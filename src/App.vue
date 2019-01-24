@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <div id="app">
     <header class="modal-header">
       <div class="container">
@@ -23,6 +23,37 @@
     <router-view/>
     <footer>
       <div class="container footer-main">
+        <p>@2018 TastyHouse</p>
+      </div>
+    </footer>
+  </div>
+</template> -->
+<template>
+  <div id="app">
+    <b-container fluid>
+      <b-row style="background-color: #3F9384">
+        <b-col cols="2" sm="2">
+          <img class="rounded logo" align="right" src="./assets/images/logo.png"/>
+        </b-col>
+        <b-col cols="8">
+          <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
+        </b-col>
+        <b-col cols="1" lg="1" md="1" sm="1" class="menu md">
+          <div style="margin-top: 11px" class="user">
+            {{ user ? user.name : 'Loading...' }}
+          </div>
+          <div class="menu-icon">
+            <img src="./assets/images/menu-button.svg" alt="">
+          </div>
+        </b-col>
+        <b-col cols="0" lg="1" md="1" sm="1"></b-col>
+      </b-row>
+    </b-container>
+    <body>
+    <router-view/>
+    </body>
+    <footer>
+      <div class="container">
         <p>@2018 TastyHouse</p>
       </div>
     </footer>
@@ -87,12 +118,10 @@ export default {
   header .container .row {
     flex-wrap: nowrap;
   }
-  .logo {
-    width: 100px;
-    height: 100px;
-    float: left;
-    line-height: 100px;
-  }
+.logo {
+  width: 90px;
+  height: 90px;
+}
   .title{
     width: 100%;
     text-align: center;
@@ -131,17 +160,21 @@ export default {
     height: 25px;
   }
 
-  footer {
-    background-color: #3F9384;
-    width: 100%;
-    margin-top: 70px;
-    align-self: flex-end;
-  }
-  footer p {
-    font-family: "Times New Roman";
-    color: #ffffff;
-    /* float: left; */
-    line-height: 40px;
-  }
+footer {
+  background-color: #3F9384;
+  width: 100%;
+  margin-top: 10px;
+  display: inline-block;
+  float: left;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+footer p {
+  font-family: "Times New Roman";
+  color: #ffffff;
+  float: left;
+  line-height: 40px;
+}
 
 </style>
