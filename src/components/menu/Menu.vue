@@ -18,8 +18,21 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-container v-else>
-      запрос списка горячих блюд/салатов/супов, как вывети еще подумать
+    <b-container v-else-if="!menuFlag && category == 'salat'">
+      <b-row class='height-50'>
+      </b-row>
+      <b-row class="height-150">
+        <b-col md="3">
+          <img class="menu-icon" src="../../assets/images/cezar.jpg" alt="cezar">
+        </b-col>
+        <b-col md="6">
+          <div class="name">Цезарь с курицей</div>
+          <div class="mass">250 гр.<br>500 Ккал</div>
+        </b-col>
+        <b-col md="3">
+          <b-button>dksjfk</b-button>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -29,20 +42,23 @@ export default {
   data () {
     return {
       menuFlag: true,
-      dishes: []
+      dishes: [],
+      category: ''
     }
   },
   methods: {
     changeMenuFlag (value) { // АПИ еще нет, так что долблюсь в радномный порт, ибо если долбиться в 8080 когда он занят vue дело не благородное
-      let _url = 'localhost:8081/dishes&type=' + value
-      this.$http.get(_url).then(response => {
-        this.dishes = response.body.result
-        this.menuFlag = false
-      }).catch(err => {
-        console.log(err.status)
-        this.dishes = []
+      // let _url = 'localhost:8081/dishes&type=' + value
+      // this.$http.get(_url).then(response => {
+      //   this.dishes = response.body.result
+      //   this.menuFlag = false
+      // }).catch(err => {
+      //   console.log(err.status)
+      //   this.dishes = []
         // this.menuFlag = true
-      })
+      // })
+      this.menuFlag = false
+      this.category = value
     }
   }
 }
@@ -82,5 +98,21 @@ export default {
   font-size: 18pt;
   font-weight: bolder;
   border-radius: 0 0 10px 10px;
+}
+.name {
+  width: 100%;
+  font-size: 30px;
+  line-height: 30px;
+  text-align: left;
+}
+.mass {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  line-height: 20px;
+  font-size: 18px;
+  text-align: left;
+  margin-left: 15px;
 }
 </style>

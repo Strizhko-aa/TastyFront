@@ -45,7 +45,7 @@ export default {
 
     // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
     // ниже и читать про него ничего не нужно
-    this.$http.get('http://localhost:8081/kitchen').then(response => {
+    this.$http.get('http://localhost:8080/kitchen').then(response => {
       this.elements = response.body
       console.log(response.body)
     }).catch(err => {
