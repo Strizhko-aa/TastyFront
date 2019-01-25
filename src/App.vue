@@ -166,7 +166,6 @@ footer {
   margin-top: 10px;
   display: inline-block;
   float: left;
-  position: fixed;
   bottom: 0;
   left: 0;
 }
