@@ -2,20 +2,20 @@
     <div class="element" v-if="visible">
         <div class="element-list">
             <div class="photo">
-                <img class="photo" src="../../assets/images/cezar.jpg">
+                <img class="photo" :src="`http://localhost:8080/` + data.dish.imgUrl">
             </div>
             <div class="name-dish" v-on:click="flag=!flag">
                 <div class="name category">
-                    <span> Салат </span>
+                    <span> {{data.dish.typeDish.title}} </span>
                 </div>
                 <div class="name">
-                    <span> {{data.text}} </span>
+                    <span> {{data.dish.name}} </span>
                 </div>
                 <div class="mass">
-                    <span> 250 гр.</span>
+                    <span> {{data.dish.mass}}</span>
                 </div>
                 <div class="time">
-                    <span>00:05:30</span>
+                    <span></span>
                 </div>
             </div>
             <div class="button-block">
@@ -27,24 +27,14 @@
                 <div class="ingredient-name title">Ингредиенты</div>
                 <div class="ingredient-description">
                     <div class="ingredient-list">
-                        <span class="ing-list-name">Курица </span> -
-                        <span class="ing-list-mass"> 300 гр</span>
-                    </div>
-                    <div class="ingredient-list">
-                        <span class="ing-list-name">Листья салата </span> -
-                        <span class="ing-list-mass"> 50 гр</span>
+                        <span class="ing-list-name" v-html=data.dish.ingredient> {{data.dish.ingredient}} </span>
                     </div>
                 </div>
             </div>
             <div class="recipe-block">
                 <div class="recipe-name title">Рецепт</div>
-                <div class="recipe-description">
-                    1. Нарвать на небольшие кусочки листья салата. <br>
-                    2. В горячую сковородку положить 1 ст. л. сливочного масла. Как оно  расплавится, кинуть нарезанный на пластины зубчик чеснока. <br>
-                    3. Куриную грудку нарезать на кусочки. Положить в сковороду к чесноку и маслу. Обжаривать на сильном огне приблизительно 10 минут до румяной корочки. <br>
-                    4. Добавить еще 1 ст. л. сливочного масла и второй зубчик чеснока. Положить кусочки хлеба в сковороду и обжаривать до румяной корочки. <br>
-                    5. Достать листья салата, туда же положить обжаренную куриную грудку, помидоры, нарезанные тонкой соломкой. Заправить соусом «Цезарь».<br>
-                    6. Перемешать. Сверху положить получившиеся сухарики и натереть сыр.
+                <div class="recipe-description" v-html=data.dish.recipe>
+                  {{data.dish.recipe}}
                 </div>
             </div>
         </div>
@@ -118,7 +108,6 @@ export default {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    z-index: -1;
 }
 .name-dish {
     width: 100%;
