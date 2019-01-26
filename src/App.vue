@@ -39,7 +39,7 @@
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
         <b-col cols="1" lg="1" md="1" sm="1" class="menu md">
-          <div style="margin-top: 11px" class="user">
+          <div style="margin-top: 1px" class="user">
             {{ user ? user.name : 'Loading...' }}
           </div>
           <div class="menu-icon">

@@ -35,7 +35,7 @@ export default new Router({
     },
     {
       path: '/waiter/orders/:tableNumber',
-      name: 'Официант',
+      name: 'Стол',
       component: WaiterOrdersOnTable
     }
   ]
