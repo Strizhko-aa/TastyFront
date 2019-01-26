@@ -1,40 +1,38 @@
 <template>
   <div id="app">
     <!-- убрал внешний контейнер. Как я понял, не стоит фигачить контейнер в контейнер. А может это норма. -->
-      <h1 class="text-center">Статистика</h1>
+    <b-container fluid>
       <br>
+      <h1 class="text-center">Статистика</h1>
       <div>
         <b-row>
           <b-col></b-col>
           <b-col class="text-center">
-
-          <b-button-group size="sm">
-            <b-button @click="pressed('popular')" variant="success">Популярное блюдо</b-button>
-            <b-button @click="pressed('inform')" variant="success">Информация по блюду</b-button>
-            <b-button @click="pressed('rating')" variant="success">Рейтинг блюд</b-button>
-          </b-button-group>
+            <b-form-group>
+              <b-form-radio-group style="width: 100%" v-model="selected" :options="options" size="md" buttons button-variant="success" name="radioTime">
+              </b-form-radio-group>
+            </b-form-group>
           </b-col>
           <b-col></b-col>
         </b-row>
       </div>
-      <b-container fluid>
         <br>
         <b-row>
-          <b-col cols="12" xl="12" lg="10" md="12" sm="12" class="text-center bordered">
+          <b-col cols="0" sm="0" md="1" lg="1" xl="1"></b-col>
+          <b-col cols="12" xl="10" lg="10" md="10" sm="12" class="text-center bordered">
 
             <!-- если statistic ===  'popular' показываем одну пикчу, если нет смотрим следующее условие и т.д.-->
-            <div v-if="statistic === 'popular'">
-              <img src="../../assets/images/popular.jpg" alt="график популярного блюда" class="grafic">
+            <div v-if="selected === 'popular'">
+              <Popular/>
             </div>
-            <div v-else-if="statistic === 'inform'">
-              <img src="../../assets/images/info-po-bludu.jpg" alt="информация по блюду">
+            <div v-else-if="selected === 'inform'">
+              <Inform/>
             </div>
-            <div v-if="statistic === 'rating'">
-              <img src="../../assets/images/raiting.jpg" alt="рейтинг">
+            <div v-if="selected === 'rating'">
+              <Rating/>
             </div>
             <!-- меня несколько упороло и я вставил вместо фоток графиков скрины что ты мне скинул,
             и теперь тут сайт в сайте =.=, только телевизора не хватает -->
-
           </b-col>
         </b-row>
       </b-container>
@@ -42,27 +40,34 @@
 </template>
 
 <script>
+import Popular from './Popular'
+import Inform from './Inform'
+import Rating from './Rating'
 export default {
 
   name: 'app',
-  data () {
+  components: {Rating, Popular, Inform},
+  data: function () {
     return {
-      statistic: 'popular'
-    }
-  },
-  methods: {
-    pressed: function (pressedBtn) {
-      this.statistic = pressedBtn
-      // alert(this.statistic)
+      selected: 'popular',
+      options: [
+        {text: 'Популярное блюдо', value: 'popular'},
+        {text: 'Информация по блюду', value: 'inform', disabled: true},
+        {text: 'Рейтинг блюд', value: 'rating', disabled: true}
+      ],
+      elems: []
     }
   }
 }
 </script>
 
 <style>
-  .grafic {
-    height: 100%;
+  .bordered {
+    border-radius: 10px 10px;
+    border: 3px solid #3F9384;
+    margin-bottom: 10px;
   }
+
   /* все стили что были остались в App.vue (это полоска сверху и футер), так что не удивляйся их исчезновению.*/
   /* И да, я не подгонял еще твои блоки под моюильны разрешения */
 </style>

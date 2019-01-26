@@ -20,7 +20,7 @@ export default new Router({
     },
     {
       path: '/admin',
-      name: 'Администрирование',
+      name: 'Администратор',
       component: AdminComponent
     },
     {
