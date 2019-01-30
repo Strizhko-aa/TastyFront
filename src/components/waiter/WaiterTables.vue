@@ -5,10 +5,10 @@
     <br>
       <b-row class="mb-4" v-for="(value, key) in elements" v-bind:key="key">
         <b-col cols="1"></b-col>
-        <b-col v-for="(order, index) in value" v-bind:key="order.id" v-if="index === 0" :class="order.statuses.title" class="rounded-circle text-center" cols="1" v-on:click="window.location.href = '/waiter/orders/{{order.tableNumber}}'">
+        <b-col v-for="(order, index) in value" v-bind:key="order.id" v-if="index === 0" :class="order.statuses.title" class="rounded-circle text-center" cols="1" @click="transitionOnOrder(order.tableNumber)">
           <span class="number_of_table">{{order.tableNumber}}</span>
         </b-col>
-        <b-col v-else :class="order.statuses.title" class="rounded-circle text-center offset-2" cols="1" v-on:click="window.location.href = '/waiter/orders/{{order.tableNumber}}'">
+        <b-col v-else :class="order.statuses.title" class="rounded-circle text-center offset-2" cols="1" @click="transitionOnOrder(order.tableNumber)">
           <span class="number_of_table">{{order.tableNumber}}</span>
         </b-col>
       </b-row>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+  import store from '../store/store'
+
 export default {
   name: 'WaiterTables',
   props: {
@@ -27,6 +29,10 @@ export default {
     }
   },
   methods: {
+    transitionOnOrder: function (tableNumber) {
+      store.state.tableNumber = tableNumber
+      window.location.href = '/waiter/orders/' + tableNumber
+    }
   },
   created () {
     this.$http.get('http://localhost:8080/waiter').then(response => {

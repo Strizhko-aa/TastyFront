@@ -3,9 +3,9 @@
     <div class="container">
       <div class="table mt-5">
         <div class="table_title text-center">
-          <span class="table_name">Столик {{order.tableNumber}}</span>
+          <span class="table_name">Столик {{$route.params.tableNumber}}</span>
         </div>
-        <div class="row align-items-center ml-2 mt-4 mr-2" v-for="(value, key) in dishes" v-bind:key="key">
+        <div class="row align-items-center ml-2 mt-4 mr-2" v-for="(value, key) in elements[0]" v-bind:key="key">
           <div v-for="(dish, index) in value" v-bind:key="dish.id">
             <div class="col-2">
               <img :src="`http://localhost:8080/` + dish.imgUrl" class="img-fluid">
@@ -13,7 +13,7 @@
             <div class="col-4">
               <p>
                 <b>{{dish.name}}</b>
-                <br><span class="status-of-dish">Статус: {{order.dishesFromOrder[index].status}}</span>
+                <br><span class="status-of-dish">Статус: {{elements[1].dishesFromOrder[index].status}}</span>
                 <i class="far fa-clock"></i>
               </p>
               <div class="form-check bring_dish">
@@ -28,24 +28,24 @@
           <div class="col">
             <div class="progress time">
               <div class="progress-bar" role="progressbar" style="width: 25%; background: #3F9384;"
-                   :aria-valuenow="percentOfReady" aria-valuemin="0" aria-valuemax="100">
-                <b>{{percentOfReady}}%</b>
+                   :aria-valuenow="elements[2]" aria-valuemin="0" aria-valuemax="100">
+                <b>{{elements[2]}}%</b>
               </div>
             </div>
           </div>
         </div>
         <div class="row ml-2 mt-4 mr-2">
           <div class="col">
-            <span class="order_info">Дата: {{order.dateOrders}}</span>
+            <span class="order_info">Дата: </span>
           </div>
           <div class="col">
-            <span class="order_info">Время: {{order.dateOrders}}</span>
+            <span class="order_info">Время: </span>
           </div>
           <div class="col">
-            <span class="order_info">Итого: {{totalPrice}} ₽</span>
+            <span class="order_info">Итого: {{elements[3]}} ₽</span>
           </div>
           <div class="col">
-            <span class="order_info">Оплата: {{order.typePayment.title}}</span>
+            <span class="order_info">Оплата: </span>
           </div>
         </div>
       </div>
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import store from '../store/store'
+
 export default {
   name: 'WaiterOrdersOnTable',
   props: {},
@@ -64,7 +66,7 @@ export default {
   },
   methods: {},
   created () {
-    this.$http.get('http://localhost:8080/waiter/orders/1').then(response => {
+    this.$http.get('http://localhost:8080/waiter/orders/' + store.state.tableNumber).then(response => {
       this.elements = response.body
       console.log(response.body)
     }).catch(err => {
