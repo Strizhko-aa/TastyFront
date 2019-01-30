@@ -41,28 +41,28 @@ export default {
 </script>
 
 <style scoped>
-h1.choose_table, span.number_of_table {
+.choose_table, .number_of_table {
   font-family: Times, serif;
 }
-span.number_of_table {
+.number_of_table {
   color: white;
   font-size: 55px;
 }
-div.no_one_here
+.no_one_here
 {
   border: 2px solid #3F9384;
   background: grey;
   cursor: pointer;
 }
 
-div.in_process_of_cooking
+.in_process_of_cooking
 {
   border: 2px solid #3F9384;
   background: #3F9384;
   cursor: pointer;
 }
 
-div.dish_is_ready
+.dish_is_ready
 {
   border: 2px solid #3F9384;
   background: red;
