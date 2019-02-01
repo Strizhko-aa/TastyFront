@@ -59,52 +59,52 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        menuFlag: true,
-        dishes: [],
-        category: '',
-        purchased: []
-      }
-    },
-    computed: {
-      dishesCount () {
-        return this.dishes.length
-      }
-    },
-    watch: {
-      dishes (newVal, oldVal) {
-        for (let i = 0; i < newVal.length; i++) {
-          this.purchased.push(false)
-        }
-      }
-    },
-    methods: {
-      back () {
-        this.menuFlag = true
-      },
-      createImgUrl (imgUrl) {
-        let _url = '../../assets/images/' + imgUrl.substring(5, imgUrl.length)
-        return require(_url)
-      },
-      changeMenuFlag (value) {
-        let _url = 'http://localhost:8080/menu/' + value
-        this.$http.get(_url).then(response => {
-          console.log(response.body)
-          this.dishes = response.body
-        }).catch(err => {
-          console.log(err)
-        })
-        this.menuFlag = false
-        this.category = value
-      },
-      addToCard (iiii) {
-        this.purchased[iiii] = true
-        console.log('IN CLICK' + iiii)
+export default {
+  data () {
+    return {
+      menuFlag: true,
+      dishes: [],
+      category: '',
+      purchased: []
+    }
+  },
+  computed: {
+    dishesCount () {
+      return this.dishes.length
+    }
+  },
+  watch: {
+    dishes (newVal, oldVal) {
+      for (let i = 0; i < newVal.length; i++) {
+        this.purchased.push(false)
       }
     }
+  },
+  methods: {
+    back () {
+      this.menuFlag = true
+    },
+    createImgUrl (imgUrl) {
+      let _url = '../../assets/images/' + imgUrl.substring(5, imgUrl.length)
+      return require(_url)
+    },
+    changeMenuFlag (value) {
+      let _url = 'http://localhost:8080/menu/' + value
+      this.$http.get(_url).then(response => {
+        console.log(response.body)
+        this.dishes = response.body
+      }).catch(err => {
+        console.log(err)
+      })
+      this.menuFlag = false
+      this.category = value
+    },
+    addToCard (iiii) {
+      this.purchased[iiii] = true
+      console.log('IN CLICK' + iiii)
+    }
   }
+}
 </script>
 
 <style scoped>
