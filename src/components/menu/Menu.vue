@@ -102,6 +102,26 @@ export default {
     addToCard (iiii) {
       this.purchased[iiii] = true
       console.log('IN CLICK' + iiii)
+
+      let elem = document.getElementsByClassName('button button-buy')[iiii]
+      if (elem == null) {
+        elem = document.getElementsByClassName('button button-purchased')[iiii]
+      }
+      let json = {'name': document.getElementsByClassName('name')[iiii].textContent, 'tableNumber': 4}
+      switch (elem.textContent) { // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
+        case 'Купить': // ToDo - а как достать номер столика с которого посетитель сделал заказ?
+          this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+          break
+        case 'Куплено':
+          this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+          break
+      }
     }
   }
 }
