@@ -52,8 +52,8 @@ export default {
       selected: 'popular',
       options: [
         {text: 'Популярное блюдо', value: 'popular'},
-        {text: 'Информация по блюду', value: 'inform', disabled: true},
-        {text: 'Рейтинг блюд', value: 'rating', disabled: true}
+        {text: 'Информация по блюду', value: 'inform'},
+        {text: 'Рейтинг блюд', value: 'rating'}
       ],
       elems: []
     }
