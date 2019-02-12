@@ -33,7 +33,7 @@
     <b-container fluid>
       <b-row style="background-color: #3F9384">
         <b-col cols="2" sm="2">
-          <img class="rounded logo" align="right" src="./assets/images/logo.png"/>
+          <img class="rounded logo" align="right" src="./assets/images/logo.png" alt="logo"/>
         </b-col>
         <b-col cols="8">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
@@ -42,8 +42,15 @@
           <div style="margin-top: 1px" class="user">
             {{ user ? user.name : 'Loading...' }}
           </div>
-          <div class="menu-icon">
-            <img src="./assets/images/menu-button.svg" alt="">
+          <div>
+            <b-dropdown id="ddown-right" right variant="link" class="m-md-2" no-caret>
+                <template slot="button-content">
+                  <div class="menu-icon">
+                  <img src="./assets/images/menu-button.svg" alt="">
+                  </div>
+                </template>
+              <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+            </b-dropdown>
           </div>
         </b-col>
         <b-col cols="0" lg="1" md="1" sm="1"></b-col>
@@ -71,7 +78,19 @@ export default {
   },
   data () {
     return {
-      user: null
+      user: null,
+      result: ''
+    }
+  },
+  methods: {
+    logout: function () {
+      let _url = 'http://localhost:8080/logout'
+      this.$http.post(_url, JSON.stringify('logout')).then(response =>
+        response.json()).then(json => {
+        this.result = json
+      }).catch(error => {
+        console.log('logout' + ' ' + error)
+      })
     }
   },
   computed: { // вычисляемое значение. Оно вычисляется при рендере
@@ -85,7 +104,7 @@ export default {
   created () {
     // Simulate fetching user data.
     setTimeout(() => {
-      this.user = { name: 'Alina' }
+      this.user = { name: 'Guest' }
     }, 2000)
   }
 }
@@ -137,6 +156,15 @@ export default {
     float: right;
     font-size: 20px;
     color:#ffffff;
+    vertical-align: middle;
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .dropdown-style {
+    height: auto;
+    line-height: initial;
+    float: right;
+    font-size: 20px;
     vertical-align: middle;
     display: flex;
     flex-wrap: nowrap;

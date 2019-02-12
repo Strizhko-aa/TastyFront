@@ -5,7 +5,7 @@
       <b-row>
       <b-col cols="2">
         <b-form-group>
-          <b-form-radio-group @click.native="postToServer()" style="width: 100%" v-model="selected" :options="options" size="lg" buttons button-variant="success" stacked name="radioTime"/>
+          <b-form-radio-group style="width: 100%" v-model="selected" :options="options" size="lg" buttons button-variant="success" stacked name="radioTime"/>
         </b-form-group>
       </b-col>
         <b-col cols="5">
@@ -21,6 +21,8 @@
             <label style="margin-bottom: 23px">Среднее время готовки: 16 минут</label><br>
             <label style="margin-bottom: 30px">Выручка составила: 1 руб.</label><br>
             <label style="margin-bottom: 15px">Рейтинг посетителей: 5 ★</label>
+            <p>{{selected}}</p>
+            <p>{{elements}}</p>
           </div>
         </b-col>
       </b-row>
@@ -43,27 +45,30 @@ export default {
       elements: []
     }
   },
-  methods: {
-    postToServer: function () {
+  methods: {},
+  watch: {
+    selected: function (val) {
       let _url = 'http://localhost:8080/admin'
       var _type = {'statistic_type': this.selected}
       this.qtype = this.selected
-      this.$http.post(_url, JSON.stringify(_type)).then(response => {
+      this.$http.post(_url, JSON.stringify(_type)).then(response =>
+        response.json()).then(json => {
+        this.elements = json
       }).catch(error => {
         console.log(_type + ' ' + error)
       })
     }
-    // created () {
-    //   let resource = this.$resource('http://localhost:8080/admin')
-    //   resource.get().then(result => {
-    //     result.json().then(data => {
-    //       console.log(data)
-    //       this.elements = data
-    //     })
-    //   }, error => {
-    //     console.log(error)
-    //   })
-    // }
   }
+  // created () {
+  //   let resource = this.$resource('http://localhost:8080/admin')
+  //   resource.get().then(result => {
+  //     result.json().then(data => {
+  //       console.log(data)
+  //       this.elements = data
+  //     })
+  //   }, error => {
+  //     console.log(error)
+  //   })
+  // }
 }
 </script>
