@@ -1,12 +1,12 @@
 <template>
-    <div class="element" v-if="visible">
+    <div class="element" v-if="visible || data.status === 'В ожидании' || data.status === 'Готовится'"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
         <div class="element-list">
             <div class="photo">
-                <img class="photo" :src="`http://localhost:8080/` + data.dish.imgUrl">
+                <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
             </div>
             <div class="name-dish" v-on:click="flag=!flag">
                 <div class="name category">
-                    <span> {{data.dish.typeDish.title}} </span>
+                    <span> {{data.dish.typeDish.title}}</span>
                 </div>
                 <div class="name">
                     <span> {{data.dish.name}} </span>
@@ -56,27 +56,27 @@ export default {
       flag: false,
       recipeStatus: 'ВЗЯТЬ',
       classElementRecipe: 'button-take',
-      visible: true
+      visible: false
     }
   },
   methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
     clickRecipeButton () {
-      let status
+      let json
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
-          status = {'status': 'Готовится'}
+          json = {'status': 'Готовится', 'name': document.getElementsByClassName('name')[0].textContent, 'tableNumber': 4}
           break
         case 'ГОТОВО':
           this.visible = false
           this.classElementRecipe = 'button-take'
-          status = {'status': 'Готово'}
+          json = {'status': 'Готово', 'name': document.getElementsByClassName('name')[0].textContent, 'tableNumber': 4}
           break
         default:
           break
       }
-      this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(status)).then(function (response) {
+      this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(json)).then(function (response) {
       }).catch(function (error) {
         console.log(error)
       })
