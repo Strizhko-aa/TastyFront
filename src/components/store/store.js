@@ -6,8 +6,7 @@ Vue.use(Vuex)
 // это vueX - хранилище чтобы перебрасывать значения между любыми компонентами прокта
 const store = new Vuex.Store({
   state: {
-    whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
-    tableNumber: 0
+    whereIsUser: '' //  выводми сверху где юзер. Меняется в main.js при переходе
   },
   mutations: {
     setValue (store, keyValue) {

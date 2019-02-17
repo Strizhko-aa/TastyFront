@@ -61,18 +61,25 @@ export default {
   },
   methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
     clickRecipeButton () {
+      let status
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
+          status = {'status': 'Готовится'}
           break
         case 'ГОТОВО':
           this.visible = false
           this.classElementRecipe = 'button-take'
+          status = {'status': 'Готово'}
           break
         default:
           break
       }
+      this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(status)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }

@@ -5,6 +5,7 @@ import AdminComponent from '@/components/admin/Admin'
 import Kitchen from '@/components/kitchen/Kitchen'
 import WaiterTables from '@/components/waiter/WaiterTables'
 import WaiterOrdersOnTable from '@/components/waiter/WaiterOrdersOnTable'
+import Login from '@/components/login/Login'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
       path: '/',
       name: 'Меню',
       component: MenuComponent
+    },
+    {
+      path: '/login',
+      name: 'Авторизация',
+      component: Login
     },
     {
       path: '/admin',
