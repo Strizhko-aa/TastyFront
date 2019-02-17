@@ -84,14 +84,10 @@ export default {
     back () {
       this.menuFlag = true
     },
-    createImgUrl (imgUrl) {
-      let _url = '../../assets/images/' + imgUrl.substring(5, imgUrl.length)
-      return require(_url)
-    },
     changeMenuFlag (value) {
       let _url = 'http://localhost:8080/menu/' + value
       this.$http.get(_url).then(response => {
-        console.log(response.body)
+        // console.log(response.body)
         this.dishes = response.body
       }).catch(err => {
         console.log(err)
