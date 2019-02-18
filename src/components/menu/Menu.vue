@@ -33,10 +33,10 @@
     <b-container fluid v-else-if="!menuFlag">
       <b-button class="back-button button-buy" @click="back()">Назад</b-button>
       <div v-if="dishesCount > 0">
-        <div v-for="(item, index) in dishes" :key="item.id">
+        <!-- <div v-for="(item, index) in dishes" :key="item.id">
           <b-row class='height-50'>
-          </b-row>
-          <b-row class="height-150 item">
+          </b-row> -->
+          <b-row v-for="(item) in dishes" :key="item.id" class="height-150 item">
             <b-col md="3">
               <img class="photo" :src="require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))"
                    alt="">
@@ -45,14 +45,15 @@
               <div class="name">{{ item.name }}</div>
               <div class="mass">{{ item.price }} руб <span v-if="item.mass !== ''">{{ item.mass }} гр</span></div>
             </b-col>
-            <b-col v-if="purchased[index] === false" md="3">
-              <b-button class="button button-buy" @click="addToCard(index)">Купить</b-button>
+            <b-col md="3">
+              <b-button v-if="inPurchased(item.index)" class="button button-buy" @click="addToCard(item.id)">Купить</b-button>
+              <b-button v-else class="button button-purchased">Куплено</b-button>
             </b-col>
-            <b-col v-else md="3">
+            <!-- <b-col v-else md="3">
               <b-button class="button button-purchased">Куплено</b-button>
-            </b-col>
+            </b-col> -->
           </b-row>
-        </div>
+        <!-- </div> -->
       </div>
     </b-container>
   </div>
@@ -65,7 +66,7 @@ export default {
       menuFlag: true,
       dishes: [],
       category: '',
-      purchased: []
+      purchased: [] // [{id: 0, count: 0}]
     }
   },
   computed: {
@@ -81,6 +82,14 @@ export default {
     }
   },
   methods: {
+    inPurchased (id) {
+      for (let item in this.purchased) {
+        if (id === this.purchased[item].id) {
+          return true
+        }
+      }
+      return false
+    },
     back () {
       this.menuFlag = true
     },
@@ -95,29 +104,29 @@ export default {
       this.menuFlag = false
       this.category = value
     },
-    addToCard (iiii) {
-      this.purchased[iiii] = true
-      console.log('IN CLICK' + iiii)
+    addToCard (id) {
+      this.purchased.push({id: id, count: 1})
+      console.log('IN CLICK' + id)
 
-      let elem = document.getElementsByClassName('button button-buy')[iiii]
-      if (elem == null) {
-        elem = document.getElementsByClassName('button button-purchased')[iiii]
-      }
-      let json = {'name': document.getElementsByClassName('name')[iiii].textContent, 'tableNumber': 4}
-      switch (elem.textContent) { // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
-        case 'Купить': // ToDo - а как достать номер столика с которого посетитель сделал заказ?
-          this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
-          }).catch(function (error) {
-            console.log(error)
-          })
-          break
-        case 'Куплено':
-          this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
-          }).catch(function (error) {
-            console.log(error)
-          })
-          break
-      }
+      // let elem = document.getElementsByClassName('button button-buy')[index]
+      // if (elem == null) {
+      //   elem = document.getElementsByClassName('button button-purchased')[index]
+      // }
+      // let json = {'name': document.getElementsByClassName('name')[index].textContent, 'tableNumber': 4}
+      // switch (elem.textContent) { // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
+      //   case 'Купить': // ToDo - а как достать номер столика с которого посетитель сделал заказ?
+      //     this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
+      //     }).catch(function (error) {
+      //       console.log(error)
+      //     })
+      //     break
+      //   case 'Куплено':
+      //     this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
+      //     }).catch(function (error) {
+      //       console.log(error)
+      //     })
+      //     break
+      // }
     }
   }
 }
