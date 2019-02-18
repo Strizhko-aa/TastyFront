@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <b-container v-if="menuFlag === true">
+    <div class="container" v-if="menuFlag === true">
       <b-row class="height-50">
       </b-row>
       <b-row class="height-150 category-line">
@@ -29,25 +29,33 @@
           <div class="category-name">Закуски</div>
         </b-col>
       </b-row>
-    </b-container>
-    <b-container fluid v-else-if="!menuFlag">
+    </div>
+    <div class="container" v-else-if="!menuFlag">
       <b-button class="back-button button-buy" @click="back()">Назад</b-button>
       <div v-if="dishesCount > 0">
-        <!-- <div v-for="(item, index) in dishes" :key="item.id">
-          <b-row class='height-50'>
-          </b-row> -->
           <b-row v-for="(item) in dishes" :key="item.id" class="height-150 item">
             <b-col md="3">
+          </b-row>
+          <b-row class="height-150 item">
+            <b-col md="3" class="photo">
               <img class="photo" :src="require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))"
                    alt="">
             </b-col>
             <b-col md="6">
-              <div class="name">{{ item.name }}</div>
-              <div class="mass">{{ item.price }} руб <span v-if="item.mass !== ''">{{ item.mass }} гр</span></div>
+              <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
+              <div class="description"> Вкусно, нежно, аппетитно. Под супер соусом с невероятным вкусом. Подается на тарелке с хлебушком.</div>
+              <div class="mass"> <span v-if="item.mass !== ''">{{ item.mass }} </span> <span class="price">{{ item.price }} ₽</span></div>
             </b-col>
-            <b-col md="3">
+            <!-- <b-col md="3">
               <b-button v-if="inPurchased(item.index)" class="button button-buy" @click="addToCard(item.id)">Купить</b-button>
-              <b-button v-else class="button button-purchased">Куплено</b-button>
+              <b-button v-else class="button button-purchased">Куплено</b-button> -->
+            <b-col v-if="purchased[index] === false" md="3" class="quantity">
+              <div class="quantity-input">
+                <input class="minus btn-Q" type="button" value="-">
+                <input id="text_tribulus" value="1" class="input-text qty text" size="3"/>
+                <input class="plus btn-Q" type="button" value="+">
+              </div>
+              <b-button class="button button-buy" @click="addToCard(index)">Купить</b-button>
             </b-col>
             <!-- <b-col v-else md="3">
               <b-button class="button button-purchased">Куплено</b-button>
@@ -55,7 +63,7 @@
           </b-row>
         <!-- </div> -->
       </div>
-    </b-container>
+    </div>
   </div>
 </template>
 
@@ -130,17 +138,26 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>
   /* Стиль больше чем 576px */
   @media (min-width: 576px) {
+    .container {
+      width: 100%;
+    }
+
     .height-50 {
       height: 50px;
     }
 
     .height-150 {
-      height: 150px;
+      height: 160px;
+
+    }
+    .item {
+      border-bottom: 1px solid #3F9384;
     }
 
     .menu-icon {
@@ -148,6 +165,48 @@ export default {
       height: 100%;
       border-radius: 3px 3px 0 0;
       object-fit: cover;
+    }
+    .photo {
+      position: relative;
+      padding: 0;
+      height: 150px;
+      border-radius: 10px 0;
+      box-shadow:
+        inset 1px 1px 10px 0 rgba(255,255,255,.5),
+        inset -1px -1px 10px 0 rgba(0,0,0,.5),
+        2px 2px 5px 0 rgba(0,0,0,.5);
+    }
+    .photo img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    .quantity {
+      text-align: right;
+    }
+
+    .quantity-input {
+
+      overflow: hidden;
+      border-radius: 10px;
+      display: inline-flex;
+      flex-direction: row;
+
+    }
+
+    .btn-Q {
+      background: #3F9384;
+      color: white;
+      width: 40px;
+      height: 40px;
+      outline: none;
+      border: none;
+    }
+
+    .input-text {
+      height: 40px;
+      outline: none;
+      text-align: center;
     }
   }
 
@@ -176,9 +235,12 @@ export default {
 
   .name {
     width: 100%;
-    font-size: 30px;
-    line-height: 30px;
+    font-size: 25px;
+    line-height: 25px;
     text-align: left;
+  }
+  .description {
+    text-align: justify;
   }
 
   .mass {
@@ -191,12 +253,21 @@ export default {
     text-align: left;
     margin-left: 15px;
   }
+  .price {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    line-height: 22px;
+    font-size: 22px;
+    text-align: right;
+  }
 
   .button {
-    width: 100%;
+    width: 139px;
     margin-top: 30px;
-    height: 60px;
-    font-size: 22pt;
+    height: 40px;
+    font-size: 17pt;
     line-height: 0;
   }
 
@@ -213,8 +284,7 @@ export default {
   .photo {
     position: relative;
     padding: 0;
-    height: 130px;
-    max-width: 200px;
+    height: 150px;
     border-radius: 10px 0;
     box-shadow: inset 1px 1px 10px 0 rgba(255, 255, 255, .5),
     inset -1px -1px 10px 0 rgba(0, 0, 0, .5),
