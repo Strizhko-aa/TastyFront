@@ -54,7 +54,12 @@
               </div>
               <b-button class="button button-buy" @click="addToCard(index)">Купить</b-button>
             </b-col>
-            <b-col v-else md="3">
+            <b-col v-else md="3" class="quantity">
+              <div class="quantity-input">
+                <input class="minus btn-Q purchased" type="button" value="-">
+                <input id="text_tribulus_1" value="1" class="input-text qty text" size="3"/>
+                <input class="plus btn-Q purchased" type="button" value="+">
+              </div>
               <b-button class="button button-purchased">Куплено</b-button>
             </b-col>
           </b-row>
@@ -177,7 +182,7 @@ export default {
     .quantity-input {
 
       overflow: hidden;
-      border-radius: 10px;
+      border-radius: 0.25rem;
       display: inline-flex;
       flex-direction: row;
 
@@ -190,6 +195,9 @@ export default {
       height: 40px;
       outline: none;
       border: none;
+    }
+    .purchased {
+      background: gainsboro;
     }
 
     .input-text {
