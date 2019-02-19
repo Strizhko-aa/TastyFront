@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import MenuComponent from '@/components/menu/Menu'
+import CartComponent from '@/components/menu/cart'
 import AdminComponent from '@/components/admin/Admin'
 import Kitchen from '@/components/kitchen/Kitchen'
 import WaiterTables from '@/components/waiter/WaiterTables'
@@ -12,12 +13,17 @@ Vue.use(Router)
 // Это vue-router. Тут прописаны пути по которым можно ходить и какой будет результат при переходе.
 // Результат это компонент App.vue (верхняя полоска и футер) а по середине компонент (в App.vue это тег <router-view/>)
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'Меню',
       component: MenuComponent
+    },
+    {
+      path: '/cart',
+      name: 'Корзина',
+      component: CartComponent
     },
     {
       path: '/login',

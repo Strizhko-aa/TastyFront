@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="container" v-if="menuFlag === true">
+    <b-container v-if="menuFlag === true">
       <b-row class="height-50">
       </b-row>
       <b-row class="height-150 category-line">
@@ -29,52 +29,49 @@
           <div class="category-name">Закуски</div>
         </b-col>
       </b-row>
-    </div>
-    <div class="container" v-else-if="!menuFlag">
+    </b-container>
+    <b-container v-else-if="!menuFlag">
       <b-button class="back-button button-buy" @click="back()">Назад</b-button>
       <div v-if="dishesCount > 0">
-          <b-row v-for="(item) in dishes" :key="item.id" class="height-150 item">
-            <b-col md="3">
-          </b-row>
-          <b-row class="height-150 item">
-            <b-col md="3" class="photo">
+          <b-row v-for="item in dishes" :key="item.id" class="height-150 item">
+            <b-col cols="4" sm="6" md="3" class="photo">
               <img class="photo" :src="require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))"
                    alt="">
             </b-col>
-            <b-col md="6">
+            <b-col cols="12" sm="3" md="6">
               <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
               <div class="description"> Вкусно, нежно, аппетитно. Под супер соусом с невероятным вкусом. Подается на тарелке с хлебушком.</div>
               <div class="mass"> <span v-if="item.mass !== ''">{{ item.mass }} </span> <span class="price">{{ item.price }} ₽</span></div>
             </b-col>
-            <!-- <b-col md="3">
-              <b-button v-if="inPurchased(item.index)" class="button button-buy" @click="addToCard(item.id)">Купить</b-button>
-              <b-button v-else class="button button-purchased">Куплено</b-button> -->
-            <b-col v-if="purchased[index] === false" md="3" class="quantity">
-              <div class="quantity-input">
-                <input class="minus btn-Q" type="button" value="-">
-                <input id="text_tribulus" value="1" class="input-text qty text" size="3"/>
-                <input class="plus btn-Q" type="button" value="+">
-              </div>
-              <b-button class="button button-buy" @click="addToCard(index)">Купить</b-button>
+            <b-col v-if="!inPurchased(item.id)" cols="12" sm="3" md="3" class="quantity">
+              <b-button class="button button-buy" @click="addToCard(item)">Купить</b-button>
             </b-col>
-            <!-- <b-col v-else md="3">
-              <b-button class="button button-purchased">Куплено</b-button>
-            </b-col> -->
+            <b-col v-else cols="12" sm="3" md="3" class="quantity">
+              <div class="quantity-input">
+                <button class="minus btn-Q" @click="changeCount(item, -1)">-</button>
+                <input id="text_tribulus_1" :value="purchased[findPurshasedIndex(item.id)].count" class="input-text qty text" size="3"/>
+                <button class="plus btn-Q" @click="changeCount(item, 1)">+</button>
+              </div>
+            </b-col>
           </b-row>
-        <!-- </div> -->
       </div>
-    </div>
+    </b-container>
+    <router-link to="/cart">
+      <div class="cart">Корзина({{purchased.length}})</div>
+    </router-link>
   </div>
 </template>
 
 <script>
+import menuStore from './menuStore'
+
 export default {
   data () {
     return {
       menuFlag: true,
       dishes: [],
       category: '',
-      purchased: [] // [{id: 0, count: 0}]
+      purchased: [] // [{dish: dish, count: 1}]
     }
   },
   computed: {
@@ -82,25 +79,51 @@ export default {
       return this.dishes.length
     }
   },
+
   watch: {
-    dishes (newVal, oldVal) {
-      for (let i = 0; i < newVal.length; i++) {
-        this.purchased.push(false)
-      }
+    purchased (newVal, oldVal) {
+      menuStore.dispatch('setValue', {key: 'purchased', value: newVal})
     }
   },
+
   methods: {
+    deleteFromPurshased (index) {
+      this.purchased.splice(index, 1)
+    },
+
+    findPurshasedIndex (searchId) {
+      for (let i = 0; i < this.purchased.length; i++) {
+        if (this.purchased[i].dish.id === searchId) {
+          return i
+        }
+      }
+      return null
+    },
+
+    changeCount (dish, value) {
+      let index = this.findPurshasedIndex(dish.id)
+      if (index !== null) {
+        this.purchased[index].count += value
+      }
+      if (this.purchased[index].count === 0) {
+        this.deleteFromPurshased(index)
+      }
+    },
+
+    // нужен для отображения кнопок. Если блюдо куплено вернует тру иначе фолс
     inPurchased (id) {
       for (let item in this.purchased) {
-        if (id === this.purchased[item].id) {
+        if (id === this.purchased[item].dish.id) { // если ид блюда из меню совпадает с каким-то ид купленного
           return true
         }
       }
-      return false
+      return false // если не нашлось
     },
     back () {
       this.menuFlag = true
     },
+
+    // при выборе категории меняет флаг и запрашивает нужный тип блюд
     changeMenuFlag (value) {
       let _url = 'http://localhost:8080/menu/' + value
       this.$http.get(_url).then(response => {
@@ -112,9 +135,10 @@ export default {
       this.menuFlag = false
       this.category = value
     },
-    addToCard (id) {
-      this.purchased.push({id: id, count: 1})
-      console.log('IN CLICK' + id)
+
+    // добавление блюда в купленные
+    addToCard (dish) {
+      this.purchased.push({dish: dish, count: 1})
 
       // let elem = document.getElementsByClassName('button button-buy')[index]
       // if (elem == null) {
@@ -186,12 +210,11 @@ export default {
     }
 
     .quantity-input {
-
       overflow: hidden;
-      border-radius: 10px;
+      border-radius: 0.25rem;
       display: inline-flex;
       flex-direction: row;
-
+      margin-top: 30%;
     }
 
     .btn-Q {
@@ -239,8 +262,10 @@ export default {
     line-height: 25px;
     text-align: left;
   }
+
   .description {
-    text-align: justify;
+    /* text-align: justify; */
+    width: 100%;
   }
 
   .mass {
@@ -265,7 +290,7 @@ export default {
 
   .button {
     width: 139px;
-    margin-top: 30px;
+    margin-top: 30%;
     height: 40px;
     font-size: 17pt;
     line-height: 0;
@@ -273,12 +298,6 @@ export default {
 
   .button-buy {
     background-color: #3F9384;
-  }
-
-  .button-purchased {
-    cursor: default;
-    background-color: gainsboro;
-    outline: none;
   }
 
   .photo {
@@ -297,5 +316,20 @@ export default {
 
   .back-button {
     margin-top: 10px;
+  }
+
+  .btn-Q {
+    background: #3F9384;
+    color: white;
+    width: 40px;
+    height: 40px;
+    outline: none;
+    border: none;
+  }
+
+  .cart {
+    position: absolute;
+    top: 38px;
+    right: 160px;
   }
 </style>
