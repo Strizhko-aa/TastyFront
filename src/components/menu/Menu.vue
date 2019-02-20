@@ -70,25 +70,23 @@ export default {
     return {
       menuFlag: true,
       dishes: [],
-      category: '',
-      purchased: [] // [{dish: dish, count: 1}]
+      category: ''
+      // purchased: [] // [{dish: dish, count: 1}]
     }
   },
   computed: {
     dishesCount () {
       return this.dishes.length
-    }
-  },
-
-  watch: {
-    purchased (newVal, oldVal) {
-      menuStore.dispatch('setValue', {key: 'purchased', value: newVal})
+    },
+    purchased () {
+      return menuStore.getters.value('purchased')
     }
   },
 
   methods: {
     deleteFromPurshased (index) {
-      this.purchased.splice(index, 1)
+      // this.purchased.splice(index, 1)
+      menuStore.dispatch('deleteFromPurshased', index)
     },
 
     findPurshasedIndex (searchId) {
@@ -102,12 +100,13 @@ export default {
 
     changeCount (dish, value) {
       let index = this.findPurshasedIndex(dish.id)
-      if (index !== null) {
-        this.purchased[index].count += value
-      }
-      if (this.purchased[index].count === 0) {
-        this.deleteFromPurshased(index)
-      }
+      // if (index !== null) {
+      //   this.purchased[index].count += value
+      // }
+      // if (this.purchased[index].count === 0) {
+      //   this.deleteFromPurshased(index)
+      // }
+      menuStore.dispatch('changeCount', {index: index, value: value})
     },
 
     // нужен для отображения кнопок. Если блюдо куплено вернует тру иначе фолс
