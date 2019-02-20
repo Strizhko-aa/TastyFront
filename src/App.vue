@@ -32,13 +32,13 @@
   <div id="app">
     <b-container fluid>
       <b-row style="background-color: #3F9384">
-        <b-col cols="2" sm="2">
+        <b-col cols="2" md="2" sm="2">
           <img class="rounded logo" align="right" src="./assets/images/logo.png" alt="logo"/>
         </b-col>
-        <b-col cols="8">
+        <b-col cols="8" md="8" sm="8">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
-        <b-col cols="1" lg="1" md="1" sm="1" class="menu md">
+        <b-col cols="2" md="2" sm="2" class="menu md">
           <div style="margin-top: 1px" class="user">
             {{ user ? user.name : 'Loading...' }}
           </div>
@@ -53,12 +53,12 @@
             </b-dropdown>
           </div>
         </b-col>
-        <b-col cols="0" lg="1" md="1" sm="1"></b-col>
+        <b-col cols="0" md="0" sm="0"></b-col>
       </b-row>
     </b-container>
-    <body>
-    <router-view/>
-    </body>
+    <b-container fluid>
+      <router-view/>
+    </b-container>
     <footer>
       <div class="container">
         <p>@2018 TastyHouse</p>

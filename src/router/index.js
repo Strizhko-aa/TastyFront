@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import MenuComponent from '@/components/menu/Menu'
+import CartComponent from '@/components/menu/cart'
 import AdminComponent from '@/components/admin/Admin'
 import Kitchen from '@/components/kitchen/Kitchen'
 import WaiterTables from '@/components/waiter/WaiterTables'
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'Меню',
       component: MenuComponent
+    },
+    {
+      path: '/cart',
+      name: 'Корзина',
+      component: CartComponent
     },
     {
       path: '/login',
