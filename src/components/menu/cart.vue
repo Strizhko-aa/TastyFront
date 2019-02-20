@@ -6,7 +6,7 @@
         <b-col cols="12" sm="3" md="3" class="quantity">
           <!-- <div class="quantity-input">
             <button class="minus btn-Q" @click="changeCount(item, -1)">-</button>
-            <input id="text_tribulus_1" :value="purchased[findPurshasedIndex(item.id)].count" class="input-text qty text" size="3"/>
+            <input id="text_tribulus_1" :value="purchased[findPurchasedIndex(item.id)].count" class="input-text qty text" size="3"/>
             <button class="plus btn-Q" @click="changeCount(item, 1)">+</button>
           </div> -->
         </b-col>

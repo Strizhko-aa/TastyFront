@@ -66,12 +66,12 @@ export default {
         case 'ВЗЯТЬ':
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
-          json = {'status': 'Готовится', 'id': dishId, 'tableNumber': 4}
+          json = {'status': 'Готовится', 'id': dishId, 'tableNumber': 2}
           break
         case 'ГОТОВО':
           this.visible = false
           this.classElementRecipe = 'button-take'
-          json = {'status': 'Готово', 'id': dishId, 'tableNumber': 4}
+          json = {'status': 'Готово', 'id': dishId, 'tableNumber': 2}
           break
         default:
           break
