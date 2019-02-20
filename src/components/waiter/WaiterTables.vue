@@ -5,13 +5,13 @@
         <br>
         <b-row class="mb-4" v-for="(value, key) in elements" :key="key">
           <b-col cols="1"></b-col>
-          <b-col v-for="(order, index) in value" :key="index" v-if="index === 0" :class="order.statuses.title"
-                class="rounded-circle text-center" cols="1" @click="transitionOnOrder(order.tableNumber)">
-            <span class="number_of_table">{{order.tableNumber}}</span>
+          <b-col v-for="(table, index) in value" :key="index" v-if="index === 0" :class="table.tableStatus.title"
+                class="rounded-circle text-center" cols="1" @click="transitionOnOrder(table.id)">
+            <span class="number_of_table">{{table.id}}</span>
           </b-col>
-          <b-col v-else :class="order.statuses.title" class="rounded-circle text-center offset-2" cols="1"
-                @click="transitionOnOrder(order.tableNumber)">
-            <span class="number_of_table">{{order.tableNumber}}</span>
+          <b-col v-else :class="table.tableStatus.title" class="rounded-circle text-center offset-2" cols="1"
+                @click="transitionOnOrder(table.id)">
+            <span class="number_of_table">{{table.id}}</span>
           </b-col>
         </b-row>
     </b-container>

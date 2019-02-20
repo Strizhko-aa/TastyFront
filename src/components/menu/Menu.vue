@@ -46,10 +46,10 @@
               <div class="mass">{{ item.price }} руб <span v-if="item.mass !== ''">{{ item.mass }} гр</span></div>
             </b-col>
             <b-col v-if="purchased[index] === false" md="3">
-              <b-button class="button button-buy" @click="addToCard(index)">Купить</b-button>
+              <b-button class="button button-buy" @click="addToCard(index, item.id)">Купить</b-button>
             </b-col>
             <b-col v-else md="3">
-              <b-button class="button button-purchased">Куплено</b-button>
+              <b-button class="button button-purchased" @click="removeFromCard(index, item.id)">Куплено</b-button>
             </b-col>
           </b-row>
         </div>
@@ -99,29 +99,25 @@ export default {
       this.menuFlag = false
       this.category = value
     },
-    addToCard (iiii) {
+    addToCard (iiii, dishId) {
       this.purchased[iiii] = true
       console.log('IN CLICK' + iiii)
-
-      let elem = document.getElementsByClassName('button button-buy')[iiii]
-      if (elem == null) {
-        elem = document.getElementsByClassName('button button-purchased')[iiii]
-      }
-      let json = {'name': document.getElementsByClassName('name')[iiii].textContent, 'tableNumber': 4}
-      switch (elem.textContent) { // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
-        case 'Купить': // ToDo - а как достать номер столика с которого посетитель сделал заказ?
-          this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
-          }).catch(function (error) {
-            console.log(error)
-          })
-          break
-        case 'Куплено':
-          this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
-          }).catch(function (error) {
-            console.log(error)
-          })
-          break
-      }
+      let json = {'id': dishId, 'tableNumber': 4}
+      this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      }) // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
+      // ToDo - а как достать номер столика с которого посетитель сделал заказ?
+    },
+    removeFromCard (iiii, dishId) {
+      this.purchased[iiii] = false
+      console.log('IN CLICK' + iiii)
+      let json = {'id': dishId, 'tableNumber': 4}
+      this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      }) // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
+      // ToDo - а как достать номер столика с которого посетитель сделал заказ?
     }
   }
 }
