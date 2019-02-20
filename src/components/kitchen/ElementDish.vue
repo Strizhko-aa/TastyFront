@@ -1,5 +1,5 @@
 <template>
-    <div class="element" v-if="visible || data.status === 'В ожидании' || data.status === 'Готовится'"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
+    <div class="element" v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
         <div class="element-list">
             <div class="photo">
                 <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="button-block">
-                <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton()"> {{recipeStatus}} </button>
+                <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.dish.id)"> {{recipeStatus}} </button>
             </div>
         </div>
         <div class="recipe" v-show="flag">
@@ -56,22 +56,22 @@ export default {
       flag: false,
       recipeStatus: 'ВЗЯТЬ',
       classElementRecipe: 'button-take',
-      visible: false
+      visible: true
     }
   },
   methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
-    clickRecipeButton () {
+    clickRecipeButton (dishId) {
       let json
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
-          json = {'status': 'Готовится', 'name': document.getElementsByClassName('name')[0].textContent, 'tableNumber': 4}
+          json = {'status': 'Готовится', 'id': dishId, 'tableNumber': 2}
           break
         case 'ГОТОВО':
           this.visible = false
           this.classElementRecipe = 'button-take'
-          json = {'status': 'Готово', 'name': document.getElementsByClassName('name')[0].textContent, 'tableNumber': 4}
+          json = {'status': 'Готово', 'id': dishId, 'tableNumber': 2}
           break
         default:
           break

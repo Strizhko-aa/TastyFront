@@ -49,8 +49,9 @@
             <b-col v-else cols="12" sm="3" md="3" class="quantity">
               <div class="quantity-input">
                 <button class="minus btn-Q" @click="changeCount(item, -1)">-</button>
-                <input id="text_tribulus_1" :value="purchased[findPurshasedIndex(item.id)].count" class="input-text qty text" size="3"/>
+                <input id="text_tribulus_1" :value="purchased[findPurchasedIndex(item.id)].count" class="input-text qty text" size="3"/>
                 <button class="plus btn-Q" @click="changeCount(item, 1)">+</button>
+                <b-button variant="danger" @click="deleteFromPurshased(item.id)">[x]</b-button>
               </div>
             </b-col>
           </b-row>
@@ -71,7 +72,6 @@ export default {
       menuFlag: true,
       dishes: [],
       category: ''
-      // purchased: [] // [{dish: dish, count: 1}]
     }
   },
   computed: {
@@ -84,12 +84,12 @@ export default {
   },
 
   methods: {
-    deleteFromPurshased (index) {
-      // this.purchased.splice(index, 1)
+    deleteFromPurshased (id) {
+      let index = this.findPurchasedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
     },
 
-    findPurshasedIndex (searchId) {
+    findPurchasedIndex (searchId) {
       for (let i = 0; i < this.purchased.length; i++) {
         if (this.purchased[i].dish.id === searchId) {
           return i
@@ -98,15 +98,24 @@ export default {
       return null
     },
 
+    // изменяет кол-во блюда в заказе
     changeCount (dish, value) {
-      let index = this.findPurshasedIndex(dish.id)
-      // if (index !== null) {
-      //   this.purchased[index].count += value
-      // }
-      // if (this.purchased[index].count === 0) {
-      //   this.deleteFromPurshased(index)
-      // }
-      menuStore.dispatch('changeCount', {index: index, value: value})
+      let index = this.findPurchasedIndex(dish.id)
+      if (index !== null) {
+        menuStore.dispatch('changeCount', {index: index, value: value})
+        // let json = {'dishId': dish.id}
+        // if (value === -1) {
+        //   this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
+        //   }).catch(function (error) {
+        //     console.log(error)
+        //   })
+        // } else if (value === 1) {
+        //   this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+        //   }).catch(function (error) {
+        //     console.log(error)
+        //   })
+        // }
+      }
     },
 
     // нужен для отображения кнопок. Если блюдо куплено вернует тру иначе фолс
@@ -139,25 +148,11 @@ export default {
     addToCard (dish) {
       this.purchased.push({dish: dish, count: 1})
 
-      // let elem = document.getElementsByClassName('button button-buy')[index]
-      // if (elem == null) {
-      //   elem = document.getElementsByClassName('button button-purchased')[index]
-      // }
-      // let json = {'name': document.getElementsByClassName('name')[index].textContent, 'tableNumber': 4}
-      // switch (elem.textContent) { // ToDo - учитывая, что еще добавятся кнопки, все здесь еще поменяется
-      //   case 'Купить': // ToDo - а как достать номер столика с которого посетитель сделал заказ?
-      //     this.$http.post('http://localhost:8080/buy', JSON.stringify(json)).then(function (response) {
-      //     }).catch(function (error) {
-      //       console.log(error)
-      //     })
-      //     break
-      //   case 'Куплено':
-      //     this.$http.post('http://localhost:8080/remove', JSON.stringify(json)).then(function (response) {
-      //     }).catch(function (error) {
-      //       console.log(error)
-      //     })
-      //     break
-      // }
+      // let json = {'dishId': dish.id}
+      // this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+      // }).catch(function (error) {
+      //   console.log(error)
+      // })
     }
   }
 }

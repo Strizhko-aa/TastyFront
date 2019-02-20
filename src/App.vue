@@ -42,8 +42,8 @@
           <div style="margin-top: 1px" class="user">
             {{ user ? user.name : 'Loading...' }}
           </div>
-          <div>
-            <b-dropdown id="ddown-right" right variant="link" class="m-md-2" no-caret>
+          <!-- <div> -->
+            <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
                 <template slot="button-content">
                   <div class="menu-icon">
                   <img src="./assets/images/menu-button.svg" alt="">
@@ -51,9 +51,9 @@
                 </template>
               <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
             </b-dropdown>
-          </div>
+          <!-- </div> -->
         </b-col>
-        <b-col cols="0" md="0" sm="0"></b-col>
+        <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
       </b-row>
     </b-container>
     <b-container fluid>
@@ -126,6 +126,9 @@ export default {
 .modal-header {
    height: auto !important;
    padding: 0 !important;
+ }
+ .btn-drop-menu {
+   float: right;
  }
   header {
     width: 100%;
