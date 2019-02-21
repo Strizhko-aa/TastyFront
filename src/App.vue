@@ -56,7 +56,7 @@
         <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
       </b-row>
     </b-container>
-    <b-container fluid>
+    <b-container class="section">
       <router-view/>
     </b-container>
     <footer>
@@ -113,15 +113,15 @@ export default {
 
 <style>
 #app {
+  position: relative;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  padding-bottom: 60px;
 }
 .modal-header {
    height: auto !important;
@@ -187,16 +187,20 @@ export default {
   }
 
    .menu-icon img {
-    width: 25px;
-    height: 25px;
-  }
+     width: 25px;
+     height: 25px;
+   }
+.section {
+  margin: 25px auto;
+  min-height: calc( 100vh - 220px);
+}
 
 footer {
   background-color: #3F9384;
   width: 100%;
-  margin-top: 10px;
   display: inline-block;
   float: left;
+  position: absolute;
   bottom: 0;
   left: 0;
 }
