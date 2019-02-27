@@ -93,6 +93,11 @@ export default {
     deleteFromPurshased (id) {
       let index = this.findPurchasedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
+      let json = {'dishId': id}
+      this.$http.post('http://localhost:8080/cancel', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
 
     findPurchasedIndex (searchId) {
@@ -109,18 +114,18 @@ export default {
       let index = this.findPurchasedIndex(dish.id)
       if (index !== null) {
         menuStore.dispatch('changeCount', {index: index, value: value})
-        // let json = {'dishId': dish.id}
-        // if (value === -1) {
-        //   this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
-        //   }).catch(function (error) {
-        //     console.log(error)
-        //   })
-        // } else if (value === 1) {
-        //   this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
-        //   }).catch(function (error) {
-        //     console.log(error)
-        //   })
-        // }
+        let json = {'dishId': dish.id}
+        if (value === -1) {
+          this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else if (value === 1) {
+          this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }
       }
     },
 
@@ -154,11 +159,11 @@ export default {
     addToCard (dish) {
       this.purchased.push({dish: dish, count: 1})
 
-      // let json = {'dishId': dish.id}
-      // this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
-      // }).catch(function (error) {
-      //   console.log(error)
-      // })
+      let json = {'dishId': dish.id}
+      this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }
