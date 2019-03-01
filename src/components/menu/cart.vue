@@ -134,7 +134,12 @@ export default {
     // просто в форе оно не работало пришлось рекурсивно делать
     sendOrder: async function (i = 0) {
       if (i < this.ordered.length) {
-        console.log(await this.sendDish(this.ordered[i].dish.id)) // подождать результат
+        let dataSendDish = {
+          tableNumber: this.$data.tableNumber,
+          idDish: this.ordered[i].dish.id,
+          count: this.ordered[i].count
+        }
+        console.log(await this.sendDish(dataSendDish)) // подождать результат
         i++
         this.sendOrder(i) // добавить след элемент
       } else { // когда заказы кончились
@@ -142,15 +147,11 @@ export default {
         this.$router.push('/')
       }
     },
-
     // добавить блюдо в козину(с точки зрения БД). С точки зрения клиенты это уже должно быть заказано
     // async, promise только для того, чтобы дождаться пока отправится одно блюдо и только после этого отправить следующее
-    sendDish: async function (id) {
-      let data = {
-        'dishId': id
-      }
+    sendDish: async function (data) {
       return new Promise((resolve) => {
-        this.$http.post('http://localhost:8080/add', JSON.stringify(data)).then((response) => {
+        this.$http.post('http://localhost:8080/confirm', data).then((response) => {
           console.log(response.status)
           resolve('send success')
         }).catch(error => {
