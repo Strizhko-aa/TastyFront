@@ -132,20 +132,28 @@ export default {
     },
     // по идее отправить список заказов в БД
     // просто в форе оно не работало пришлось рекурсивно делать
-    sendOrder: async function (i = 0) {
-      if (i < this.ordered.length) {
-        let dataSendDish = {
-          tableNumber: this.$data.tableNumber,
-          idDish: this.ordered[i].dish.id,
-          count: this.ordered[i].count
-        }
-        console.log(await this.sendDish(dataSendDish)) // подождать результат
-        i++
-        this.sendOrder(i) // добавить след элемент
-      } else { // когда заказы кончились
-        this.clearCart()
-        this.$router.push('/')
-      }
+    sendOrder () {
+      // if (i < this.ordered.length) {
+      //   let dataSendDish = {
+      //     tableNumber: this.$data.tableNumber,
+      //     idDish: this.ordered[i].dish.id,
+      //     count: this.ordered[i].count
+      //   }
+      //   console.log(await this.sendDish(dataSendDish)) // подождать результат
+      //   i++
+      //   this.sendOrder(i) // добавить след элемент
+      // } else { // когда заказы кончились
+      //   this.clearCart()
+      //   this.$router.push('/')
+      // }
+      let json = {'tableNumber': this.$data.tableNumber}
+      this.$http.post('http://localhost:8080/confirm', JSON.stringify(json)).then((response) => {
+        console.log(response.status)
+      }).catch(error => {
+        console.log(error)
+      })
+      this.clearCart()
+      this.$router.push('/')
     },
     // добавить блюдо в козину(с точки зрения БД). С точки зрения клиенты это уже должно быть заказано
     // async, promise только для того, чтобы дождаться пока отправится одно блюдо и только после этого отправить следующее
