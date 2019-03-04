@@ -7,7 +7,7 @@
       <div>
         <b-row>
           <b-col></b-col>
-          <b-col class="text-center">
+          <b-col cols="10" class="text-center">
             <b-form-group>
               <b-form-radio-group style="width: 100%" v-model="selected" :options="options" size="md" buttons button-variant="success" name="radioTime">
               </b-form-radio-group>
@@ -18,9 +18,7 @@
       </div>
         <br>
         <b-row>
-          <b-col cols="0" sm="0" md="1" lg="1" xl="1"></b-col>
-          <b-col cols="12" xl="10" lg="10" md="10" sm="12" class="text-center bordered">
-
+          <b-col class="text-center bordered">
             <!-- если statistic ===  'popular' показываем одну пикчу, если нет смотрим следующее условие и т.д.-->
             <div v-if="selected === 'popular'">
               <Popular/>
@@ -43,6 +41,7 @@
 import Popular from './Popular'
 import Inform from './Inform'
 import Rating from './Rating'
+
 export default {
 
   name: 'app',
@@ -54,8 +53,7 @@ export default {
         {text: 'Популярное блюдо', value: 'popular'},
         {text: 'Информация по блюду', value: 'inform'},
         {text: 'Рейтинг блюд', value: 'rating'}
-      ],
-      elems: []
+      ]
     }
   }
 }
