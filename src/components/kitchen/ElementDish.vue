@@ -52,10 +52,20 @@ export default {
   // често говоря я хз как выглядит твой элемент ибо я еще не сливал АПИ-шку, позже солью подрехтую, да
   // и вобще наврное придется через бутстрап переписывать =(
   data () {
+    let recipeStatus = ''
+    let classElementRecipe = ''
+    if (this.data.dishStatus.title === 'В ожидании') {
+      recipeStatus = 'ВЗЯТЬ'
+      classElementRecipe = 'button-take'
+    }
+    if (this.data.dishStatus.title === 'Готовится') {
+      recipeStatus = 'ГОТОВО'
+      classElementRecipe = 'button-ready'
+    }
     return {
       flag: false,
-      recipeStatus: 'ВЗЯТЬ',
-      classElementRecipe: 'button-take',
+      recipeStatus: recipeStatus,
+      classElementRecipe: classElementRecipe,
       visible: true
     }
   },
