@@ -7,6 +7,8 @@ import Kitchen from '@/components/kitchen/Kitchen'
 import WaiterTables from '@/components/waiter/WaiterTables'
 import WaiterOrdersOnTable from '@/components/waiter/WaiterOrdersOnTable'
 import Login from '@/components/login/Login'
+import Registration from '@/components/login/Registration'
+import GetPassword from '@/components/login/getpassword'
 
 Vue.use(Router)
 
@@ -27,8 +29,18 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'Авторизация',
+      name: 'Аутентификация',
       component: Login
+    },
+    {
+      path: '/registration',
+      name: 'Авторизация',
+      component: Registration
+    },
+    {
+      path: '/getpassword',
+      name: 'Получить пароль',
+      component: GetPassword
     },
     {
       path: '/admin',
