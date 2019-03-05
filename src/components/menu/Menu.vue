@@ -31,7 +31,9 @@
       </b-row>
     </b-container>
     <b-container v-else-if="!menuFlag">
-      <b-button class="back-button button-buy" @click="back()">Назад</b-button>
+      <b-row class="back">
+        <b-button class="back-button button" @click="back()">Назад</b-button>
+      </b-row>
       <div v-if="dishesCount > 0">
           <b-row v-for="item in dishes" :key="item.id" class="height-150 item">
             <b-col cols="4" sm="6" md="3" class="photo">
@@ -51,14 +53,18 @@
                 <button class="minus btn-Q" @click="changeCount(item, -1)">-</button>
                 <input id="text_tribulus_1" :value="purchased[findPurchasedIndex(item.id)].count" class="input-text qty text" size="3"/>
                 <button class="plus btn-Q" @click="changeCount(item, 1)">+</button>
-                <b-button variant="danger" @click="deleteFromPurshased(item.id)">[x]</b-button>
+                <b-button class="delete"  @click="deleteFromPurshased(item.id)"><img class="delete-icon" src="../../assets/images/delete.png"></b-button>
               </div>
             </b-col>
           </b-row>
       </div>
     </b-container>
-    <router-link to="/cart">
-      <div class="cart">Корзина({{purchased.length}})</div>
+    <router-link to="/cart" v-if="purchased.length > 0">
+      <div class="cart"><img class="cart-icon" src="../../assets/images/shopping.png">
+        <div class="count-goods">
+        <span class="count">{{purchased.length}}</span>
+        </div>
+      </div>
     </router-link>
   </div>
 </template>
@@ -87,6 +93,11 @@ export default {
     deleteFromPurshased (id) {
       let index = this.findPurchasedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
+      let json = {'dishId': id}
+      this.$http.post('http://localhost:8080/cancel', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
 
     findPurchasedIndex (searchId) {
@@ -103,18 +114,18 @@ export default {
       let index = this.findPurchasedIndex(dish.id)
       if (index !== null) {
         menuStore.dispatch('changeCount', {index: index, value: value})
-        // let json = {'dishId': dish.id}
-        // if (value === -1) {
-        //   this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
-        //   }).catch(function (error) {
-        //     console.log(error)
-        //   })
-        // } else if (value === 1) {
-        //   this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
-        //   }).catch(function (error) {
-        //     console.log(error)
-        //   })
-        // }
+        let json = {'dishId': dish.id}
+        if (value === -1) {
+          this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else if (value === 1) {
+          this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }
       }
     },
 
@@ -148,11 +159,11 @@ export default {
     addToCard (dish) {
       this.purchased.push({dish: dish, count: 1})
 
-      // let json = {'dishId': dish.id}
-      // this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
-      // }).catch(function (error) {
-      //   console.log(error)
-      // })
+      let json = {'dishId': dish.id}
+      this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }
@@ -172,7 +183,7 @@ export default {
 
     .height-150 {
       height: 160px;
-
+      margin-bottom: 10px;
     }
     .item {
       border-bottom: 1px solid #3F9384;
@@ -226,7 +237,26 @@ export default {
       text-align: center;
     }
   }
-
+.delete {
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  margin-left: 5px;
+  background: white;
+  border: 0;
+}
+  .delete-icon {
+    width: 35px;
+    height: 35px;
+  }
+  .delete:hover .delete-icon{
+    width: 37px;
+    height: 37px;
+  }
+  .back {
+    width: 100%;
+    margin: 20px 0;
+  }
   /* все не охваченные стили .т.е меньше чем 576 */
   .menu-icon {
     height: 120px;
@@ -283,6 +313,7 @@ export default {
   }
 
   .button {
+    background-color: #3F9384;
     width: 139px;
     margin-top: 30%;
     height: 40px;
@@ -291,7 +322,7 @@ export default {
   }
 
   .button-buy {
-    background-color: #3F9384;
+    width: 190px;
   }
 
   .photo {
@@ -310,6 +341,8 @@ export default {
 
   .back-button {
     margin-top: 10px;
+    font-size: 15px;
+    width: auto;
   }
 
   .btn-Q {
@@ -322,8 +355,33 @@ export default {
   }
 
   .cart {
-    position: absolute;
-    top: 38px;
-    right: 160px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 100px;
+    height: 100px;
+    z-index: 1;
+  }
+  .cart-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+   .count-goods {
+     position: absolute;
+     right: 0;
+     top: 0;
+     width: 30%;
+     height: 30%;
+     background-color: chocolate;
+     text-align: center;
+     vertical-align: middle;
+     border-radius: 50%;
+     font-size: 22px;
+     color: white;
+     display: inherit;
+   }
+  .count{
+    margin: auto;
   }
 </style>
