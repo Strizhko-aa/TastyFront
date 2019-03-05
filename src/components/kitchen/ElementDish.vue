@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="button-block">
-                <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.dish.id)"> {{recipeStatus}} </button>
+                <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.id)"> {{recipeStatus}} </button>
             </div>
         </div>
         <div class="recipe" v-show="flag">
@@ -70,18 +70,18 @@ export default {
     }
   },
   methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
-    clickRecipeButton (dishId) {
+    clickRecipeButton (dishesFromOrderId) {
       let json
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
-          json = {'status': 'Готовится', 'id': dishId, 'tableNumber': 2}
+          json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
           break
         case 'ГОТОВО':
           this.visible = false
           this.classElementRecipe = 'button-take'
-          json = {'status': 'Готово', 'id': dishId, 'tableNumber': 2}
+          json = {'status': 'Готово', 'id': dishesFromOrderId, 'tableNumber': 2}
           break
         default:
           break
