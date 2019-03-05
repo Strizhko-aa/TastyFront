@@ -13,7 +13,7 @@ Vue.use(Router)
 // Это vue-router. Тут прописаны пути по которым можно ходить и какой будет результат при переходе.
 // Результат это компонент App.vue (верхняя полоска и футер) а по середине компонент (в App.vue это тег <router-view/>)
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
