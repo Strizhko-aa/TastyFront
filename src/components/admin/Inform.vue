@@ -5,8 +5,8 @@
         <b-row>
           <b-col cols="5">
             <b-form-select v-model="selected" :options="options" class="mb-3" :select-size="15">
-              <optgroup v-for="(group, name) in optionGroups" :label="name">
-                <option v-for="option in group" :value="option.value">
+              <optgroup v-for="(group, name) in optionGroups" :label="name" :key="name">
+                <option v-for="option in group" :value="option.value" :key="option.value">
                   {{ option.text }}
                 </option>
               </optgroup>
