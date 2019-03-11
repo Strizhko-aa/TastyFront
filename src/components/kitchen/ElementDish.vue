@@ -1,6 +1,6 @@
 <template>
-    <div class="element" v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
-        <div class="element-list">
+    <div class="element"  v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
+      <div class="element-list">
             <div class="photo">
                 <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
             </div>
@@ -46,8 +46,9 @@ export default {
   name: 'ElementDish',
   props: {
     // removeComponent: () => {}, // втф?
-    data: Object // пропс это хорошо. Если вдруг тебе понадобится таскать какие-то элементы дальше чем из
+    data: Object, // пропс это хорошо. Если вдруг тебе понадобится таскать какие-то элементы дальше чем из
     // родительского в дочерний загляни в store/store.js
+    updateComponent: Function
   },
   // често говоря я хз как выглядит твой элемент ибо я еще не сливал АПИ-шку, позже солью подрехтую, да
   // и вобще наврное придется через бутстрап переписывать =(
@@ -74,13 +75,14 @@ export default {
       let json
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
+          this.data.dishStatus.title = 'Готовится'
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
           break
         case 'ГОТОВО':
           this.visible = false
-          this.classElementRecipe = 'button-take'
+          this.data.dishStatus.title = 'Готово'
           json = {'status': 'Готово', 'id': dishesFromOrderId, 'tableNumber': 2}
           break
         default:
@@ -90,6 +92,7 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
+      this.updateComponent()
     }
   }
 }
@@ -129,14 +132,13 @@ export default {
 .name-dish {
     width: 100%;
     height: 130px;
-    padding-left: 15px;
+    padding: 0 10px;
     position: relative;
 }
 .name {
     width: 100%;
-    font-size: 30px;
-    line-height: 30px;
-
+    font-size: 26px;
+    line-height: 26px;
     text-align: left;
 }
 .category {
@@ -161,9 +163,9 @@ export default {
     width: 150px;
 }
 .button {
-    font-size: 30px;
-    max-width: 150px;
-    width: 150px;
+    font-size: 28px;
+    max-width: 140px;
+    width: 140px;
     font-weight: 500;
     float: right;
     vertical-align: middle;
@@ -214,4 +216,9 @@ export default {
     line-height: 20px;
     text-align: justify;
 }
+@media (max-width: 1200px) {
+    .name {
+      font-size: 24px;
+    }
+  }
 </style>
