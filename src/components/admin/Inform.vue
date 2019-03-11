@@ -24,7 +24,7 @@
               <label style="margin-top: 10px"><strong>Цена: </strong>{{information.price}} рублей</label><br>
               <!--<label v-html="information.ingredient">{{information.ingredient}}</label>-->
               <label style="margin-top: 50px;"><strong>Масса: </strong>{{information.mass}}</label>
-              <label style="margin-top: 50px;"><strong>Время приотовл-я:</strong> {{information.time}} минут</label>
+              <label style="margin-top: 50px;"><strong>Время готовки:</strong> {{information.time}} минут</label>
             </div>
           </b-col>
         </b-row>
