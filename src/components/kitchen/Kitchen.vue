@@ -2,8 +2,22 @@
   <div class="hello">
     <div class="container">
       <!-- проверка что элементы есть -->
-      <div class="row" v-if="elements.length > 0">
-        <ElementDish v-for="v in elements" v-bind:key="v.id" v-bind:data="v"/>
+      <div class="row" v-if="elements.length > 0 && mobile" >
+        <ElementDish class="col-12" v-for="v in elements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
+      </div>
+      <div class="row" v-else-if="elements.length > 0">
+        <div class="col-12 col-lg-6" v-if="flagL">
+          <ElementDish v-for="v in leftElements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
+        </div>
+        <div class="col-12 col-lg-6" v-else>
+          <h2>Блюда на приготовление не найдены</h2>
+        </div>
+        <div class="col-12 col-lg-6" v-if="flagR">
+          <ElementDish v-for="v in rightElements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
+        </div>
+        <div class="col-12 col-lg-6" v-else>
+          <h2>Блюда в процессе притовления не найдены</h2>
+        </div>
       </div>
       <!-- если их нет, то заглушка -->
       <div v-else>
@@ -26,13 +40,31 @@ export default {
   },
   data () {
     return {
-      elements: []
+      elements: [],
+      mobile: false,
+      leftElements: [],
+      rightElements: [],
+      flagR: true,
+      flagL: true
     }
   },
   methods: {
-
+    filter (search) {
+      return this.elements.filter(x => x.dishStatus.title === search)
+    },
+    windowEvent () {
+      this.mobile = window.innerWidth < 960
+    },
+    updateComponent () {
+      this.leftElements = this.filter('В ожидании')
+      this.rightElements = this.filter('Готовится')
+      this.flagL = this.leftElements.length > 0
+      this.flagR = this.rightElements.length > 0
+    }
   },
   created () {
+    window.onresize = this.windowEvent
+    window.onready = this.windowEvent
     // let resource = this.$resource('http://localhost:8080/kitchen');
     // resource.get().then(result => {
     //   result.json().then(data => {
@@ -47,6 +79,7 @@ export default {
     // ниже и читать про него ничего не нужно
     this.$http.get('http://localhost:8080/kitchen').then(response => {
       this.elements = response.body
+      this.updateComponent()
       console.log(response.body)
     }).catch(err => {
       console.log(err.status)
@@ -75,8 +108,5 @@ export default {
 }
 .element.recipe-show .recipe {
   display: block;
-}
-.container .row {
-    display: block;
 }
 </style>
