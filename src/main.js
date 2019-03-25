@@ -6,6 +6,7 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import Vuex from 'vuex'
 import store from '../src/components/store/store'
 // import menuStore from '../src/components/menu/menuStore'

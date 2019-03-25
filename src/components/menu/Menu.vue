@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <div class="popup" v-if="message" v-on:click="clearMessage()">{{message}}</div>
     <b-container v-if="menuFlag === true">
       <b-row class="height-50">
       </b-row>
@@ -75,10 +76,14 @@ import menuStore from './menuStore'
 export default {
   data () {
     return {
+      routeMessage: null,
       menuFlag: true,
       dishes: [],
       category: ''
     }
+  },
+  created () {
+    this.message = this.$route.query.message
   },
   computed: {
     dishesCount () {
@@ -86,10 +91,24 @@ export default {
     },
     purchased () {
       return menuStore.getters.value('purchased')
+    },
+    message: {
+      get: function () {
+        return this.routeMessage
+      },
+      set: function (value) {
+        this.routeMessage = value
+        if (value) {
+          setTimeout(() => { this.clearMessage() }, 3000)
+        }
+      }
     }
   },
-
   methods: {
+    clearMessage () {
+      this.message = null
+      this.$router.push('/')
+    },
     deleteFromPurshased (id) {
       let index = this.findPurchasedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
@@ -171,6 +190,17 @@ export default {
 </script>
 
 <style scoped>
+  .popup {
+    position: absolute;
+    left: 35%;
+    z-index: 10;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ee6b00bf;
+    color: #ffffff;
+  }
   /* Стиль больше чем 576px */
   @media (min-width: 576px) {
     .container {
