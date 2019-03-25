@@ -1,27 +1,40 @@
 <template>
     <div class="element"  v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
-      <div class="element-list">
-            <div class="photo">
-                <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+      <div  v-on:click="flag=!flag">
+        <div class="element-list">
+          <div class="photo">
+            <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+          </div>
+          <div class="name-dish">
+            <div class="name category">
+              <span> {{data.dish.typeDish.title}}</span>
             </div>
-            <div class="name-dish" v-on:click="flag=!flag">
-                <div class="name category">
-                    <span> {{data.dish.typeDish.title}}</span>
-                </div>
-                <div class="name">
-                    <span> {{data.dish.name}} </span>
-                </div>
-                <div class="mass">
-                    <span> {{data.dish.mass}}</span>
-                </div>
-                <div class="time">
-                    <span></span>
-                </div>
+            <div class="name">
+              <span> {{data.dish.name}} </span>
+            </div>
+            <div class="mass">
+              <span> {{data.dish.mass}}</span>
+            </div>
+          </div>
+          <div class="btnAndTime">
+            <div class="time timeTop">
+              <span>{{data.dish.preparingTime}}</span>
             </div>
             <div class="button-block">
-                <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.id)"> {{recipeStatus}} </button>
+              <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.id)"> {{recipeStatus}} </button>
             </div>
+            <div class="time timeBottom" >
+            <span>Ждет: {{date}}</span>
+          </div>
+          </div>
         </div>
+        <div v-if="flag" class="arrow" >
+          <ion-icon name="ios-arrow-up" v-show="flag"></ion-icon>
+        </div>
+        <div v-else-if="!flag" class="arrow">
+          <ion-icon name="ios-arrow-down"></ion-icon>
+        </div>
+      </div>
         <div class="recipe" v-show="flag">
             <div class="ingredients-block">
                 <div class="ingredient-name title">Ингредиенты</div>
@@ -67,7 +80,11 @@ export default {
       flag: false,
       recipeStatus: recipeStatus,
       classElementRecipe: classElementRecipe,
-      visible: true
+      visible: true,
+      date: setInterval(() => { this.timeO() }, 1000)
+      // tmp: false,
+      // dateReal: this.cookingTime(),
+      // dateRealTime: null
     }
   },
   methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
@@ -79,6 +96,9 @@ export default {
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
+          // this.tmp = true
+          // this.dateReal = new Date()
+          // this.cookingTime(this.dateReal)
           break
         case 'ГОТОВО':
           this.visible = false
@@ -93,6 +113,36 @@ export default {
         console.log(error)
       })
       this.updateComponent()
+    },
+    timeO () {
+      var a = new Date()
+      var b = new Date(this.data.timeOrder)
+      var daysLag = a.getTime() - b.getTime()
+      this.date = this.msToTime(daysLag)
+    },
+    msToTime (duration) {
+      var milliseconds = parseInt((duration % 1000) / 100)
+      var seconds = parseInt((duration / 1000) % 60)
+      var minutes = parseInt((duration / (1000 * 60)) % 60)
+      var hours = parseInt((duration / (1000 * 60 * 60)))
+
+      hours = (hours < 10) ? '0' + hours : hours
+      minutes = (minutes < 10) ? '0' + minutes : minutes
+      seconds = (seconds < 10) ? '0' + seconds : seconds
+
+      return hours + ':' + minutes + ':' + seconds
+    },
+    timeR (date) {
+      var a = new Date()
+      var b = new Date(date)
+      console.log('time ' + b.getTime())
+      var daysReal = a.getTime() - b.getTime()
+      this.dateRealTime = this.msToTime(daysReal)
+    },
+    cookingTime (date) {
+      if (this.tmp) {
+        setInterval(() => { this.timeR(date) }, 1000)
+      }
     }
   }
 }
@@ -109,9 +159,12 @@ export default {
     padding: 10px;
     /*margin-bottom: 5px;
     border-top: 2px dotted #3F9384;*/
-    border-bottom: 1px solid #3F9384;
     display: flex;
     font-family: "Times New Roman";
+}
+.arrow {
+  width: 100%;
+  border-bottom: 1px solid #3F9384;
 }
 .photo {
     position: relative;
@@ -151,12 +204,22 @@ export default {
     text-align: left;
     font-size: 18px;
 }
+.btnAndTime {
+  position: relative;
+  display: flex;
+}
 .time {
-    width: 100%;
-    font-size: 20px;
-    text-align: left;
-    position: absolute;
-    bottom: 0;
+  position: absolute;
+  width: 100%;
+  font-size: 22px;
+  line-height: 22px;
+  text-align: right;
+}
+.timeTop {
+  top: 0px;
+}
+.timeBottom {
+  bottom: 0;
 }
 .button-block {
     align-self: center;
