@@ -21,12 +21,12 @@
       <b-row class="height-50">
       </b-row>
       <b-row class="height-150 category-line">
-        <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Десерт')">
-          <img class="menu-icon" src="../../assets/images/novogodnij-desert-radost-obezyanki.jpg" alt="">
+        <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Десерты')">
+          <img class="menu-icon" src="../../assets/images/novogodnij-desert-radost-obezyanki.jpg" alt="десерты">
           <div class="category-name">Десерты</div>
         </b-col>
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Закуски')">
-          <img class="menu-icon" src="../../assets/images/buterbrody-s-krasnoj-ikroj-i-syrom.jpg" alt="">
+          <img class="menu-icon" src="../../assets/images/buterbrody-s-krasnoj-ikroj-i-syrom.jpg" alt="закуски">
           <div class="category-name">Закуски</div>
         </b-col>
       </b-row>

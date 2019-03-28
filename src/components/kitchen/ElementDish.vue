@@ -1,57 +1,57 @@
 <template>
-    <div class="element"  v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
-      <div  v-on:click="flag=!flag">
-        <div class="element-list">
-          <div class="photo">
-            <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+  <div class="element" v-if="visible"> <!-- Добавил для своих нужд, хотите - убирайте :) -->
+    <div v-on:click="flag=!flag">
+      <div class="element-list">
+        <div class="photo">
+          <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+        </div>
+        <div class="name-dish">
+          <div class="name category">
+            <span> {{data.dish.typeDish.title}}</span>
           </div>
-          <div class="name-dish">
-            <div class="name category">
-              <span> {{data.dish.typeDish.title}}</span>
-            </div>
-            <div class="name">
-              <span> {{data.dish.name}} </span>
-            </div>
-            <div class="mass">
-              <span> {{data.dish.mass}}</span>
-            </div>
+          <div class="name">
+            <span> {{data.dish.name}} </span>
           </div>
-          <div class="btnAndTime">
-            <div class="time timeTop">
-              <span>{{data.dish.preparingTime}}</span>
-            </div>
-            <div class="button-block">
-              <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe" v-on:click="clickRecipeButton(data.id)"> {{recipeStatus}} </button>
-            </div>
-            <div class="time timeBottom" >
-            <span>Ждет: {{date}}</span>
-          </div>
+          <div class="mass">
+            <span> {{data.dish.mass}}</span>
           </div>
         </div>
-        <div v-if="flag" class="arrow" >
-          <ion-icon name="ios-arrow-up" v-show="flag"></ion-icon>
-        </div>
-        <div v-else-if="!flag" class="arrow">
-          <ion-icon name="ios-arrow-down"></ion-icon>
+        <div class="btnAndTime">
+          <div class="time timeTop">
+            <span>{{data.dish.preparingTime}}</span>
+          </div>
+          <div class="button-block">
+            <button class="btn btn-lg btn-success active button" v-bind:class="classElementRecipe"
+                    v-on:click="clickRecipeButton(data.id)"> {{recipeStatus}}
+            </button>
+          </div>
+          <div class="time timeBottom">{{waitTitle}} {{waitDateTime}}</div>
         </div>
       </div>
-        <div class="recipe" v-show="flag">
-            <div class="ingredients-block">
-                <div class="ingredient-name title">Ингредиенты</div>
-                <div class="ingredient-description">
-                    <div class="ingredient-list">
-                        <span class="ing-list-name" v-html=data.dish.ingredient> {{data.dish.ingredient}} </span>
-                    </div>
-                </div>
-            </div>
-            <div class="recipe-block">
-                <div class="recipe-name title">Рецепт</div>
-                <div class="recipe-description" v-html=data.dish.recipe>
-                  {{data.dish.recipe}}
-                </div>
-            </div>
-        </div>
+      <div v-if="flag" class="arrow">
+        <ion-icon name="ios-arrow-up" v-show="flag"></ion-icon>
+      </div>
+      <div v-else-if="!flag" class="arrow">
+        <ion-icon name="ios-arrow-down"></ion-icon>
+      </div>
     </div>
+    <div class="recipe" v-show="flag">
+      <div class="ingredients-block">
+        <div class="ingredient-name title">Ингредиенты</div>
+        <div class="ingredient-description">
+          <div class="ingredient-list">
+            <span class="ing-list-name" v-html=data.dish.ingredient> {{data.dish.ingredient}} </span>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-block">
+        <div class="recipe-name title">Рецепт</div>
+        <div class="recipe-description" v-html=data.dish.recipe>
+          {{data.dish.recipe}}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -66,6 +66,7 @@ export default {
   // често говоря я хз как выглядит твой элемент ибо я еще не сливал АПИ-шку, позже солью подрехтую, да
   // и вобще наврное придется через бутстрап переписывать =(
   data () {
+    console.log(this.data)
     let recipeStatus = ''
     let classElementRecipe = ''
     if (this.data.dishStatus.title === 'В ожидании') {
@@ -81,13 +82,31 @@ export default {
       recipeStatus: recipeStatus,
       classElementRecipe: classElementRecipe,
       visible: true,
-      date: setInterval(() => { this.timeO() }, 1000)
-      // tmp: false,
-      // dateReal: this.cookingTime(),
-      // dateRealTime: null
+      waitDateTime: null,
+      interval: null
     }
   },
-  methods: { // есть такой пункт как methods, не надо засовывать действие на нажатие в дату
+  computed: {
+    waitTitle: {
+      get: function () {
+        return this.data.beginCookingTime ? 'Готов: ' : 'Ждет: '
+      }
+    },
+    dateRealNow: {
+      get: function () {
+        return new Date(this.data.beginCookingTime || this.data.timeOrder)
+      },
+      set: function (value) {
+        this.data.beginCookingTime = value
+      }
+    }
+  },
+  created () {
+    this.interval = setInterval(() => {
+      this.waitDateTime = this.msToTime(new Date() - this.dateRealNow)
+    }, 1000)
+  },
+  methods: {
     clickRecipeButton (dishesFromOrderId) {
       let json
       switch (this.recipeStatus) {
@@ -96,9 +115,7 @@ export default {
           this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
-          // this.tmp = true
-          // this.dateReal = new Date()
-          // this.cookingTime(this.dateReal)
+          this.dateRealNow = new Date()
           break
         case 'ГОТОВО':
           this.visible = false
@@ -109,16 +126,11 @@ export default {
           break
       }
       this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(json)).then(function (response) {
+        console.log(response)
       }).catch(function (error) {
         console.log(error)
       })
       this.updateComponent()
-    },
-    timeO () {
-      var a = new Date()
-      var b = new Date(this.data.timeOrder)
-      var daysLag = a.getTime() - b.getTime()
-      this.date = this.msToTime(daysLag)
     },
     msToTime (duration) {
       var milliseconds = parseInt((duration % 1000) / 100)
@@ -131,18 +143,6 @@ export default {
       seconds = (seconds < 10) ? '0' + seconds : seconds
 
       return hours + ':' + minutes + ':' + seconds
-    },
-    timeR (date) {
-      var a = new Date()
-      var b = new Date(date)
-      console.log('time ' + b.getTime())
-      var daysReal = a.getTime() - b.getTime()
-      this.dateRealTime = this.msToTime(daysReal)
-    },
-    cookingTime (date) {
-      if (this.tmp) {
-        setInterval(() => { this.timeR(date) }, 1000)
-      }
     }
   }
 }
@@ -150,82 +150,95 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.element{
+  .element {
     border: 1px solid #3F9384;
     font-family: "Times New Roman";
-}
-.element-list {
+  }
+
+  .element-list {
     width: 100%;
     padding: 10px;
     /*margin-bottom: 5px;
     border-top: 2px dotted #3F9384;*/
     display: flex;
     font-family: "Times New Roman";
-}
-.arrow {
-  width: 100%;
-  border-bottom: 1px solid #3F9384;
-}
-.photo {
+  }
+
+  .arrow {
+    width: 100%;
+    border-bottom: 1px solid #3F9384;
+  }
+
+  .photo {
     position: relative;
     padding: 0;
     height: 130px;
     max-width: 200px;
     border-radius: 10px 0;
-    box-shadow:
-            inset 1px 1px 10px 0 rgba(255,255,255,.5),
-            inset -1px -1px 10px 0 rgba(0,0,0,.5),
-            2px 2px 5px 0 rgba(0,0,0,.5);
-}
-.photo img {
+    box-shadow: inset 1px 1px 10px 0 rgba(255, 255, 255, .5),
+    inset -1px -1px 10px 0 rgba(0, 0, 0, .5),
+    2px 2px 5px 0 rgba(0, 0, 0, .5);
+  }
+
+  .photo img {
     object-fit: cover;
     width: 100%;
     height: 100%;
-}
-.name-dish {
+  }
+
+  .name-dish {
     width: 100%;
     height: 130px;
     padding: 0 10px;
     position: relative;
-}
-.name {
+  }
+
+  .name {
     width: 100%;
     font-size: 26px;
     line-height: 26px;
     text-align: left;
-}
-.category {
+  }
+
+  .category {
     font-weight: bold;
-}
-.mass {
+  }
+
+  .mass {
     width: 100%;
     line-height: 20px;
     margin-top: 10px;
     text-align: left;
     font-size: 18px;
-}
-.btnAndTime {
-  position: relative;
-  display: flex;
-}
-.time {
-  position: absolute;
-  width: 100%;
-  font-size: 22px;
-  line-height: 22px;
-  text-align: right;
-}
-.timeTop {
-  top: 0px;
-}
-.timeBottom {
-  bottom: 0;
-}
-.button-block {
+  }
+
+  .btnAndTime {
+    position: relative;
+    display: flex;
+  }
+
+  .time {
+    position: absolute;
+    width: 100%;
+    font-size: 22px;
+    line-height: 22px;
+    text-align: right;
+  }
+
+  .timeTop {
+    top: 0px;
+  }
+
+  .timeBottom {
+    bottom: 0;
+  }
+
+  .button-block {
     align-self: center;
     width: 150px;
-}
-.button {
+  }
+
+  .button {
     font-size: 28px;
     max-width: 140px;
     width: 140px;
@@ -233,39 +246,51 @@ export default {
     float: right;
     vertical-align: middle;
     font-family: "Times New Roman";
-}
-.button-take{ background-color: #6e819e !important;}
-.button-ready{ background-color: #3F9384 !important; }
-.element {
+  }
+
+  .button-take {
+    background-color: #6e819e !important;
+  }
+
+  .button-ready {
+    background-color: #3F9384 !important;
+  }
+
+  .element {
     width: 100%;
-}
-.recipe {
+  }
+
+  .recipe {
     width: 100%;
     display: flex;
     /*border-top: 1px dotted #3F9384;*/
 
     padding: 15px 0;
-}
-.ingredients-block {
+  }
+
+  .ingredients-block {
     width: 30%;
-    padding: 0 15px ;
+    padding: 0 15px;
     height: auto;
     border-right: 1px dotted #3F9384;
-}
-.recipe-block {
+  }
+
+  .recipe-block {
     padding: 0 15px;
     width: 70%;
     height: auto;
-}
-.title {
+  }
+
+  .title {
     font-size: 20px;
     line-height: 20px;
     text-align: center;
     margin-bottom: 15px;
     font-family: "Times New Roman";
     color: black;
-}
-.ingredient-list {
+  }
+
+  .ingredient-list {
     width: 100%;
     display: inline-block;
     float: left;
@@ -273,13 +298,15 @@ export default {
     font-size: 18px;
     line-height: 20px;
     text-align: center;
-}
-.recipe-description {
+  }
+
+  .recipe-description {
     font-size: 18px;
     line-height: 20px;
     text-align: justify;
-}
-@media (max-width: 1200px) {
+  }
+
+  @media (max-width: 1200px) {
     .name {
       font-size: 24px;
     }
