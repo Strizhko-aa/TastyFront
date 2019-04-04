@@ -40,6 +40,7 @@
               <th>Категория</th>
               <th>Запас</th>
               <th colspan="2"> Редактирование </th>
+              <th>На завтра</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +54,8 @@
                 <ion-icon class="icon-table" name="add-circle" v-on:click="edit('+', i)"></ion-icon>
                 <ion-icon class="icon-table" name="remove-circle" v-on:click="edit('-', i)"></ion-icon>
               </td>
+              <td>{{i.quantity_in_stock}} , {{i.unit}}</td>
+              <td><ion-icon class="icon-table"  name="trash" v-on:click="deleteIng(i.id)"></ion-icon></td>
             </tr>
             </tbody>
           </table>
@@ -121,31 +124,15 @@ export default {
             unit: ''
           }
           this.ingredients.push(response.body)
-          Vue.notify({
-            group: 'foo',
-            title: 'Добавление ',
-            type: 'success',
-            position: 'top center',
-            duration: 7000,
-            text: 'Ингредиент ' + response.body.name + ' успешно добавлен'
-          })
+          this.noty('Добавление ', 'success','Ингредиент ' + response.body.name + ' успешно добавлен')
         } else {
-          this.notyErrorAdd()
+          this.noty('Добавление ', 'error', 'Ошибка добавления')
         }
       }, error => {
-        this.notyErrorAdd()
+        this.noty('Добавление ', 'error', 'Ошибка добавления')
       }).catch(function (error) {
         console.log(error)
-      })
-    },
-    notyErrorAdd () {
-      Vue.notify({
-        group: 'foo',
-        title: 'Добавление ',
-        type: 'error',
-        position: 'top center',
-        duration: 7000,
-        text: 'Ошибка добавления'
+        this.noty('Добавление ', 'error', 'Ошибка добавления')
       })
     },
     edit (symbol, ingredient) {
@@ -155,34 +142,44 @@ export default {
         this.$http.post('http://localhost:8080/admin/editMassIngredient', JSON.stringify(this.editModel)).then(function (response) {
           console.log(response)
           if (response.body.id) {
-            Vue.notify({
-              group: 'foo',
-              title: 'Изменение кол-ва ингредента',
-              type: 'success',
-              position: 'top center',
-              duration: 7000,
-              text: 'Вес ингредиента ' + response.body.name + ' успешно изменен'
-            })
+            this.noty('Изменение кол-ва ингредента ', 'success', 'Вес ингредиента ' + response.body.name + ' успешно изменен')
             ingredient.quantity_in_stock = response.body.quantity_in_stock
             ingredient.mass = ''
           } else {
-            this.notyErrorEdit()
+            this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
           }
         }, error => {
-          this.notyErrorEdit()
+          this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
         }).catch(function (error) {
           console.log(error)
         })
-      } else this.notyErrorEdit()
+      } else this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
     },
-    notyErrorEdit () {
+    deleteIng (id) {
+      this.$http.post('http://localhost:8080/admin/deleteIngredient', JSON.stringify(id)).then(function (response) {
+        console.log(response)
+        if (response.body === true) {
+          const indexElement = this.ingredients.findIndex(x => x.id === id)
+          if (indexElement >= 0) {
+            this.ingredients.splice(indexElement, 1)
+          }
+          this.noty('Удаление ', 'success', 'Ингредиент удален')
+        } else this.noty('Удаление ', 'error', 'Нельзя удалить ингредиент, так как он используется в блюде(блюдах)')
+      }, error => {
+        this.noty('Удаление ','error', 'Ошибка удаления')
+      }).catch(function (error) {
+        console.log(error)
+        this.noty('Удаление ', 'error', 'Ошибка удаления')
+      })
+    },
+    noty (title, type, text) {
       Vue.notify({
         group: 'foo',
-        title: 'Изменение ',
-        type: 'error',
+        title: title,
+        type: type,
         position: 'top center',
         duration: 7000,
-        text: 'Ошибка изменения количества ингредиента'
+        text: text
       })
     }
   }
