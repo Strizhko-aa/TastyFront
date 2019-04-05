@@ -52,7 +52,7 @@ export default {
       options: [
         {text: 'Популярное блюдо', value: 'popular'},
         {text: 'Информация по блюду', value: 'inform'},
-        {text: 'Рейтинг блюд', value: 'rating', disabled: true}
+        {text: 'Рейтинг блюд', value: 'rating'}
       ]
     }
   }
