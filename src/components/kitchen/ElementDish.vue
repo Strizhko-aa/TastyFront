@@ -40,7 +40,9 @@
         <div class="ingredient-name title">Ингредиенты</div>
         <div class="ingredient-description">
           <div class="ingredient-list">
-            <span class="ing-list-name" v-html=data.dish.ingredient> {{data.dish.ingredient}} </span>
+            <div v-for="i in data.dish.ingredients" v-bind:key="i.id">
+              <p class="ing-item"> {{i.ingredient.name}} - {{i.quantity}} {{i.ingredient.unit}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -304,6 +306,9 @@ export default {
     font-size: 18px;
     line-height: 20px;
     text-align: justify;
+  }
+  .ing-item {
+    margin-bottom: 0;
   }
 
   @media (max-width: 1200px) {
