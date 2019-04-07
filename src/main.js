@@ -11,10 +11,13 @@ import Vuex from 'vuex'
 import store from '../src/components/store/store'
 // import menuStore from '../src/components/menu/menuStore'
 import VueResource from 'vue-resource'
+import Notifications from 'vue-notification'
+
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)
+Vue.use(Notifications)
 
 Vue.config.productionTip = false
 

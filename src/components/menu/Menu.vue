@@ -38,8 +38,7 @@
       <div v-if="dishesCount > 0">
           <b-row v-for="item in dishes" :key="item.id" class="height-150 item">
             <b-col cols="4" sm="6" md="3" class="photo">
-              <img class="photo" :src="require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))"
-                   alt="">
+              <img class="photo" v-bind:src="(item.imgUrl.substring(0, 4) === 'http') ? item.imgUrl : require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))" alt="">
             </b-col>
             <b-col cols="12" sm="3" md="6">
               <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
