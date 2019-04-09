@@ -4,7 +4,7 @@
       <br>
       <b-row>
         <b-col cols="4"></b-col>
-          <b-col>
+          <b-col @submit.prevent="loginIn">
             <div></div>
             <div class="mt-3">
               <b-form-input v-model="username"
@@ -42,38 +42,32 @@ export default {
   data () {
     return {
       username: '',
-      password: '',
-      result: '',
-      elements: []
+      password: ''
     }
   },
   methods: {
     loginIn: function () {
-      let _url = 'http://localhost:8080/login'
-      // var _type = {
-      //   'username': this.username,
-      //   'login': this.login
-      // }
-      this.$http.get(_url).then(response => {
-        this.elements = response.body
+      let _url = 'http://localhost:8080/token'
+      let _json = {
+        'login': this.username,
+        'password': this.password
+      }
+      this.$http.post(_url, JSON.stringify(_json)).then(response => {
+        this.$cookies.set('token', response.bodyText)
+        this.$router.push({path: '/waiter'})
       }).catch(err => {
         console.log(err.status)
-        this.elements = []
       })
-      console.log('login:')
-      console.log(this.elements)
     }
-  },
-  created () {
-    let _url = 'http://localhost:8080/login'
-    this.$http.get(_url).then(response => {
-      this.elements = response.body
-    }).catch(err => {
-      console.log(err.status)
-      this.elements = []
-    })
-    console.log('created:')
-    console.log(this.elements)
   }
+  // created () {
+  //   let _url = 'http://localhost:8080/login'
+  //   this.$http.get(_url).then(response => {
+  //     this.elements = response.body
+  //   }).catch(err => {
+  //     console.log(err.status)
+  //     this.elements = []
+  //   })
+  // }
 }
 </script>

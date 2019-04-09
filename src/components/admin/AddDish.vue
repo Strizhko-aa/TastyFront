@@ -88,14 +88,14 @@ export default {
   },
   props: [ 'imageSrc' ],
   created () {
-    this.$http.get('http://localhost:8080/admin/addDish/ingredient').then(response => {
+    this.$http.get('http://localhost:8080/admin/addDish/ingredient', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.ingredient = response.body
       console.log(response.body)
     }).catch(err => {
       console.log(err.status)
       this.ingredient = []
     })
-    this.$http.get('http://localhost:8080/admin/addDish/typeDish').then(response => {
+    this.$http.get('http://localhost:8080/admin/addDish/typeDish', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.typeDish = response.body
       console.log(response.body)
     }).catch(err => {

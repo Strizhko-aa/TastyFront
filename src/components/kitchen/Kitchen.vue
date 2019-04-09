@@ -28,7 +28,6 @@
 </template>
 
 <script>
-
 import ElementDish from './ElementDish'
 
 export default {
@@ -77,7 +76,7 @@ export default {
 
     // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
     // ниже и читать про него ничего не нужно
-    this.$http.get('http://localhost:8080/kitchen').then(response => {
+    this.$http.get('http://localhost:8080/kitchen', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.elements = response.body
       this.updateComponent()
       console.log(response.body)

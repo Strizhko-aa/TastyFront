@@ -19,8 +19,6 @@
 </template>
 
 <script>
-// import store from '../store/store'
-
 export default {
   name: 'WaiterTables',
   props: {},
@@ -36,7 +34,8 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8080/waiter').then(function (response) {
+    this.$http.get('http://localhost:8080/waiter',
+      {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(function (response) {
       this.elements = response.body
       console.log(this.elements)
     }).catch(function (err) {

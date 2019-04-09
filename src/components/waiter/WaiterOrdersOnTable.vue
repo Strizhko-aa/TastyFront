@@ -86,7 +86,8 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
+    this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber,
+      {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(function (response) {
       this.elements = response.body
       console.log(this.elements)
     }).catch(function (err) {

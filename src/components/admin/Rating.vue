@@ -10,67 +10,66 @@
 </template>
 
 <script>
-  import BarChart from './chart/BarChart'
+import BarChart from './chart/BarChart'
 
-
-  export default {
-    name: 'Rating',
-    components: {BarChart},
-    data() {
-      return {
-        temp: null,
-        graph: null,
-        chartOptions: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                //ticks: 8,
-                beginAtZero: true,
-                fontSize: 16
-              },
-              labelFontSize: 20,
-              gridLines: {
-                display: false,
-              },
-            }],
-            xAxes: [{
-              gridLines: {
-                display: true,
-              },
-              ticks: {
-                fontSize: 16
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Продажи'
-              },
-            }]
-          },
-          legend: {
-            display: true,
-          },
-          responsive: true,
-          maintainAspectRatio: false
-        }
+export default {
+  name: 'Rating',
+  components: {BarChart},
+  data () {
+    return {
+      temp: null,
+      graph: null,
+      chartOptions: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              // ticks: 8,
+              beginAtZero: true,
+              fontSize: 16
+            },
+            labelFontSize: 20,
+            gridLines: {
+              display: false
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              display: true
+            },
+            ticks: {
+              fontSize: 16
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Продажи'
+            }
+          }]
+        },
+        legend: {
+          display: true
+        },
+        responsive: true,
+        maintainAspectRatio: false
       }
-    },
-    methods: {
-      getInformationFromServer: function () {
-        let _url = 'http://localhost:8080/admin/rating';
-        var jsonLabels = [];
-        var jsonData = [];
-        this.$http.get(_url).then(response =>
-          response.json()).then(json => {
-          console.log(json);
-          Object.keys(json).forEach(function (key) {
-            jsonData.push(key);
-            jsonLabels.push(json[key]);
-          })
-        }).catch(error => {
-          console.log(error)
-        });
-        setTimeout(() => {
-          this.graph = {
+    }
+  },
+  methods: {
+    getInformationFromServer: function () {
+      let _url = 'http://localhost:8080/admin/rating'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url, {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graph = {
           labels: jsonData,
           datasets: [
             {
@@ -81,14 +80,14 @@
               data: jsonLabels
             }
           ]
-        };
-        }, 500)
-      }
-    },
-    created: function () {
-     this.getInformationFromServer();
+        }
+      }, 500)
     }
+  },
+  created: function () {
+    this.getInformationFromServer()
   }
+}
 </script>
 
 <style scoped>

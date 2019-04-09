@@ -87,7 +87,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8080/admin/addDish/ingredient').then(response => {
+    this.$http.get('http://localhost:8080/admin/addDish/ingredient', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.ingredients = response.body
       console.log(response.body)
     }).catch(err => {
@@ -124,11 +124,10 @@ export default {
             unit: ''
           }
           this.ingredients.push(response.body)
-          this.noty('Добавление ', 'success','Ингредиент ' + response.body.name + ' успешно добавлен')
+          this.noty('Добавление ', 'success', 'Ингредиент ' + response.body.name + ' успешно добавлен')
         } else {
           this.noty('Добавление ', 'error', 'Ошибка добавления')
         }
-      }, error => {
         this.noty('Добавление ', 'error', 'Ошибка добавления')
       }).catch(function (error) {
         console.log(error)
@@ -148,7 +147,6 @@ export default {
           } else {
             this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
           }
-        }, error => {
           this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
         }).catch(function (error) {
           console.log(error)
@@ -165,8 +163,7 @@ export default {
           }
           this.noty('Удаление ', 'success', 'Ингредиент удален')
         } else this.noty('Удаление ', 'error', 'Нельзя удалить ингредиент, так как он используется в блюде(блюдах)')
-      }, error => {
-        this.noty('Удаление ','error', 'Ошибка удаления')
+        this.noty('Удаление ', 'error', 'Ошибка удаления')
       }).catch(function (error) {
         console.log(error)
         this.noty('Удаление ', 'error', 'Ошибка удаления')

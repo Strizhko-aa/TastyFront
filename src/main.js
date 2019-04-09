@@ -12,17 +12,27 @@ import store from '../src/components/store/store'
 // import menuStore from '../src/components/menu/menuStore'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
-
+import VueCookies from 'vue-cookies'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)
 Vue.use(Notifications)
+Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 
 router.afterEach((to, from) => {
   store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
+})
+
+router.beforeEach((to, from, next) => {
+  if (VueCookies.get('token') === null && to.path !== '/login') {
+    console.log(to)
+    next({ path: '/login' })
+  } else {
+    next()
+  }
 })
 
 /* eslint-disable no-new */
