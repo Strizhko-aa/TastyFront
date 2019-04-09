@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
-    selectedInWaiterMenu: '',
+    selectedInWaiterMenu: 'tables',
     authorized: true
   },
   mutations: {

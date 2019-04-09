@@ -1,6 +1,18 @@
 <template>
   <div class="main-waiter-tables">
-    {{elements}}
+    <b-container fluid>
+      <b-row>
+        <b-col class="table" cols=6 sm=6 md=4 lg=3 v-for="table in parsedTables" :key="table.id">
+          <div class="table-color-back" @click="transitionOnOrder(table.id)"
+            v-bind:class="{'red-table': table.status === 3 || table.status === 6,
+                            'yellow-table': table.status === 5,
+                            'green-table': table.status === 4 || table.status === 8}">
+            <span>{{table.id}}</span>
+            <img src="../../assets/images/table.png" alt="">
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -12,51 +24,64 @@ export default {
   props: {},
   data () {
     return {
-      elements: {}
+      elements: {},
+      parsedTables: []
     }
+  },
+  mounted () {
+    console.log('mounted')
+    this.$http.get('http://localhost:8080/waiter').then(function (response) {
+      this.elements = response.body
+      this.parsedTables = this.parseTables(response.body)
+    }).catch(function (err) {
+      console.log(err.status)
+    })
   },
   methods: {
     transitionOnOrder: function (tableNumber) {
       this.$route.params.tableNumber = tableNumber
       this.$router.push({path: '/waiter/orders/' + tableNumber})
+    },
+    parseTables (data) {
+      let _tables = []
+      for (let i in data) {
+        let table = {
+          id: data[i][0].id,
+          status: data[i][0].tableStatus.id
+        }
+        _tables.push(table)
+      }
+      return _tables
     }
-  },
-  created () {
-    this.$http.get('http://localhost:8080/waiter').then(function (response) {
-      this.elements = response.body
-      console.log(this.elements)
-    }).catch(function (err) {
-      console.log(err.status)
-    })
   }
 }
 </script>
 
 <style scoped>
-  .choose_table, .number_of_table {
-    font-family: Times, serif;
-  }
-
-  .number_of_table {
-    color: white;
-    font-size: 55px;
-  }
-
-  .no_one_here {
-    border: 2px solid #3F9384;
-    background: grey;
-    cursor: pointer;
-  }
-
-  .in_process_of_cooking {
-    border: 2px solid #3F9384;
-    background: #3F9384;
-    cursor: pointer;
-  }
-
-  .dish_is_ready {
-    border: 2px solid #3F9384;
-    background: red;
-    cursor: pointer;
-  }
+.table-color-back {
+  width: 155px;
+  cursor: pointer;
+}
+.table span {
+  position: absolute;
+  width: 155px;
+  text-align: center;
+  top: 38%;
+  font-weight: bold;
+  font-size: 22pt;
+  color: black;
+}
+.table img {
+  width: 155px;
+  height: 155px;
+}
+.red-table {
+  background-color: red;
+}
+.yellow-table {
+  background-color: yellow;
+}
+.green-table {
+  background-color: green;
+}
 </style>
