@@ -29,6 +29,15 @@
             <div v-if="selected === 'rating'">
               <Rating/>
             </div>
+            <div v-if="selected === 'addDish'">
+              <AddDish/>
+            </div>
+            <div v-if="selected === 'stock'">
+              <Stock/>
+            </div>
+            <div v-if="selected === 'stopList'">
+              <StopList/>
+            </div>
             <!-- меня несколько упороло и я вставил вместо фоток графиков скрины что ты мне скинул,
             и теперь тут сайт в сайте =.=, только телевизора не хватает -->
           </b-col>
@@ -41,18 +50,24 @@
 import Popular from './Popular'
 import Inform from './Inform'
 import Rating from './Rating'
+import AddDish from './AddDish'
+import Stock from './Stock'
+import StopList from './StopList'
 
 export default {
 
   name: 'app',
-  components: {Rating, Popular, Inform},
+  components: {Rating, Popular, Inform, AddDish, Stock, StopList},
   data: function () {
     return {
       selected: 'popular',
       options: [
         {text: 'Популярное блюдо', value: 'popular'},
         {text: 'Информация по блюду', value: 'inform'},
-        {text: 'Рейтинг блюд', value: 'rating', disabled: true}
+        {text: 'Рейтинг блюд', value: 'rating'},
+        {text: 'Добавление блюда в меню', value: 'addDish'},
+        {text: 'Запасы ингредиентов', value: 'stock'},
+        {text: 'Стоп-лист', value: 'stopList'}
       ]
     }
   }

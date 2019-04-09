@@ -10,6 +10,7 @@ import Login from '@/components/login/Login'
 import Registration from '@/components/login/Registration'
 import GetPassword from '@/components/login/getpassword'
 
+
 Vue.use(Router)
 
 // Это vue-router. Тут прописаны пути по которым можно ходить и какой будет результат при переходе.
