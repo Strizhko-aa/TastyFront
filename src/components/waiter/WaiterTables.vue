@@ -1,20 +1,6 @@
 <template>
-  <div id="app">
-    <b-container>
-        <h1 class="text-center choose_table">Cтолики:</h1>
-        <br>
-        <b-row class="mb-4" v-for="(value, key) in elements" :key="key">
-          <b-col cols="1"></b-col>
-          <b-col v-for="(table, index) in value" :key="index" v-if="index === 0" :class="table.tableStatus.title"
-                class="rounded-circle text-center" cols="1" @click="transitionOnOrder(table.id)">
-            <span class="number_of_table">{{table.id}}</span>
-          </b-col>
-          <b-col v-else :class="table.tableStatus.title" class="rounded-circle text-center offset-2" cols="1"
-                @click="transitionOnOrder(table.id)">
-            <span class="number_of_table">{{table.id}}</span>
-          </b-col>
-        </b-row>
-    </b-container>
+  <div class="main-waiter-tables">
+    {{elements}}
   </div>
 </template>
 
@@ -32,7 +18,7 @@ export default {
   methods: {
     transitionOnOrder: function (tableNumber) {
       this.$route.params.tableNumber = tableNumber
-      window.location.href = '/waiter/orders/' + tableNumber
+      this.$router.push({path: '/waiter/orders/' + tableNumber})
     }
   },
   created () {

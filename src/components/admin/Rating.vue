@@ -47,7 +47,8 @@ export default {
       // this.elements.count = json['count']
       console.log(this.elements)
     }).catch(error => {
-      console.log(_type + ' ' + error)
+      // console.log(_type + ' ' + error)
+      console.log(error.status)
     })
   }
 }

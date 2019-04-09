@@ -10,12 +10,24 @@ import Vuex from 'vuex'
 import store from '../src/components/store/store'
 // import menuStore from '../src/components/menu/menuStore'
 import VueResource from 'vue-resource'
+import WaiterMixin from '../src/components/mixin/WaiterMixin'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)
 
+Vue.mixin(WaiterMixin)
+
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+  if (!store.getters.value('authorized') && to.path !== '/login') {
+    console.log(to)
+    next({ path: '/login' })
+  } else {
+    next()
+  }
+})
 
 router.afterEach((to, from) => {
   store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
