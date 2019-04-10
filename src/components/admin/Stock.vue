@@ -55,7 +55,7 @@
               <tbody>
               <tr v-for="i in ingredients" v-bind:key="i.id">
 
-                <td style="color: white" bgcolor="red" v-if="(i.quantity_in_stock - i.forTomorrow)<100">{{i.id}}</td>
+                <td bgcolor="#f0908a" v-if="(i.quantity_in_stock - i.forTomorrow)<100">{{i.id}}</td>
                 <td v-else>{{i.id}}</td>
 
                 <td>{{i.name}}</td>
