@@ -35,9 +35,9 @@
               </b-col>
               <b-col cols="3">
                 <select class="select input form-control" v-model="model.unit">
-                  <option value="гр." selected>гр</option>
-                  <option value="мл.">мл</option>
-                  <option value="шт.">шт</option>
+                  <option value="гр">гр</option>
+                  <option value="мл">мл</option>
+                  <option value="шт">шт</option>
                 </select>
               </b-col>
               <b-col cols="3">
@@ -96,11 +96,10 @@ export default {
       loading: true,
       ingredients: [],
       forTomorrow: [],
-      countNoNextDay: [],
       model: {
         name: '',
         type: '',
-        unit: ''
+        unit: 'гр'
       },
       editModel: {
         id: null,
@@ -124,12 +123,10 @@ export default {
     getIngredientsFromServer: function () {
       this.$http.get('http://localhost:8080/admin/addDish/ingredient').then(response =>
         response.json()).then(json => {
+        this.ingredients = []
         for (var i = 0; i < json.length; i++) {
           this.ingredients[i] = json[i]['ingredient']
           this.ingredients[i].forTomorrow = json[i]['quantityIngredientsForTomorrow']
-          if (this.ingredients[i].quantity_in_stock - this.ingredients[i].forTomorrow < 100) {
-            this.countNoNextDay[i] = this.ingredients[i]
-          }
         }
       }).catch(err => {
         console.log(err.status)
@@ -185,6 +182,7 @@ export default {
             this.noty('Изменение кол-ва ингредента ', 'success', 'Вес ингредиента ' + response.body.name + ' успешно изменен')
             ingredient.quantity_in_stock = response.body.quantity_in_stock
             ingredient.mass = ''
+            this.$forceUpdate()
           } else {
             this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
           }
