@@ -19,18 +19,17 @@
           <table class="table table-hover" id="dish-table" cellspacing="0">
             <thead>
             <tr>
-              <th>#</th>
+              <th><a v-on:click="sortedList('id')"># ⇅</a></th>
               <th>Фото</th>
-              <th>Название</th>
-              <th>Тип</th>
-              <th>Цена</th>
-              <th>Убрать из меню</th>
+              <th><a v-on:click="sortedList('title')">Название ⇅</a></th>
+              <th><a v-on:click="sortedList('type')">Тип ⇅</a></th>
+              <th><a v-on:click="sortedList('price')">Цена ⇅</a></th>
               <th> ... </th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="dish in dishes" v-bind:key="dish.id">
-              <td>{{dish.id}}</td>
+              <td  v-bind:class="dish.statusDish">{{dish.id}}</td >
               <td>
                 <img class="photo" v-bind:src="(dish.imgUrl.substring(0, 4) === 'http') ? dish.imgUrl : require('../../assets/images/' + dish.imgUrl.substring(5, dish.imgUrl.length))" alt="">
               </td>
@@ -39,12 +38,12 @@
                 ( <span class="ingredients" v-for="ing in dish.ingredients" v-bind:key="ing.id">{{ing.ingredient.name}}<span v-if="ing != dish.ingredients[dish.ingredients.length - 1]">, </span></span> )
               </td>
               <td>{{dish.typeDish.title}}</td>
-              <td>{{dish.price}} ₽</td>
+              <td style="white-space: nowrap;">{{dish.price}} ₽</td>
               <td>
-                <input type="checkbox" v-if="dish.stopList == true" checked>
-                <input type="checkbox" v-else>
+                  <select class="select input" v-model="dish.statusDish" v-on:change="editDishInStopList(dish)">
+                    <option v-for="sd in statusDish" v-bind:value="sd.id" v-bind:key="sd.id" >{{sd.value}}</option>
+                  </select>
               </td>
-              <td><ion-icon class="icon-table"  name="trash" v-on:click="deleteDish(dish.id)"></ion-icon></td>
             </tr>
             </tbody>
           </table>
@@ -61,7 +60,16 @@ export default {
   data: function () {
     return {
       showSearch: false,
-      dishes: []
+      dishes: [],
+      statusDish: [],
+      model: {
+        status: null,
+        id: null
+      },
+      flagSortTitle: 1,
+      flagSortPrice: 1,
+      flagSortType: 1,
+      flagSortId: 1
     }
   },
   created () {
@@ -72,8 +80,18 @@ export default {
       console.log(err.status)
       this.dishes = []
     })
+    this.$http.get('http://localhost:8080/admin/showStatusDish').then(response => {
+      this.statusDish = response.body
+      console.log(response.body)
+    }).catch(err => {
+      console.log(err.status)
+      this.statusDish = []
+    })
   },
   methods: {
+    log (string) {
+      console.log(string)
+    },
     tableSearch () {
       var phrase = document.getElementById('dish-table-filter')
       var table = document.getElementById('dish-table')
@@ -92,21 +110,19 @@ export default {
         }
       }
     },
-    deleteIng (id) {
-      this.$http.post('http://localhost:8080/admin/deleteIngredient', JSON.stringify(id)).then(function (response) {
+    editDishInStopList (dish) {
+      this.$http.post('http://localhost:8080/admin/editDishInStopList', JSON.stringify(dish)).then(function (response) {
         console.log(response)
-        if (response.body === true) {
-          const indexElement = this.ingredients.findIndex(x => x.id === id)
-          if (indexElement >= 0) {
-            this.ingredients.splice(indexElement, 1)
-          }
-          this.noty('Удаление ', 'success', 'Ингредиент удален')
-        } else this.noty('Удаление ', 'error', 'Нельзя удалить ингредиент, так как он используется в блюде(блюдах)')
+        if (response.body.id) {
+          if (response.body.statusDish === 'available') this.noty('Статус блюда ', 'success', 'Блюдо ' + dish.name + ' доступно для меню')
+          if (response.body.statusDish === 'no_ingredients') this.noty('Статус блюда ', 'success', 'Блюдо ' + dish.name + ' отправлено стоп-лист из-за нехватки ингредиентов')
+          if (response.body.statusDish === 'blocked') this.noty('Статус блюда ', 'success', 'Блюдо ' + dish.name + ' заблокировано')
+          if (response.body.statusDish === 'deleted') this.noty('Статус блюда ', 'success', 'Блюдо ' + dish.name + ' удалено')
+        }
       }, error => {
-        this.noty('Удаление ','error', 'Ошибка удаления')
+        this.noty('Статус блюда ', 'error', 'Не удалось изменить статус блюда ' + dish.name)
       }).catch(function (error) {
         console.log(error)
-        this.noty('Удаление ', 'error', 'Ошибка удаления')
       })
     },
     noty (title, type, text) {
@@ -118,9 +134,28 @@ export default {
         duration: 7000,
         text: text
       })
-    }
+    },
+    sortedList (param) {
+      switch (param) {
+        case 'title': if (this.flagSortTitle === 1) { return this.dishes.sort(this.sortByTitle) } else return this.dishes.sort(this.sortByTitle2)
+        case 'type': if (this.flagSortType === 1) { return this.dishes.sort(this.sortByType) } else return this.dishes.sort(this.sortByType2)
+        case 'id': if (this.flagSortId === 1) { return this.dishes.sort(this.sortById) } else return this.dishes.sort(this.sortById2)
+        case 'price': if (this.flagSortPrice === 1) { return this.dishes.sort(this.sortByPrice) } else return this.dishes.sort(this.sortByPrice2)
+        default: return this.dishes
+      }
+    },
+    sortByTitle (d1, d2) { this.flagSortTitle = 2; return (d1.name.toLowerCase() > d2.name.toLowerCase()) ? 1 : -1 },
+    sortByTitle2 (d1, d2) { this.flagSortTitle = 1; return (d1.name.toLowerCase() < d2.name.toLowerCase()) ? 1 : -1 },
+    sortByType (d1, d2) { this.flagSortType = 2; return (d1.typeDish.title.toLowerCase() > d2.typeDish.title.toLowerCase()) ? 1 : -1 },
+    sortByType2 (d1, d2) { this.flagSortType = 1; return (d1.typeDish.title.toLowerCase() < d2.typeDish.title.toLowerCase()) ? 1 : -1 },
+    sortById (d1, d2) { this.flagSortId = 2; return (d1.id > d2.id) ? 1 : -1 },
+    sortById2 (d1, d2) { this.flagSortId = 1; return (d1.id < d2.id) ? 1 : -1 },
+    sortByPrice (d1, d2) { this.flagSortPrice = 2; return (d1.price > d2.price) ? 1 : -1 },
+    sortByPrice2 (d1, d2) { this.flagSortPrice = 1; return (d1.price < d2.price) ? 1 : -1 }
+
   }
 }
+
 </script>
 
 <style scoped>
@@ -181,5 +216,44 @@ export default {
   }
   .ingredients {
     font-size: 13px;
+  }
+
+  .select {
+    height: 25px;
+    border-width: 2px;
+    border-style: inset;
+    border-color: initial;
+    border-image: initial;
+    color: #6c757d;
+    padding: 0;
+  }
+  .input {
+    width: auto;
+    border-radius: 5px;
+    padding: 1px 0px;
+    font-size: 15px;
+    color: #000000;
+    background-color: transparent;
+  }
+  .available {
+    background: #83f587b0;
+  }
+  .no_ingredients {
+    background: #c1e1e7;
+  }
+  .blocked {
+    background: #fee5cb;
+  }
+  .deleted {
+    background: #f0908a;
+  }
+/*  tr:hover td {
+    background: rgba(255,255,255,.5);
+  }*/
+  .table-hover > tbody > tr:hover {
+    background-color: #D2D2D2;
+  }
+  th {
+    white-space: nowrap;
   }
 </style>
