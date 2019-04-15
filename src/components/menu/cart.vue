@@ -1,5 +1,6 @@
 <template >
 <b-container class="orderBlock">
+  <div class="popup" v-if="message" v-on:click="clearMessage()">{{message}}</div>
   <div class="titleBlock"> Оформление заказа </div>
     <b-container class="no-overflow ">
       <b-row v-for="(item, index) in ordered" :key="item.dish.id" class="no-overflow item">
@@ -34,22 +35,53 @@
         <router-link to="/">Вернуться к меню</router-link>
       </b-row>
     </b-container>
-    <b-container v-if="confirmOrderFlag" class="confirm-order-block">
-      <h3>Подтверждание заказа</h3>
+    <div class="container confirm-order-block" v-if="confirmOrderFlag" >
+      <h3>Подтверждение заказа</h3>
       <b-input-group class="mt-3">
         <b-form-input v-model="tableNumber" placeholder="Введите номер столика"/>
       </b-input-group>
-      <b-row v-for="item in ordered" :key="item.dish.id">
-        <b-col><p class="info-text">{{item.dish.name}}: {{item.count}}</p></b-col>
+      <div class="table-order">
+        <table id="mytable" class="table table-bordred table-striped">
+          <thead>
+          <th>Название</th>
+          <th>Цена, ₽/шт. </th>
+          <th>Кол-во</th>
+          <th>Общая стоимость</th>
+          </thead>
+          <tbody>
+          <tr v-for="item in ordered" :key="item.dish.id">
+            <td>{{item.dish.name}}</td>
+            <td class="min-column">{{item.dish.price}} ₽</td>
+            <td class="min-column">{{item.count}} шт.</td>
+            <td class="min-column">{{item.count * item.dish.price}} ₽</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <b-row>
+        <b-col class="totalSum">Итоговая стоимость: {{ totalPrice }}</b-col>
       </b-row>
       <b-row>
-        <b-col>Итого: {{ totalPrice }}</b-col>
+        <b-col><b-button variant="success" @click="stripeOpen()">Оплата картой онлайн</b-button></b-col>
+        <b-col><b-button variant="success" @click="sendOrder(2, null)">Оплата наличными</b-button></b-col>
       </b-row>
-      <b-row>
-        <b-col><b-button variant="success" @click="sendOrder()">Оплатить</b-button></b-col>
-      </b-row>
+      <div  id="payment-form" v-if="stripeFlag">
+        <div class="form-row">
+          <label for="card-element">
+            Заполните карту
+          </label>
+          <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+
+          <!-- Used to display Element errors. -->
+          <div id="card-errors" role="alert"></div>
+        </div>
+
+        <b-button class="stripeButton" variant="success" @click="submitForm()" >Оплатить</b-button>
+      </div>
       <b-button variant="danger" class="confirm-close-btn">X</b-button>
-    </b-container>
+    </div>
     <div class="confirm-overflow" v-if="confirmOrderFlag" @click="closeConfirm()"></div>
   </b-container>
 </template>
@@ -60,11 +92,19 @@ import menuStore from './menuStore'
 export default {
   data () {
     return {
+      message: null,
       tableNumber: null,
-      confirmOrderFlag: false
+      confirmOrderFlag: false,
+      stripeFlag: false,
+      stripe: null,
+      elements: null,
+      style: null,
+      card: null,
+      form: null
     }
   },
-
+  created () {
+  },
   computed: {
     ordered () {
       return menuStore.getters.value('purchased')
@@ -77,8 +117,14 @@ export default {
       return price
     }
   },
-
   methods: {
+    clearMessage () {
+      this.message = null
+    },
+    transition: function (pay) {
+      this.$route.params.pay = pay
+      window.location.href = '/confirm' + pay
+    },
     // удалить по ид из заказа
     deleteFromPurshased (id) {
       let index = this.findOrderedIndex(id)
@@ -109,7 +155,6 @@ export default {
         }
       }
     },
-
     // ищет индекс по ид в заказынных
     findOrderedIndex (searchId) {
       console.log(searchId)
@@ -125,14 +170,88 @@ export default {
     beforeConfirmOrder () {
       this.confirmOrderFlag = true
     },
+    stripeOpen () {
+      if (!this.stripeFlag) {
+        this.stripeCard()
+      }
+      this.stripeFlag = !this.stripeFlag
+    },
+    stripeCard () {
+      setTimeout(() => {
+        this.stripe = window.Stripe('pk_test_WXdZcci87vt7peUiTW4xGYNV00R7o9Lqeb')
+        this.elements = this.stripe.elements()
 
+        // Custom styling can be passed to options when creating an Element.
+        var style = {
+          base: {
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+              color: '#aab7c4'
+            }
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+          }
+        }
+
+        // Create an instance of the card Element.
+        this.card = this.elements.create('card', {style: style})
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        this.card.mount('#card-element')
+
+        this.card.addEventListener('change', function (event) {
+          var displayError = document.getElementById('card-errors')
+          if (event.error) {
+            displayError.textContent = event.error.message
+          } else {
+            displayError.textContent = ''
+          }
+        })
+        this.form = document.getElementById('payment-form')
+        this.form.addEventListener('submit', this.submitForm)
+      }, 200)
+    },
+    submitForm () {
+      // event.preventDefault()
+      this.stripe.createToken(this.card).then((result) => {
+        console.log(result)
+        if (result.error) {
+          // Inform the customer that there was an error.
+          var errorElement = document.getElementById('card-errors')
+          errorElement.textContent = result.error.message
+        } else {
+          // Send the token to your server.
+          this.stripeTokenHandler(result.token)
+        }
+      })
+    },
+
+    stripeTokenHandler (token) {
+      // Insert the token ID into the form so it gets submitted to the serve
+      this.form = document.getElementById('payment-form')
+      var hiddenInput = document.createElement('input')
+      hiddenInput.setAttribute('type', 'hidden')
+      hiddenInput.setAttribute('name', 'stripeToken')
+      hiddenInput.setAttribute('id', 'stripeToken')
+      hiddenInput.setAttribute('value', token.id)
+      console.log(hiddenInput)
+      this.form.appendChild(hiddenInput)
+      // Submit the form
+      this.sendOrder(1, token.id)
+      // this.form.submit()
+    },
     // закрыть подтверждаение заказа
     closeConfirm () {
       this.confirmOrderFlag = false
     },
     // по идее отправить список заказов в БД
     // просто в форе оно не работало пришлось рекурсивно делать
-    sendOrder () {
+    sendOrder (typePay, token) {
       // if (i < this.ordered.length) {
       //   let dataSendDish = {
       //     tableNumber: this.$data.tableNumber,
@@ -146,14 +265,25 @@ export default {
       //   this.clearCart()
       //   this.$router.push('/')
       // }
-      let json = {'tableNumber': this.$data.tableNumber}
-      this.$http.post('http://localhost:8080/confirm', JSON.stringify(json)).then((response) => {
-        console.log(response.status)
+      let json = {'tableNumber': this.$data.tableNumber, 'token': token}
+      this.$http.post('http://localhost:8080/confirm/' + typePay, JSON.stringify(json)).then((response) => {
+        this.clearCardAndGoToRoot(response.bodyText)
+        console.log('success')
+        console.log(response)
+        console.log(response.bodyText)
+      }, (error) => {
+        this.message = 'Ошибка сервера'
+        console.log('error')
+        console.log(error)
       }).catch(error => {
+        this.message = 'Ошибка сервера'
+        console.log('catch')
         console.log(error)
       })
+    },
+    clearCardAndGoToRoot (message) {
       this.clearCart()
-      this.$router.push('/')
+      this.$router.push({path: '/', query: {message: message}})
     },
     // добавить блюдо в козину(с точки зрения БД). С точки зрения клиенты это уже должно быть заказано
     // async, promise только для того, чтобы дождаться пока отправится одно блюдо и только после этого отправить следующее
@@ -178,6 +308,15 @@ export default {
 </script>
 
 <style scoped>
+  .popup {
+    position: absolute;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ee6f00;
+    color: #ffffff;
+  }
 .orderBlock {
   border: 1px solid #3F9384;
   padding: 15px;
@@ -266,7 +405,9 @@ export default {
 .confirm-order-block {
   position: fixed;
   width: 500px;
-  top: 20%;
+  height: auto;
+  max-height: 625px;
+  top: 4%;
   left: 50%;
   margin-left: -250px;
   background-color: whitesmoke;
@@ -288,4 +429,45 @@ export default {
   right: 30px;
 }
 
+.StripeElement {
+  box-sizing: border-box;
+
+  height: 40px;
+  width: 100%;
+  padding: 10px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: white;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+  label{
+    margin-top: 10px;
+  }
+  .stripeButton {
+    margin-top: 10px;
+  }
+  .table-order{
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  .min-column{
+    white-space: nowrap;
+  }
 </style>

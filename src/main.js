@@ -6,15 +6,18 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import Vuex from 'vuex'
 import store from '../src/components/store/store'
 // import menuStore from '../src/components/menu/menuStore'
 import VueResource from 'vue-resource'
 import WaiterMixin from '../src/components/mixin/WaiterMixin'
+import Notifications from 'vue-notification'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)
+Vue.use(Notifications)
 
 Vue.mixin(WaiterMixin)
 

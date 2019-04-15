@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <div class="popup" v-if="message" v-on:click="clearMessage()">{{message}}</div>
     <b-container v-if="menuFlag === true">
       <b-row class="height-50">
       </b-row>
@@ -20,12 +21,12 @@
       <b-row class="height-50">
       </b-row>
       <b-row class="height-150 category-line">
-        <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Десерт')">
-          <img class="menu-icon" src="../../assets/images/novogodnij-desert-radost-obezyanki.jpg" alt="">
+        <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Десерты')">
+          <img class="menu-icon" src="../../assets/images/novogodnij-desert-radost-obezyanki.jpg" alt="десерты">
           <div class="category-name">Десерты</div>
         </b-col>
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Закуски')">
-          <img class="menu-icon" src="../../assets/images/buterbrody-s-krasnoj-ikroj-i-syrom.jpg" alt="">
+          <img class="menu-icon" src="../../assets/images/buterbrody-s-krasnoj-ikroj-i-syrom.jpg" alt="закуски">
           <div class="category-name">Закуски</div>
         </b-col>
       </b-row>
@@ -37,8 +38,7 @@
       <div v-if="dishesCount > 0">
           <b-row v-for="item in dishes" :key="item.id" class="height-150 item">
             <b-col cols="4" sm="6" md="3" class="photo">
-              <img class="photo" :src="require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))"
-                   alt="">
+              <img class="photo" v-bind:src="(item.imgUrl.substring(0, 4) === 'http') ? item.imgUrl : require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))" alt="">
             </b-col>
             <b-col cols="12" sm="3" md="6">
               <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
@@ -75,10 +75,14 @@ import menuStore from './menuStore'
 export default {
   data () {
     return {
+      routeMessage: null,
       menuFlag: true,
       dishes: [],
       category: ''
     }
+  },
+  created () {
+    this.message = this.$route.query.message
   },
   computed: {
     dishesCount () {
@@ -86,10 +90,24 @@ export default {
     },
     purchased () {
       return menuStore.getters.value('purchased')
+    },
+    message: {
+      get: function () {
+        return this.routeMessage
+      },
+      set: function (value) {
+        this.routeMessage = value
+        if (value) {
+          setTimeout(() => { this.clearMessage() }, 3000)
+        }
+      }
     }
   },
-
   methods: {
+    clearMessage () {
+      this.message = null
+      this.$router.push('/')
+    },
     deleteFromPurshased (id) {
       let index = this.findPurchasedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
@@ -171,6 +189,17 @@ export default {
 </script>
 
 <style scoped>
+  .popup {
+    position: absolute;
+    left: 35%;
+    z-index: 10;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ee6b00bf;
+    color: #ffffff;
+  }
   /* Стиль больше чем 576px */
   @media (min-width: 576px) {
     .container {
