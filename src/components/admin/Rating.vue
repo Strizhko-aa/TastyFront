@@ -2,75 +2,140 @@
   <div>
     <br>
     <b-container fluid>
+      <h1>Продажи</h1>
+      <h3>За неделю</h3>
+      <bar-chart :chart-data="graphOneWeek" :options="chartOptions"></bar-chart>
+      <h3>За месяц</h3>
+      <bar-chart :chart-data="graphOneMonth" :options="chartOptions"></bar-chart>
+      <h3>За 3 месяца</h3>
+      <bar-chart :chart-data="graphThreeMonths" :options="chartOptions"></bar-chart>
 
-          <bar-chart :chart-data="graph" :options="chartOptions"></bar-chart>
 
     </b-container>
   </div>
 </template>
 
 <script>
-  import BarChart from './chart/BarChart'
+import BarChart from './chart/BarChart'
 
-
-  export default {
-    name: 'Rating',
-    components: {BarChart},
-    data() {
-      return {
-        temp: null,
-        graph: null,
-        chartOptions: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                //ticks: 8,
-                beginAtZero: true,
-                fontSize: 16
-              },
-              labelFontSize: 20,
-              gridLines: {
-                display: false,
-              },
-            }],
-            xAxes: [{
-              gridLines: {
-                display: true,
-              },
-              ticks: {
-                fontSize: 16
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Продажи'
-              },
-            }]
-          },
-          legend: {
-            display: true,
-          },
-          responsive: true,
-          maintainAspectRatio: false
-        }
+export default {
+  name: 'Rating',
+  components: {BarChart},
+  data () {
+    return {
+      temp: null,
+      graphOneMonth: null,
+      graphOneWeek: null,
+      graphThreeMonths: null,
+      chartOptions: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              // ticks: 8,
+              beginAtZero: true,
+              fontSize: 16
+            },
+            labelFontSize: 20,
+            gridLines: {
+              display: false
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              display: true
+            },
+            ticks: {
+              fontSize: 16
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Продажи'
+            }
+          }]
+        },
+        legend: {
+          display: true
+        },
+        responsive: true,
+        maintainAspectRatio: false
       }
+    }
+  },
+  methods: {
+    getInformationFromServerOneWeek: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=oneWeek'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graphOneWeek = {
+          labels: jsonData,
+          datasets: [
+            {
+              label: 'Продажи за неделю',
+              backgroundColor: 'rgba(63, 147, 132, 0.3)',
+              borderColor: 'rgba(63, 147, 132, 1)',
+              borderWidth: 1,
+              data: jsonLabels
+            }
+          ]
+        }
+      }, 500)
     },
-    methods: {
-      getInformationFromServer: function () {
-        let _url = 'http://localhost:8080/admin/rating';
-        var jsonLabels = [];
-        var jsonData = [];
-        this.$http.get(_url).then(response =>
-          response.json()).then(json => {
-          console.log(json);
-          Object.keys(json).forEach(function (key) {
-            jsonData.push(key);
-            jsonLabels.push(json[key]);
-          })
-        }).catch(error => {
-          console.log(error)
-        });
-        setTimeout(() => {
-          this.graph = {
+    getInformationFromServerThreeMonths: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=threeMonths'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graphThreeMonths = {
+          labels: jsonData,
+          datasets: [
+            {
+              label: 'Продажи за 3 месяца',
+              backgroundColor: 'rgba(63, 147, 132, 0.3)',
+              borderColor: 'rgba(63, 147, 132, 1)',
+              borderWidth: 1,
+              data: jsonLabels
+            }
+          ]
+        }
+      }, 500)
+    },
+    getInformationFromServerOneMonth: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=oneMonth'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graphOneMonth = {
           labels: jsonData,
           datasets: [
             {
@@ -81,14 +146,20 @@
               data: jsonLabels
             }
           ]
-        };
-        }, 500)
-      }
+        }
+      }, 500)
     },
-    created: function () {
-     this.getInformationFromServer();
+    startPageRender: function () {
+      this.getInformationFromServerOneMonth()
+      this.getInformationFromServerOneWeek()
+      this.getInformationFromServerThreeMonths()
     }
+  },
+  created: function () {
+    this.startPageRender()
+    this.ggg()
   }
+}
 </script>
 
 <style scoped>

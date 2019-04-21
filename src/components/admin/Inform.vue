@@ -79,16 +79,16 @@ export default {
           xAxes: [{
             gridLines: {
               display: false,
-              color: "black"
+              color: 'black'
             },
             ticks: {
               beginAtZero: true,
-              fontSize: 14,
+              fontSize: 14
             },
             scaleLabel: {
               display: true,
               labelString: 'Дни недели',
-               fontColor: 'black'
+              fontColor: 'black'
             }
           }],
           yAxes: [{
@@ -99,34 +99,34 @@ export default {
             },
             ticks: {
               beginAtZero: true,
-              stacked: true ,
-              stepSize: 5 ,
+              stacked: true,
+              stepSize: 5,
               fontSize: 14
 
-  },
+            }
           }]
         }
       },
 
-    forGraph: null
+      forGraph: null
     }
   },
   methods: {
     postToServer: function () {
       let _url = 'http://localhost:8080/admin/inform'
-      const req = {'needDish': this.selected};
+      const req = {'needDish': this.selected}
       this.$http.post(_url, JSON.stringify(req)).then(response =>
         response.json()).then(json => {
-        this.information.mass = json['mass'];
-        this.information.name = json['name'];
-        this.information.img = json['img'];
-        this.information.time = json['time'];
-        this.information.type = json['type'];
-        this.information.price = json['price'];
-        this.information.dayOfWeek = json['day_of_week'];
-        this.information.inday = json['in_day'];
-        this.information.inweek = json['in_week'];
-        this.information.inyear = json['in_year'];
+        this.information.mass = json['mass']
+        this.information.name = json['name']
+        this.information.img = json['img']
+        this.information.time = json['time']
+        this.information.type = json['type']
+        this.information.price = json['price']
+        this.information.dayOfWeek = json['day_of_week']
+        this.information.inday = json['in_day']
+        this.information.inweek = json['in_week']
+        this.information.inyear = json['in_year']
 
         this.forGraph = {
           labels: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
@@ -147,9 +147,9 @@ export default {
               pointHitRadius: 30,
               pointBorderWidth: 2,
               pointStyle: 'rectRounded'
-            },
-          ]};
-        console.log(this.forGraph);
+            }
+          ]}
+        console.log(this.forGraph)
         console.log(this.information)
       }).catch(error => {
         console.log(error)
@@ -157,10 +157,10 @@ export default {
     }
   },
   created: function () {
-    let _url = 'http://localhost:8080/admin/inform';
+    let _url = 'http://localhost:8080/admin/inform'
     this.$http.get(_url).then(response => {
       this.optionGroups = response.body
-    });
+    })
     this.postToServer()
   },
   watch: {
