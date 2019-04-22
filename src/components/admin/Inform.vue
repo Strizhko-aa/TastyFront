@@ -14,17 +14,15 @@
           </b-col>
           <b-col>
             <div class="upper-block">
-              <label><strong>{{information.type}}</strong></label><br>
-              <label>{{information.name}}</label><br>
+              <label><strong>{{information.name}}</strong></label><br>
               <img align="left" class="leftimg"
-                   style="height: 200px; width: 200px; margin-right: 15px; margin-top: 20px;"
+                   style="height: 200px; width: 200px; margin-right: 15px;"
                    :src="`http://localhost:8080` + information.img"/>
               <!--<label>Описание: {{information.description}}</label><br>-->
-
-              <label style="margin-top: 10px"><strong>Цена: </strong>{{information.price}} рублей</label><br>
+              <label><strong>Цена: </strong>{{information.price}} ₽</label><br>
               <!--<label v-html="information.ingredient">{{information.ingredient}}</label>-->
-              <label style="margin-top: 50px;"><strong>Масса: </strong>{{information.mass}}</label>
-              <label style="margin-top: 50px;"><strong>Время готовки:</strong> {{information.time}} минут</label>
+              <label><strong>Масса: </strong>{{information.mass}}</label>
+              <label><strong>Время готовки:</strong> {{information.time}}</label>
             </div>
           </b-col>
         </b-row>
@@ -175,7 +173,7 @@ export default {
 .upper-block {
   text-align: left;
   font-size: 22px;
-  height: auto;
+  height: 250px;
   position: relative;
   border-bottom: 1px dotted #3F9384;
 }
@@ -185,5 +183,15 @@ export default {
   height: auto;
   position: relative;
   border-right: 1px dotted #3F9384;
+}
+.leftimg {
+  position: relative;
+  padding: 0;
+  height: 130px;
+  max-width: 200px;
+  border-radius: 10px 0;
+  box-shadow: inset 1px 1px 10px 0 rgba(255, 255, 255, .5),
+  inset -1px -1px 10px 0 rgba(0, 0, 0, .5),
+  2px 2px 5px 0 rgba(0, 0, 0, .5);
 }
 </style>

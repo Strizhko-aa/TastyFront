@@ -33,9 +33,11 @@
               <td>
                 <img class="photo" v-bind:src="(dish.imgUrl.substring(0, 4) === 'http') ? dish.imgUrl : require('../../assets/images/' + dish.imgUrl.substring(5, dish.imgUrl.length))" alt="">
               </td>
-              <td>
+              <td class="nameDish">
                 {{dish.name}} <br>
-                ( <span class="ingredients" v-for="ing in dish.ingredients" v-bind:key="ing.id">{{ing.ingredient.name}}<span v-if="ing != dish.ingredients[dish.ingredients.length - 1]">, </span></span> )
+                <span v-if="dish.ingredients.length > 0">
+                  (<span class="ingredients" v-for="ing in dish.ingredients" v-bind:key="ing.id">{{ing.ingredient.name}}<span v-if="ing != dish.ingredients[dish.ingredients.length - 1]">, </span></span>)
+                </span>
               </td>
               <td>{{dish.typeDish.title}}</td>
               <td style="white-space: nowrap;">{{dish.price}} ₽</td>
@@ -255,5 +257,8 @@ export default {
   }
   th {
     white-space: nowrap;
+  }
+  .nameDish {
+    text-align: justify;
   }
 </style>
