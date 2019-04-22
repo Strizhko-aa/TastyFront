@@ -55,6 +55,8 @@
                 <th><a v-on:click="sortedList('count')">Запас ⇅</a></th>
                 <th colspan="2"> Редактирование</th>
                 <th><a v-on:click="sortedList('countNext')">На завтра ⇅</a></th>
+                <th><a v-on:click="sortedList('price')">Цена ⇅</a></th>
+
               </tr>
               </thead>
               <tbody>
@@ -71,6 +73,7 @@
                   <ion-icon class="icon-table" name="remove-circle" v-on:click="edit('-', i)"></ion-icon>
                 </td>
                 <td>{{i.forTomorrow}} , {{i.unit}}</td>
+                <td>{{i.price}} <span style="font-size: 18px">₽</span>/{{i.unit}}</td>
                 <td>
                   <ion-icon class="icon-table" name="trash" v-on:click="deleteIng(i.id)"></ion-icon>
                 </td>
@@ -195,7 +198,7 @@ export default {
     },
     deleteIng (id) {
       this.$http.post('http://localhost:8080/admin/deleteIngredient', JSON.stringify(id)).then(function (response) {
-        console.log(response);
+        console.log(response)
         if (response.body === true) {
           const indexElement = this.ingredients.findIndex(x => x.id === id)
           if (indexElement >= 0) {
@@ -228,6 +231,8 @@ export default {
         case 'count': if (this.flagSortCount === 1) { return this.ingredients.sort(this.sortByCount) } else return this.ingredients.sort(this.sortByCount2)
         case 'countNext': if (this.flagSortCountNext === 1) { return this.ingredients.sort(this.sortByCountNext) } else return this.ingredients.sort(this.sortByCountNext2)
         case 'countNoNextDay': { return this.ingredients.sort(this.sortByCountNoNextDay) }
+        case 'price': if (this.flagSortPrice === 1) { return this.ingredients.sort(this.sortByPrice) } else return this.ingredients.sort((this.sortByPrice2))
+
         default: return this.ingredients
       }
     },
@@ -241,7 +246,10 @@ export default {
     sortByCount2 (d1, d2) { this.flagSortCount = 1; return (d1.quantity_in_stock < d2.quantity_in_stock) ? 1 : -1 },
     sortByCountNext (d1, d2) { this.flagSortCountNext = 2; return (d1.forTomorrow > d2.forTomorrow) ? 1 : -1 },
     sortByCountNext2 (d1, d2) { this.flagSortCountNext = 1; return (d1.forTomorrow < d2.forTomorrow) ? 1 : -1 },
-    sortByCountNoNextDay (d1, d2) { return (d1.quantity_in_stock - d1.forTomorrow > d2.quantity_in_stock - d2.forTomorrow) ? 1 : -1 }
+    sortByCountNoNextDay (d1, d2) { return (d1.quantity_in_stock - d1.forTomorrow > d2.quantity_in_stock - d2.forTomorrow) ? 1 : -1 },
+    sortByPrice (d1, d2) { this.flagSortPrice = 2; return (d1.price > d2.price) ? 1 : -1 },
+    sortByPrice2 (d1, d2) { this.flagSortPrice = 1; return (d1.price < d2.price) ? 1 : -1 }
+
   }
 }
 </script>
