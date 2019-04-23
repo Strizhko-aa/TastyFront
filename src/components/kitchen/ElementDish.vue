@@ -7,10 +7,10 @@
         </div>
         <div class="name-dish">
           <div class="name category">
-            <span> {{data.dish.typeDish.title}}</span>
+            <span> {{data.dish.name}}</span>
           </div>
           <div class="name">
-            <span> {{data.dish.name}} </span>
+            <span> {{data.dish.typeDish.title}} </span>
           </div>
           <div class="mass">
             <span> {{data.dish.mass}}</span>
@@ -41,7 +41,7 @@
         <div class="ingredient-description">
           <div class="ingredient-list">
             <div v-for="i in data.dish.ingredients" v-bind:key="i.id">
-              <p class="ing-item"> {{i.ingredient.name}} - {{i.quantity}} {{i.ingredient.unit}}</p>
+              <p class="ing-item"> {{i.ingredient.name}} - <span style="white-space: nowrap">{{i.quantity}} {{i.ingredient.unit}}</span></p>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default {
       classElementRecipe = 'button-take'
     }
     if (this.data.dishStatus.title === 'Готовится') {
-      recipeStatus = 'ГОТОВО'
+      recipeStatus = 'ОТДАТЬ'
       classElementRecipe = 'button-ready'
     }
     return {
@@ -114,12 +114,12 @@ export default {
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.data.dishStatus.title = 'Готовится'
-          this.recipeStatus = 'ГОТОВО'
+          this.recipeStatus = 'ОТДАТЬ'
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
           this.dateRealNow = new Date()
           break
-        case 'ГОТОВО':
+        case 'ОТДАТЬ':
           this.visible = false
           this.data.dishStatus.title = 'Готово'
           json = {'status': 'Готово', 'id': dishesFromOrderId, 'tableNumber': 2}
@@ -155,6 +155,7 @@ export default {
   .element {
     border: 1px solid #3F9384;
     font-family: "Times New Roman";
+    margin-bottom: 10px;
   }
 
   .element-list {
@@ -225,6 +226,7 @@ export default {
     font-size: 22px;
     line-height: 22px;
     text-align: right;
+    white-space: nowrap;
   }
 
   .timeTop {
@@ -309,6 +311,7 @@ export default {
   }
   .ing-item {
     margin-bottom: 0;
+    text-align: justify;
   }
 
   @media (max-width: 1200px) {

@@ -3,26 +3,23 @@
     <b-container fluid>
       <br>
       <b-row>
-      <b-col cols="2">
+      <b-col cols="col-sm-3 col-md-2">
         <b-form-group>
           <b-form-radio-group style="width: 100%" v-model="selected" :options="options" size="lg" buttons button-variant="success" stacked name="radioTime"/>
         </b-form-group>
       </b-col>
-        <b-col cols="5">
-          <img align="left" style="height: 141px; width: 141px; margin-right: 15px" :src="`http://localhost:8080` + dish.img"/>
-          <div style="text-align: left; font-size: 22px">
-            <label style="margin-bottom: 23px;"><strong>{{dish.type}}</strong></label><br>
-            <label style="margin-bottom: 30px">{{dish.name}}</label><br>
-            <label>Продано: {{dish.count}} раз</label>
-          </div>
+        <b-col cols="col-sm-5 col-md-2">
+          <img class="imgDish" align="right"  :src="`http://localhost:8080` + dish.img"/>
         </b-col>
-        <b-col cols="5">
-          <div style="text-align: left; font-size: 22px">
-            <label style="margin-bottom: 23px">Среднее время готовки: {{dish.time}} минут</label><br>
-            <label style="margin-bottom: 30px">Выручка составила: {{dish.price}} руб.</label><br>
-            <label style="margin-bottom: 15px">Рейтинг посетителей: 5 ★</label>
-          </div>
+        <b-col cols="col-sm-4 col-md-8">
+          <div class="inform nameDish"><span><strong>{{dish.name}}</strong></span></div>
+          <div class="inform"><span>Тип блюда: {{dish.type}}</span></div>
+          <div class="inform"><span>Среднее время готовки: {{dish.time}}</span></div>
+          <div class="inform"><span>Продано: {{dish.count}} раз</span></div>
+          <div class="inform"><span>Выручка: {{dish.price}} ₽</span></div>
+          <div class="inform"><span>Рейтинг посетителей: 5 ★</span></div>
         </b-col>
+
       </b-row>
     </b-container>
   </div>
@@ -86,3 +83,23 @@ export default {
   // }
 }
 </script>
+<style>
+  .imgDish {
+    position: relative;
+    padding: 0;
+    height: 150px;
+    max-width: 150px;
+    border-radius: 10px 0;
+    box-shadow: inset 1px 1px 10px 0 rgba(255, 255, 255, .5),
+    inset -1px -1px 10px 0 rgba(0, 0, 0, .5),
+    2px 2px 5px 0 rgba(0, 0, 0, .5);
+  }
+  .inform {
+    width: 100%;
+    font-size: 18px;
+    text-align: left;
+  }
+  .nameDish {
+    font-size: 22px;
+  }
+</style>

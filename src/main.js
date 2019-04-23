@@ -13,7 +13,6 @@ import store from '../src/components/store/store'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 
-
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)

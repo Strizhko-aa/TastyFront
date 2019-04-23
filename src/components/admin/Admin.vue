@@ -2,12 +2,10 @@
   <div id="app">
     <!-- убрал внешний контейнер. Как я понял, не стоит фигачить контейнер в контейнер. А может это норма. -->
     <b-container fluid>
-      <br>
-      <h1 class="text-center">Статистика</h1>
       <div>
         <b-row>
           <b-col></b-col>
-          <b-col cols="10" class="text-center">
+          <b-col cols="12" class="text-center">
             <b-form-group>
               <b-form-radio-group style="width: 100%" v-model="selected" :options="options" size="md" buttons button-variant="success" name="radioTime">
               </b-form-radio-group>
@@ -16,7 +14,6 @@
           <b-col></b-col>
         </b-row>
       </div>
-        <br>
         <b-row>
           <b-col class="text-center bordered">
             <!-- если statistic ===  'popular' показываем одну пикчу, если нет смотрим следующее условие и т.д.-->
@@ -75,12 +72,29 @@ export default {
 </script>
 
 <style>
+  .section.container {
+    margin-top: 0;
+  }
+  .b-form-group {
+    margin-bottom: 0;
+  }
   .bordered {
     border-radius: 10px 10px;
     border: 3px solid #3F9384;
     margin-bottom: 10px;
   }
-
+  .btn-success {
+    background-color: #3F9384;
+    border: 3px solid #ffffff;
+  }
+  .active {
+    background-color: #387166 !important;
+    border: 3px solid #ffffff !important;;
+  }
+  .btn-success:hover{
+    background-color: rgba(71, 143, 132, 0.56) !important;
+    border: 3px solid #ffffff !important;;
+  }
   /* все стили что были остались в App.vue (это полоска сверху и футер), так что не удивляйся их исчезновению.*/
   /* И да, я не подгонял еще твои блоки под моюильны разрешения */
 </style>
