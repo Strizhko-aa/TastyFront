@@ -15,7 +15,7 @@
         </b-row>
       </div>
         <b-row>
-          <b-col class="text-center bordered">
+          <b-col class="text-center bordered" style="vertical-align: ">
             <!-- если statistic ===  'popular' показываем одну пикчу, если нет смотрим следующее условие и т.д.-->
             <div v-if="selected === 'popular'">
               <Popular/>
@@ -35,6 +35,9 @@
             <div v-if="selected === 'stopList'">
               <StopList/>
             </div>
+            <div v-if="selected === 'revenue'">
+              <Revenue/>
+            </div>
             <!-- меня несколько упороло и я вставил вместо фоток графиков скрины что ты мне скинул,
             и теперь тут сайт в сайте =.=, только телевизора не хватает -->
           </b-col>
@@ -50,11 +53,12 @@ import Rating from './Rating'
 import AddDish from './AddDish'
 import Stock from './Stock'
 import StopList from './StopList'
+import Revenue from './Revenue'
 
 export default {
 
   name: 'app',
-  components: {Rating, Popular, Inform, AddDish, Stock, StopList},
+  components: {Rating, Popular, Inform, AddDish, Stock, StopList, Revenue},
   data: function () {
     return {
       selected: 'popular',
@@ -64,7 +68,8 @@ export default {
         {text: 'Рейтинг блюд', value: 'rating'},
         {text: 'Добавление блюда в меню', value: 'addDish'},
         {text: 'Запасы ингредиентов', value: 'stock'},
-        {text: 'Стоп-лист', value: 'stopList'}
+        {text: 'Стоп-лист', value: 'stopList'},
+        {text: 'Денежные средства', value: 'revenue'}
       ]
     }
   }

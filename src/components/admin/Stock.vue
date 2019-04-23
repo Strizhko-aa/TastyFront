@@ -24,7 +24,7 @@
               <input type="text" class="form-control" id="ing-table-filter" data-action="filter"
                      data-filters="#ing-table"
                      placeholder="Поиск..." v-on:keyup="tableSearch()"/>
-              <button class="btn-danger" v-on:click="sortedList('countNoNextDay')">Нужно докупить </button>
+              <button class="btn-danger" v-on:click="sortedList('countNoNextDay')">Нужно докупить</button>
             </div>
             <div class="panel-body col-12" v-show="showAddIngredient">
               <b-col cols="3">
@@ -225,30 +225,89 @@ export default {
     },
     sortedList (param) {
       switch (param) {
-        case 'title': if (this.flagSortTitle === 1) { return this.ingredients.sort(this.sortByTitle) } else return this.ingredients.sort(this.sortByTitle2)
-        case 'type': if (this.flagSortType === 1) { return this.ingredients.sort(this.sortByType) } else return this.ingredients.sort(this.sortByType2)
-        case 'id': if (this.flagSortId === 1) { return this.ingredients.sort(this.sortById) } else return this.ingredients.sort(this.sortById2)
-        case 'count': if (this.flagSortCount === 1) { return this.ingredients.sort(this.sortByCount) } else return this.ingredients.sort(this.sortByCount2)
-        case 'countNext': if (this.flagSortCountNext === 1) { return this.ingredients.sort(this.sortByCountNext) } else return this.ingredients.sort(this.sortByCountNext2)
-        case 'countNoNextDay': { return this.ingredients.sort(this.sortByCountNoNextDay) }
-        case 'price': if (this.flagSortPrice === 1) { return this.ingredients.sort(this.sortByPrice) } else return this.ingredients.sort((this.sortByPrice2))
+        case 'title':
+          if (this.flagSortTitle === 1) {
+            return this.ingredients.sort(this.sortByTitle)
+          } else return this.ingredients.sort(this.sortByTitle2)
+        case 'type':
+          if (this.flagSortType === 1) {
+            return this.ingredients.sort(this.sortByType)
+          } else return this.ingredients.sort(this.sortByType2)
+        case 'id':
+          if (this.flagSortId === 1) {
+            return this.ingredients.sort(this.sortById)
+          } else return this.ingredients.sort(this.sortById2)
+        case 'count':
+          if (this.flagSortCount === 1) {
+            return this.ingredients.sort(this.sortByCount)
+          } else return this.ingredients.sort(this.sortByCount2)
+        case 'countNext':
+          if (this.flagSortCountNext === 1) {
+            return this.ingredients.sort(this.sortByCountNext)
+          } else return this.ingredients.sort(this.sortByCountNext2)
+        case 'countNoNextDay': {
+          return this.ingredients.sort(this.sortByCountNoNextDay)
+        }
+        case 'price':
+          if (this.flagSortPrice === 1) {
+            return this.ingredients.sort(this.sortByPrice)
+          } else return this.ingredients.sort((this.sortByPrice2))
 
-        default: return this.ingredients
+        default:
+          return this.ingredients
       }
     },
-    sortByTitle (d1, d2) { this.flagSortTitle = 2; return (d1.name.toLowerCase() > d2.name.toLowerCase()) ? 1 : -1 },
-    sortByTitle2 (d1, d2) { this.flagSortTitle = 1; return (d1.name.toLowerCase() < d2.name.toLowerCase()) ? 1 : -1 },
-    sortByType (d1, d2) { this.flagSortType = 2; return (d1.type.toLowerCase() > d2.type.toLowerCase()) ? 1 : -1 },
-    sortByType2 (d1, d2) { this.flagSortType = 1; return (d1.type.toLowerCase() < d2.type.toLowerCase()) ? 1 : -1 },
-    sortById (d1, d2) { this.flagSortId = 2; return (d1.id > d2.id) ? 1 : -1 },
-    sortById2 (d1, d2) { this.flagSortId = 1; return (d1.id < d2.id) ? 1 : -1 },
-    sortByCount (d1, d2) { this.flagSortCount = 2; return (d1.quantity_in_stock > d2.quantity_in_stock) ? 1 : -1 },
-    sortByCount2 (d1, d2) { this.flagSortCount = 1; return (d1.quantity_in_stock < d2.quantity_in_stock) ? 1 : -1 },
-    sortByCountNext (d1, d2) { this.flagSortCountNext = 2; return (d1.forTomorrow > d2.forTomorrow) ? 1 : -1 },
-    sortByCountNext2 (d1, d2) { this.flagSortCountNext = 1; return (d1.forTomorrow < d2.forTomorrow) ? 1 : -1 },
-    sortByCountNoNextDay (d1, d2) { return (d1.quantity_in_stock - d1.forTomorrow > d2.quantity_in_stock - d2.forTomorrow) ? 1 : -1 },
-    sortByPrice (d1, d2) { this.flagSortPrice = 2; return (d1.price > d2.price) ? 1 : -1 },
-    sortByPrice2 (d1, d2) { this.flagSortPrice = 1; return (d1.price < d2.price) ? 1 : -1 }
+    sortByTitle (d1, d2) {
+      this.flagSortTitle = 2
+      return (d1.name.toLowerCase() > d2.name.toLowerCase()) ? 1 : -1
+    },
+    sortByTitle2 (d1, d2) {
+      this.flagSortTitle = 1
+      return (d1.name.toLowerCase() < d2.name.toLowerCase()) ? 1 : -1
+    },
+    sortByType (d1, d2) {
+      this.flagSortType = 2
+      return (d1.type.toLowerCase() > d2.type.toLowerCase()) ? 1 : -1
+    },
+    sortByType2 (d1, d2) {
+      this.flagSortType = 1
+      return (d1.type.toLowerCase() < d2.type.toLowerCase()) ? 1 : -1
+    },
+    sortById (d1, d2) {
+      this.flagSortId = 2
+      return (d1.id > d2.id) ? 1 : -1
+    },
+    sortById2 (d1, d2) {
+      this.flagSortId = 1
+      return (d1.id < d2.id) ? 1 : -1
+    },
+    sortByCount (d1, d2) {
+      this.flagSortCount = 2
+      return (d1.quantity_in_stock > d2.quantity_in_stock) ? 1 : -1
+    },
+    sortByCount2 (d1, d2) {
+      this.flagSortCount = 1
+      return (d1.quantity_in_stock < d2.quantity_in_stock) ? 1 : -1
+    },
+    sortByCountNext (d1, d2) {
+      this.flagSortCountNext = 2
+      return (d1.forTomorrow > d2.forTomorrow) ? 1 : -1
+    },
+    sortByCountNext2 (d1, d2) {
+      this.flagSortCountNext = 1
+      return (d1.forTomorrow < d2.forTomorrow) ? 1 : -1
+    },
+    sortByCountNoNextDay (d1, d2) {
+      return (d1.quantity_in_stock - d1.forTomorrow > d2.quantity_in_stock - d2.forTomorrow) ? 1 : -1
+    },
+    sortByPrice (d1, d2) {
+      this.flagSortPrice = 2
+      return (d1.price > d2.price) ? 1 : -1
+    },
+    sortByPrice2 (d1, d2) {
+      this.flagSortPrice = 1
+      return (d1.price < d2.price) ? 1 : -1
+    }
 
   }
 }
@@ -309,9 +368,11 @@ export default {
   .icon-table {
     font-size: 26px;
   }
+
   th {
     white-space: nowrap;
   }
+
   .btn-danger {
     margin-left: 20px;
     height: 38px;

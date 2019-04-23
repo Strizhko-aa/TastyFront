@@ -9,8 +9,6 @@
       <bar-chart :chart-data="graphOneMonth" :options="chartOptions"></bar-chart>
       <h3>За 3 месяца</h3>
       <bar-chart :chart-data="graphThreeMonths" :options="chartOptions"></bar-chart>
-
-
     </b-container>
   </div>
 </template>
