@@ -7,7 +7,7 @@
         <b-col cols="1" sm="1" md="1" style="height: 50px" class="no-overflow indexDish">
           <p class="indexDish">{{index + 1}}. </p>
         </b-col>
-        <b-col cols="4" sm="8" md="4" style="height: 50px" class="no-overflow">
+        <b-col cols="4" sm="8" md="4" style="height: 50px" class="no-overflow nameDish">
           <p class="info-text">{{item.dish.name}}</p>
         </b-col>
         <b-col cols="1" sm="3" md="1" style="height: 50px" class="no-overflow">
@@ -50,7 +50,7 @@
           </thead>
           <tbody>
           <tr v-for="item in ordered" :key="item.dish.id">
-            <td>{{item.dish.name}}</td>
+            <td class="name">{{item.dish.name}}</td>
             <td class="min-column">{{item.dish.price}} ₽</td>
             <td class="min-column">{{item.count}} шт.</td>
             <td class="min-column">{{item.count * item.dish.price}} ₽</td>
@@ -252,19 +252,6 @@ export default {
     // по идее отправить список заказов в БД
     // просто в форе оно не работало пришлось рекурсивно делать
     sendOrder (typePay, token) {
-      // if (i < this.ordered.length) {
-      //   let dataSendDish = {
-      //     tableNumber: this.$data.tableNumber,
-      //     idDish: this.ordered[i].dish.id,
-      //     count: this.ordered[i].count
-      //   }
-      //   console.log(await this.sendDish(dataSendDish)) // подождать результат
-      //   i++
-      //   this.sendOrder(i) // добавить след элемент
-      // } else { // когда заказы кончились
-      //   this.clearCart()
-      //   this.$router.push('/')
-      // }
       let json = {'tableNumber': this.$data.tableNumber, 'token': token}
       this.$http.post('http://localhost:8080/confirm/' + typePay, JSON.stringify(json)).then((response) => {
         this.clearCardAndGoToRoot(response.bodyText)
@@ -330,6 +317,9 @@ export default {
 }
 .no-overflow {
   overflow: hidden!important;
+}
+.nameDish {
+  text-align: left;
 }
 .item {
   padding: 15px;

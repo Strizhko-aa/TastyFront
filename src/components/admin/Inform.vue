@@ -14,17 +14,15 @@
           </b-col>
           <b-col>
             <div class="upper-block">
-              <label><strong>{{information.type}}</strong></label><br>
-              <label>{{information.name}}</label><br>
+              <label><strong>{{information.name}}</strong></label><br>
               <img align="left" class="leftimg"
-                   style="height: 200px; width: 200px; margin-right: 15px; margin-top: 20px;"
+                   style="height: 200px; width: 200px; margin-right: 15px;"
                    :src="`http://localhost:8080` + information.img"/>
               <!--<label>Описание: {{information.description}}</label><br>-->
-
-              <label style="margin-top: 10px"><strong>Цена: </strong>{{information.price}} рублей</label><br>
+              <label><strong>Цена: </strong>{{information.price}} ₽</label><br>
               <!--<label v-html="information.ingredient">{{information.ingredient}}</label>-->
-              <label style="margin-top: 50px;"><strong>Масса: </strong>{{information.mass}}</label>
-              <label style="margin-top: 50px;"><strong>Время готовки:</strong> {{information.time}} минут</label>
+              <label><strong>Масса: </strong>{{information.mass}}</label>
+              <label><strong>Время готовки:</strong> {{information.time}}</label>
             </div>
           </b-col>
         </b-row>
@@ -80,16 +78,16 @@ export default {
           xAxes: [{
             gridLines: {
               display: false,
-              color: "black"
+              color: 'black'
             },
             ticks: {
               beginAtZero: true,
-              fontSize: 14,
+              fontSize: 14
             },
             scaleLabel: {
               display: true,
               labelString: 'Дни недели',
-               fontColor: 'black'
+              fontColor: 'black'
             }
           }],
           yAxes: [{
@@ -100,34 +98,34 @@ export default {
             },
             ticks: {
               beginAtZero: true,
-              stacked: true ,
-              stepSize: 5 ,
+              stacked: true,
+              stepSize: 5,
               fontSize: 14
 
-  },
+            }
           }]
         }
       },
 
-    forGraph: null
+      forGraph: null
     }
   },
   methods: {
     postToServer: function () {
       let _url = 'http://localhost:8080/admin/inform'
-      const req = {'needDish': this.selected};
+      const req = {'needDish': this.selected}
       this.$http.post(_url, JSON.stringify(req)).then(response =>
         response.json()).then(json => {
-        this.information.mass = json['mass'];
-        this.information.name = json['name'];
-        this.information.img = json['img'];
-        this.information.time = json['time'];
-        this.information.type = json['type'];
-        this.information.price = json['price'];
-        this.information.dayOfWeek = json['day_of_week'];
-        this.information.inday = json['in_day'];
-        this.information.inweek = json['in_week'];
-        this.information.inyear = json['in_year'];
+        this.information.mass = json['mass']
+        this.information.name = json['name']
+        this.information.img = json['img']
+        this.information.time = json['time']
+        this.information.type = json['type']
+        this.information.price = json['price']
+        this.information.dayOfWeek = json['day_of_week']
+        this.information.inday = json['in_day']
+        this.information.inweek = json['in_week']
+        this.information.inyear = json['in_year']
 
         this.forGraph = {
           labels: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
@@ -148,9 +146,9 @@ export default {
               pointHitRadius: 30,
               pointBorderWidth: 2,
               pointStyle: 'rectRounded'
-            },
-          ]};
-        console.log(this.forGraph);
+            }
+          ]}
+        console.log(this.forGraph)
         console.log(this.information)
       }).catch(error => {
         console.log(error)
@@ -158,10 +156,10 @@ export default {
     }
   },
   created: function () {
-    let _url = 'http://localhost:8080/admin/inform';
+    let _url = 'http://localhost:8080/admin/inform'
     this.$http.get(_url).then(response => {
       this.optionGroups = response.body
-    });
+    })
     this.postToServer()
   },
   watch: {
@@ -176,7 +174,7 @@ export default {
 .upper-block {
   text-align: left;
   font-size: 22px;
-  height: auto;
+  height: 250px;
   position: relative;
   border-bottom: 1px dotted #3F9384;
 }
@@ -186,5 +184,15 @@ export default {
   height: auto;
   position: relative;
   border-right: 1px dotted #3F9384;
+}
+.leftimg {
+  position: relative;
+  padding: 0;
+  height: 130px;
+  max-width: 200px;
+  border-radius: 10px 0;
+  box-shadow: inset 1px 1px 10px 0 rgba(255, 255, 255, .5),
+  inset -1px -1px 10px 0 rgba(0, 0, 0, .5),
+  2px 2px 5px 0 rgba(0, 0, 0, .5);
 }
 </style>

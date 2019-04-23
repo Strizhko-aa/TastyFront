@@ -7,12 +7,14 @@
       </div>
       <div class="row" v-else-if="elements.length > 0">
         <div class="col-12 col-lg-6" v-if="flagL">
+          <p class="titleRow">Блюда на приготовление</p>
           <ElementDish v-for="v in leftElements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
         </div>
         <div class="col-12 col-lg-6" v-else>
           <h2>Блюда на приготовление не найдены</h2>
         </div>
         <div class="col-12 col-lg-6" v-if="flagR">
+          <p class="titleRow">Блюда в процессе притовления</p>
           <ElementDish v-for="v in rightElements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
         </div>
         <div class="col-12 col-lg-6" v-else>
@@ -105,6 +107,9 @@ export default {
   width: 100%;
   height: 100%;
   z-index: -1;
+}
+.titleRow {
+  font-size: 28px;
 }
 .element.recipe-show .recipe {
   display: block;
