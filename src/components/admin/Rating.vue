@@ -14,6 +14,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import BarChart from './chart/BarChart'
 
 export default {

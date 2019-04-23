@@ -1,97 +1,124 @@
 <template>
-  <div id="app">
-    <b-container>
-      <div class="text-center">
-        <span class="table_name_black">Столик {{elements[0].id}}</span>
-      </div>
-      <b-row class="align-items-center ml-2 mt-4 mr-2" v-for="(order, key2) in elements[0].ordersList" :key="key2">
-        <div class="table mt-5" :key="key2">
-          <div class="table_title text-center">
-            <span class="table_name">Заказ {{order.id}}</span>
-          </div>
-          <template v-for="(value, index) in elements[1][key2]">
-            <b-row class="align-items-center ml-2 mt-4 mr-2" :key="index">
-              <template v-for="(dishFromOrder, key) in value">
-                <b-col cols="2" :key="key">
-                  <img :src="'http://localhost:8080' + dishFromOrder.dish.imgUrl" class="img-fluid"
-                       alt="Изображение блюда">
-                </b-col>
-                <b-col cols="4" :key="key">
-                  <p>
-                    <b>{{dishFromOrder.dish.name}}</b>
-                    <br><span class="status-of-dish">Статус: {{dishFromOrder.dishStatus.title}}</span>
-                    <i v-if="dishFromOrder.dishStatus.title === 'В ожидании'" class="far fa-clock"></i>
-                    <i v-if="dishFromOrder.dishStatus.title === 'Готовится'" class="fab fa-gripfire"></i>
-                    <i v-if="dishFromOrder.dishStatus.title === 'Готово'" class="fas fa-check"></i>
-                  </p>
-                  <div class="form-check bring_dish">
-                    <input class="form-check-input increase_size" type="checkbox" value="" :id="index + key + key2">
-                    <label class="form-check-label ml-2" :for="index + key + key2">Отнесено</label>
-                  </div>
-                </b-col>
-              </template>
-            </b-row>
-          </template>
-          <b-row class="ml-2 mt-4 mr-2">
-            <b-col>
-              <div class="progress time">
-                <div class="progress-bar progress-color" role="progressbar" :style="{width: elements[2][key2] + '%'}"
-                     :aria-valuenow="elements[2][key2]" aria-valuemin="0" aria-valuemax="100">
-                  <b>{{elements[2][key2]}}%</b>
-                </div>
-              </div>
-            </b-col>
-          </b-row>
-          <b-row class="ml-2 mt-4 mr-2">
-            <b-col>
-              <span class="order_info">Дата: {{formatToDate(order.dateOrders)}}</span>
-            </b-col>
-            <b-col>
-              <span class="order_info">Время: {{formatToTime(order.dateOrders)}}</span>
-            </b-col>
-            <b-col>
-              <span class="order_info">Итого: {{elements[3][key2]}} ₽</span>
-            </b-col>
-            <b-col>
-              <span class="order_info">Оплата: {{order.typePayment.title}}</span>
-            </b-col>
-          </b-row>
-        </div>
+<div>
+
+  <b-container fluid>
+    <b-row>
+      <b-col style="text-align: left" cols=12 sm=12 md=12 lg=12>
+        <b-button @click="goBack()">Назад</b-button>
+      </b-col>
+    </b-row>
+  </b-container>
+  <b-container v-if="loading">LOADING ////\\\\</b-container>
+  <b-container v-else fluid>
+    <div v-show="false">{{tableNumber}}</div>
+    <b-container style="text-align: left" v-for="item in parsedOrders" :key="item.id">
+      <b-row>
+        <b-col cols sm md lg = "12">
+          <p class="order-number">
+            Заказ №{{item.id}} | {{item.total}} &#8381;
+            <i v-if="item.typePayment.id === 1" class="fas fa-credit-card"></i>
+            <i v-if="item.typePayment.id === 2" class="fas fa-money-bill-wave"></i>
+          </p>
+        </b-col>
+      </b-row>
+      <i v-if="getCount(1, item) > 0" class="fas fa-clock status"> В ожидании</i>
+      <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 1" :key="'wait' + index">
+        <b-col cols=12 sm=6 md=6 lg=6>
+          <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
+        </b-col>
+        <b-col cols=12 sm=4 md=4 lg=4> </b-col>
+        <b-col cols=12 sm=2 md=2 lg=2></b-col>
+      </b-row>
+      <i v-if="getCount(2, item) > 0" class="fas fa-fire status"> Готовится</i>
+      <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 2" :key="'inProgerss' + index">
+        <b-col cols=12 sm=6 md=6 lg=6>
+          <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
+        </b-col>
+        <b-col style="color:red" cols=12 sm=4 md=4 lg=4>  </b-col>
+        <b-col cols=12 sm=2 md=2 lg=2><img class="status-icon" src="../../assets/images/warning.svg" alt=""></b-col>
+      </b-row>
+      <i v-if="getCount(3, item) > 0" class="fas fa-check status"> Готово</i>
+      <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
+        <b-col cols=12 sm=6 md=6 lg=6>
+          <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
+        </b-col>
+        <b-col cols=12 sm=4 md=4 lg=4>  </b-col>
+        <b-col cols=12 sm=2 md=2 lg=2><img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""></b-col>
       </b-row>
     </b-container>
-  </div>
+  </b-container>
+</div>
 </template>
 
 <script>
-import moment from 'moment'
+// import moment from 'moment'
 
 export default {
   name: 'WaiterOrdersOnTable',
   props: {},
   data () {
     return {
-      elements: []
+      elements: [],
+      parsedOrders: [],
+      loading: false,
+      options: [
+        {text: 'Столики', value: 'tables'},
+        {text: 'Нужно отнести', value: 'ready'},
+        {text: 'Проблемки', value: 'warning'}
+      ]
     }
   },
-  methods: {
-    formatToDate (date) {
-      if (date) {
-        return moment(String(date)).format('DD.MM.YYYY')
+
+  computed: {
+    tableNumber () {
+      if (this.$route.params.tableNumber !== undefined) {
+        this.reqestData()
       }
-    },
-    formatToTime (date) {
-      if (date) {
-        return moment(String(date)).format('hh:mm')
-      }
+      return this.$route.params.tableNumber
     }
   },
+
   created () {
-    this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
-      this.elements = response.body
-      console.log(this.elements)
-    }).catch(function (err) {
-      console.log(err.status)
-    })
+    this.reqestData()
+  },
+
+  filters: {
+    // formatToDate (date) {
+    //   if (date) {
+    //     return moment(String(date)).format('DD.MM.YYYY')
+    //   }
+    // },
+    // formatToTime (date) {
+    //   if (date) {
+    //     return moment(String(date)).format('hh:mm')
+    //   }
+    // }
+  },
+
+  methods: {
+    goBack () {
+      this.$router.push('/waiter')
+    },
+    getCount (statusId, order) {
+      let count = 0
+      for (let i in order.parsedDishes) {
+        if (order.parsedDishes[i].status.id === statusId) {
+          count++
+        }
+      }
+      return count
+    },
+    reqestData () {
+      this.loading = true
+      this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
+        this.elements = response.body
+        this.parsedOrders = this.parseResponseMix(this.elements)
+        this.loading = false
+      }).catch(function (err) {
+        this.loading = false
+        console.log(err)
+      })
+    }
   }
 }
 </script>
@@ -99,52 +126,26 @@ export default {
 <style scoped>
   @import '../../assets/styles/css/all.min.css';
 
-  div.progress-color {
-    background: #3F9384;
-  }
-
-  div.table, div.table_title, button.bring_dish {
-    border: 2px solid #3F9384;
-    border-radius: 8px;
-  }
-
-  span.table_name {
-    font-size: 40px;
-    font-family: Times, serif;
-    color: white;
-  }
-
-  span.table_name_black {
-    font-size: 40px;
-    font-family: Times, serif;
-    color: black;
-  }
-
-  div.table_title {
-    background: #3F9384;
-  }
-
-  p {
-    font-size: 25px;
-    font-family: Times, serif;
-  }
-
-  .increase_size {
-    width: 20px;
-    height: 20px;
-  }
-
-  span.status-of-dish {
-    color: #3F9384;
-  }
-
-  div.time {
-    border: 2px solid black;
-    height: 25px;
-  }
-
-  .order_info, div.bring_dish {
-    font-size: 20px;
-    font-family: Times, serif;
-  }
+p {
+  font-size: 25px;
+  font-family: Times, serif;
+}
+.status {
+  font-size: 16pt;
+  margin: 10px 0 0 20px;
+}
+.dish-name {
+  font-size: 14pt;
+  font-family: Times, serif;
+}
+.order-number {
+  margin-top: 20px;
+}
+.dishes-in-order {
+  padding-left: 30px;
+}
+.status-icon {
+  height: 20px;
+  float: left;
+}
 </style>
