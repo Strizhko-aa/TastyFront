@@ -54,6 +54,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Vue from 'vue'
 export default {
   name: 'StopList',

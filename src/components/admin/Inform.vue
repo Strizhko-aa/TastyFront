@@ -44,6 +44,7 @@
 <script>
 import LineChart from './chart/LineChart'
 
+/* eslint-disable */
 export default {
   components: {
     LineChart

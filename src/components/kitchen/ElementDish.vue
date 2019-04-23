@@ -135,7 +135,7 @@ export default {
       this.updateComponent()
     },
     msToTime (duration) {
-      var milliseconds = parseInt((duration % 1000) / 100)
+      // var milliseconds = parseInt((duration % 1000) / 100)
       var seconds = parseInt((duration / 1000) % 60)
       var minutes = parseInt((duration / (1000 * 60)) % 60)
       var hours = parseInt((duration / (1000 * 60 * 60)))

@@ -10,8 +10,8 @@
 </template>
 
 <script>
-  import BarChart from './chart/BarChart'
-
+import BarChart from './chart/BarChart'
+/* eslint-disable */
 
   export default {
     name: 'Rating',

@@ -24,17 +24,17 @@ export default {
   props: {},
   data () {
     return {
-      elements: {},
+      elements: [],
       parsedTables: []
     }
   },
   mounted () {
     console.log('mounted')
-    this.$http.get('http://localhost:8080/waiter').then(function (response) {
+    this.$http.get('http://localhost:8080/waiter').then((response) => {
       this.elements = response.body
       this.parsedTables = this.parseTables(response.body)
-    }).catch(function (err) {
-      console.log(err.status)
+    }).catch((err) => {
+      console.log(err)
     })
   },
   methods: {
@@ -44,11 +44,13 @@ export default {
     },
     parseTables (data) {
       let _tables = []
-      for (let i in data) {
+      console.log(data[0])
+      for (let i in data[0]) {
         let table = {
-          id: data[i][0].id,
-          status: data[i][0].tableStatus.id
+          id: data[0][i][0].id,
+          status: data[0][i][0].tableStatus.id
         }
+        // console.log(table)
         _tables.push(table)
       }
       return _tables
