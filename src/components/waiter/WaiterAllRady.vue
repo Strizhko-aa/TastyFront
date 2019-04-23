@@ -58,9 +58,9 @@ export default {
     reqestAllReady: async function () {
       this.loading = true
       let tables = await this.getTables()
-      for (let i in tables) {
+      for (let i in tables[0]) {
         // console.log('id ' + tables[i][0].id)
-        let ordersFromTable = await this.getTableOrders(tables[i][0].id)
+        let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
         // console.log(ordersFromTable)
         this.parsedOrders.push(ordersFromTable)
       }

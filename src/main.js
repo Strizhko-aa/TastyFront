@@ -13,10 +13,14 @@ import store from '../src/components/store/store'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 
+import WaiterMixin from './components/mixin/WaiterMixin'
+
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueResource)
 Vue.use(Notifications)
+
+Vue.mixin(WaiterMixin)
 
 Vue.config.productionTip = false
 
