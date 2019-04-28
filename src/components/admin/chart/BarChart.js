@@ -1,4 +1,5 @@
-import {HorizontalBar, mixins} from 'vue-chartjs'
+/* eslint-disable */
+import {Bar, HorizontalBar, mixins} from 'vue-chartjs'
 const { reactiveProp } = mixins
 
 export default {

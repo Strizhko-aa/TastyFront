@@ -2,14 +2,19 @@
   <div>
     <br>
     <b-container fluid>
-
-          <bar-chart :chart-data="graph" :options="chartOptions"></bar-chart>
-
+      <h1>Продажи</h1>
+      <h3>За неделю</h3>
+      <bar-chart :chart-data="graphOneWeek" :options="chartOptions"></bar-chart>
+      <h3>За месяц</h3>
+      <bar-chart :chart-data="graphOneMonth" :options="chartOptions"></bar-chart>
+      <h3>За 3 месяца</h3>
+      <bar-chart :chart-data="graphThreeMonths" :options="chartOptions"></bar-chart>
     </b-container>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import BarChart from './chart/BarChart'
 
 export default {
@@ -18,7 +23,9 @@ export default {
   data () {
     return {
       temp: null,
-      graph: null,
+      graphOneMonth: null,
+      graphOneWeek: null,
+      graphThreeMonths: null,
       chartOptions: {
         scales: {
           yAxes: [{
@@ -54,11 +61,11 @@ export default {
     }
   },
   methods: {
-    getInformationFromServer: function () {
-      let _url = 'http://localhost:8080/admin/rating'
+    getInformationFromServerOneWeek: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=oneWeek'
       var jsonLabels = []
       var jsonData = []
-      this.$http.get(_url, {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response =>
+      this.$http.get(_url).then(response =>
         response.json()).then(json => {
         console.log(json)
         Object.keys(json).forEach(function (key) {
@@ -69,7 +76,65 @@ export default {
         console.log(error)
       })
       setTimeout(() => {
-        this.graph = {
+        this.graphOneWeek = {
+          labels: jsonData,
+          datasets: [
+            {
+              label: 'Продажи за неделю',
+              backgroundColor: 'rgba(63, 147, 132, 0.3)',
+              borderColor: 'rgba(63, 147, 132, 1)',
+              borderWidth: 1,
+              data: jsonLabels
+            }
+          ]
+        }
+      }, 500)
+    },
+    getInformationFromServerThreeMonths: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=threeMonths'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graphThreeMonths = {
+          labels: jsonData,
+          datasets: [
+            {
+              label: 'Продажи за 3 месяца',
+              backgroundColor: 'rgba(63, 147, 132, 0.3)',
+              borderColor: 'rgba(63, 147, 132, 1)',
+              borderWidth: 1,
+              data: jsonLabels
+            }
+          ]
+        }
+      }, 500)
+    },
+    getInformationFromServerOneMonth: function () {
+      let _url = 'http://localhost:8080/admin/rating?need_period=oneMonth'
+      var jsonLabels = []
+      var jsonData = []
+      this.$http.get(_url).then(response =>
+        response.json()).then(json => {
+        console.log(json)
+        Object.keys(json).forEach(function (key) {
+          jsonData.push(key)
+          jsonLabels.push(json[key])
+        })
+      }).catch(error => {
+        console.log(error)
+      })
+      setTimeout(() => {
+        this.graphOneMonth = {
           labels: jsonData,
           datasets: [
             {
@@ -82,10 +147,16 @@ export default {
           ]
         }
       }, 500)
+    },
+    startPageRender: function () {
+      this.getInformationFromServerOneMonth()
+      this.getInformationFromServerOneWeek()
+      this.getInformationFromServerThreeMonths()
     }
   },
   created: function () {
-    this.getInformationFromServer()
+    this.startPageRender()
+    this.ggg()
   }
 }
 </script>

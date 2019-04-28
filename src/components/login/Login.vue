@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import userStore from '../store/userStore'
+
 export default {
   data () {
     return {
@@ -54,9 +56,19 @@ export default {
       }
       this.$http.post(_url, JSON.stringify(_json)).then(response => {
         console.log(response)
-        this.$cookies.set('token', response.bodyText)
+        this.$cookies.set('token', response.body[0])
+        this.$http.headers.common['Authorization'] = 'Token' + response.body[0]
+        userStore.dispatch('setValue', {key: 'authorized', value: true})
+        userStore.dispatch('setValue', {key: 'email', value: response.body[1].email})
+        userStore.dispatch('setValue', {key: 'firstName', value: response.body[1].firstName})
+        userStore.dispatch('setValue', {key: 'lastName', value: response.body[1].lastName})
+        userStore.dispatch('setValue', {key: 'phone', value: response.body[1].phone})
+        userStore.dispatch('setValue', {key: 'roleStaff["id"]', value: response.body[1].roleStaff.id})
+        userStore.dispatch('setValue', {key: 'roleStaff["title"]', value: response.body[1].roleStaff.title})
         this.$router.push({path: '/waiter'})
       }).catch(err => {
+        userStore.dispatch('setValue', {key: 'authorized', value: false})
+        this.$http.headers.common['Authorization'] = ''
         console.log(err.status)
       })
     }

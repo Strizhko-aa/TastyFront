@@ -9,10 +9,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import Vuex from 'vuex'
 import store from '../src/components/store/store'
-// import menuStore from '../src/components/menu/menuStore'
+import userStore from '../src/components/store/userStore'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
+
+import WaiterMixin from './components/mixin/WaiterMixin'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
@@ -20,25 +22,53 @@ Vue.use(VueResource)
 Vue.use(Notifications)
 Vue.use(VueCookies)
 
+Vue.mixin(WaiterMixin)
+
 Vue.config.productionTip = false
 
+function setAuthorized () {
+  if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
+    console.log(Vue.cookies.get('token'))
+    Vue.http.headers.common['Authorization'] = 'Token' + Vue.cookies.get('token')
+    userStore.state.authorized = true
+  } else {
+    Vue.http.headers.common['Authorization'] = ''
+    userStore.state.authorized = false
+  }
+}
+
+function checkToken () {
+  if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
+    // также не забыть добавить проверку валидности токена на сервере(пока нет апи)
+    return true
+  } else {
+    return false
+  }
+}
+
+function initApp () {
+  setAuthorized()
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
+  })
+}
+
 router.afterEach((to, from) => {
-  store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
+  console.log(to.meta.title)
+  store.dispatch('setValue', {key: 'whereIsUser', value: to.meta.title})
 })
 
 router.beforeEach((to, from, next) => {
-  if (VueCookies.get('token') === null && to.path !== '/login') {
-    console.log(to)
-    next({ path: '/login' })
-  } else {
+  if (checkToken()) {
     next()
+  } else {
+    store.state.authorized = false
+    next({path: '/login'})
   }
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-})
+initApp()

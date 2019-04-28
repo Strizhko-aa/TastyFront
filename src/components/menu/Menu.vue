@@ -162,8 +162,8 @@ export default {
 
     // при выборе категории меняет флаг и запрашивает нужный тип блюд
     changeMenuFlag (value) {
-      let _url = 'http://localhost:8080/menu/' + value
-      this.$http.get(_url, {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
+      let _url = 'http://localhost:8080/menu/' + encodeURI(value)
+      this.$http.get(_url).then(response => {
         // console.log(response.body)
         this.dishes = response.body
       }).catch(err => {

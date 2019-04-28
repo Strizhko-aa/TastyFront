@@ -4,7 +4,7 @@ import MenuComponent from '@/components/menu/Menu'
 import CartComponent from '@/components/menu/cart'
 import AdminComponent from '@/components/admin/Admin'
 import Kitchen from '@/components/kitchen/Kitchen'
-import WaiterTables from '@/components/waiter/WaiterTables'
+import WaiterContainer from '@/components/waiter/WaiterContainer'
 import WaiterOrdersOnTable from '@/components/waiter/WaiterOrdersOnTable'
 import Login from '@/components/login/Login'
 import Registration from '@/components/login/Registration'
@@ -19,47 +19,74 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Меню',
+      name: 'menu',
+      meta: {
+        title: 'Меню'
+      },
       component: MenuComponent
     },
     {
       path: '/cart',
-      name: 'Корзина',
+      name: 'cart',
+      meta: {
+        title: 'Корзина'
+      },
       component: CartComponent
     },
     {
       path: '/login',
-      name: 'Аутентификация',
+      name: 'login',
+      meta: {
+        title: 'Вход'
+      },
       component: Login
     },
     {
       path: '/registration',
-      name: 'Авторизация',
+      name: 'registration',
+      meta: {
+        title: 'Регистрация'
+      },
       component: Registration
     },
     {
       path: '/getpassword',
-      name: 'Получить пароль',
+      name: 'get-password',
+      meta: {
+        title: 'Восстановление пароля'
+      },
       component: GetPassword
     },
     {
       path: '/admin',
-      name: 'Администратор',
+      name: 'admin',
+      meta: {
+        title: 'Администратор'
+      },
       component: AdminComponent
     },
     {
       path: '/kitchen',
-      name: 'Кухня',
+      name: 'kitchen',
+      meta: {
+        title: 'Кухня'
+      },
       component: Kitchen
     },
     {
       path: '/waiter',
-      name: 'Официант',
-      component: WaiterTables
+      name: 'waiter',
+      meta: {
+        title: 'Официант'
+      },
+      component: WaiterContainer
     },
     {
       path: '/waiter/orders/:tableNumber',
-      name: 'Стол',
+      name: 'table',
+      meta: {
+        title: 'Столик'
+      },
       component: WaiterOrdersOnTable
     }
   ]

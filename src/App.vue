@@ -38,9 +38,9 @@
         <b-col cols="8" md="8" sm="8">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
-        <b-col cols="2" md="2" sm="2" class="menu md">
+        <b-col cols="2" md="2" sm="2" class="menu md" v-show="authorized">
           <div style="margin-top: 1px" class="user">
-            {{ user ? user.name : 'Loading...' }}
+            {{ userName }}
           </div>
           <!-- <div> -->
             <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
@@ -73,6 +73,7 @@
 <script>
 // import Kitchen from './components/Kitchen.vue'
 import store from './components/store/store'
+import userStore from './components/store/userStore'
 
 export default {
   name: 'app',
@@ -105,13 +106,13 @@ export default {
   // Значит, если поменяется хначение в хранилище, то поменяется и значение переменной в компоненте
     whereIsUser () {
       return store.getters.value('whereIsUser')
+    },
+    authorized () {
+      return userStore.getters.value('authorized')
+    },
+    userName () {
+      return userStore.getters.value('email')
     }
-  },
-  created () {
-    // Simulate fetching user data.
-    setTimeout(() => {
-      this.user = { name: 'Guest' }
-    }, 2000)
   }
 }
 
