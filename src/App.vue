@@ -49,10 +49,10 @@
                   <img src="./assets/images/menu-button.svg" alt="">
                   </div>
                 </template>
-              <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
-              <b-dropdown-item-button @click.native="navigateTo('/kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
-              <b-dropdown-item-button @click.native="navigateTo('Администратор')" class="dropdown-style">Администратор</b-dropdown-item-button>
-              <b-dropdown-item-button @click.native="navigateTo('Официант')" class="dropdown-style">Официант</b-dropdown-item-button>
+              <b-dropdown-item-button @click="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permKitchen" @click="navigateTo('kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permAdmin" @click="navigateTo('admin')" class="dropdown-style">Администратор</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permWaiter" @click="navigateTo('waiter')" class="dropdown-style">Официант</b-dropdown-item-button>
             </b-dropdown>
           <!-- </div> -->
         </b-col>
@@ -86,20 +86,6 @@ export default {
       result: ''
     }
   },
-  methods: {
-    logout: function () {
-      let _url = 'http://localhost:8080/logout'
-      this.$http.post(_url, JSON.stringify('logout')).then(response =>
-        response.json()).then(json => {
-        this.result = json
-      }).catch(error => {
-        console.log('logout' + ' ' + error)
-      })
-    },
-    navigateTo (routeName) {
-      this.$router.push({path: routeName})
-    }
-  },
   computed: { // вычисляемое значение. Оно вычисляется при рендере
   // компонента(т.к. это основной компонент то при старте приложения), и при изменении
   // одного из параметров от которого он зависит. В данном случает тут берется значение из хранилища store.
@@ -112,6 +98,31 @@ export default {
     },
     userName () {
       return userStore.getters.value('email')
+    },
+    permKitchen () {
+      return userStore.getters.permission('kitchen')
+    },
+    permWaiter () {
+      return userStore.getters.permission('waiter')
+    },
+    permAdmin () {
+      return userStore.getters.permission('admin')
+    }
+  },
+  methods: {
+    logout () {
+      // let _url = 'http://localhost:8080/logout'
+      // this.$http.post(_url, JSON.stringify('logout')).then(response =>
+      //   response.json()).then(json => {
+      //   this.result = json
+      // }).catch(error => {
+      //   console.log('logout' + ' ' + error)
+      // })
+      console.log('logout')
+      this.$router.push({name: 'login'})
+    },
+    navigateTo (routeName) {
+      this.$router.push({path: routeName})
     }
   }
 }

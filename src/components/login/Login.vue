@@ -58,19 +58,34 @@ export default {
         console.log(response)
         this.$cookies.set('token', response.body[0])
         this.$http.headers.common['Authorization'] = 'Token' + response.body[0]
-        userStore.dispatch('setValue', {key: 'authorized', value: true})
-        userStore.dispatch('setValue', {key: 'email', value: response.body[1].email})
-        userStore.dispatch('setValue', {key: 'firstName', value: response.body[1].firstName})
-        userStore.dispatch('setValue', {key: 'lastName', value: response.body[1].lastName})
-        userStore.dispatch('setValue', {key: 'phone', value: response.body[1].phone})
-        userStore.dispatch('setValue', {key: 'roleStaff["id"]', value: response.body[1].roleStaff.id})
-        userStore.dispatch('setValue', {key: 'roleStaff["title"]', value: response.body[1].roleStaff.title})
-        this.$router.push({path: '/waiter'})
+        this.setUserData(response.body[1])
+        if (response.body[1].roleStaff.id === 1) {
+          this.$router.push({name: 'waiter'})
+        }
+        if (response.body[1].roleStaff.id === 2) {
+          this.$router.push({name: 'kitchen'})
+        }
+        if (response.body[1].roleStaff.id === 3) {
+          this.$router.push({name: 'admin'})
+        }
+        if (response.body[1].roleStaff.id === 4) {
+          this.$router.push({name: 'menu'})
+        }
       }).catch(err => {
         userStore.dispatch('setValue', {key: 'authorized', value: false})
         this.$http.headers.common['Authorization'] = ''
         console.log(err.status)
       })
+    },
+    setUserData (data) {
+      userStore.dispatch('setValue', {key: 'authorized', value: true})
+      userStore.dispatch('setValue', {key: 'email', value: data.email})
+      userStore.dispatch('setValue', {key: 'firstName', value: data.firstName})
+      userStore.dispatch('setValue', {key: 'lastName', value: data.lastName})
+      userStore.dispatch('setValue', {key: 'phone', value: data.phone})
+      userStore.dispatch('setValue', {key: 'roleStaff["id"]', value: data.roleStaff.id})
+      userStore.dispatch('setValue', {key: 'roleStaff["title"]', value: data.roleStaff.title})
+      userStore.dispatch('setUserPermission', data.roleStaff.id)
     }
   }
   // created () {

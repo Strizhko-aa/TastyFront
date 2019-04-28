@@ -12,6 +12,9 @@ const store = new Vuex.Store({
   mutations: {
     setValue (store, keyValue) {
       store[keyValue.key] = keyValue.value
+    },
+    clearStore (store) {
+      store.selectedInWaiterMenu = 'tables'
     }
   },
   actions: {
@@ -19,6 +22,9 @@ const store = new Vuex.Store({
     // чтобы использовать храилище его надо импортировать
     setValue ({commit}, keyValue) {
       commit('setValue', keyValue)
+    },
+    clearStore ({commit}) {
+      commit('clearStore')
     }
   },
   getters: {

@@ -46,6 +46,12 @@ function checkToken () {
   }
 }
 
+function clearData () {
+  store.dispatch('clearStore')
+  userStore.dispatch('clearStore')
+  Vue.cookies.remove('token')
+}
+
 function initApp () {
   setAuthorized()
   /* eslint-disable no-new */
@@ -63,11 +69,43 @@ router.afterEach((to, from) => {
 })
 
 router.beforeEach((to, from, next) => {
-  if (checkToken()) {
-    next()
-  } else {
-    store.state.authorized = false
-    next({path: '/login'})
+  console.log(to.name)
+  switch (to.name) {
+    case 'login':
+      clearData()
+      next()
+      break
+
+    case 'waiter': {
+      if (userStore.getters.permission('waiter') && checkToken()) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
+
+    case 'admin': {
+      if (userStore.getters.permission('admin') && checkToken()) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
+
+    case 'kitchen': {
+      if (userStore.getters.permission('kitchen') && checkToken()) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
+
+    default:
+      next()
+      break
   }
 })
 
