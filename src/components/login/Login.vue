@@ -53,6 +53,7 @@ export default {
         'password': this.password
       }
       this.$http.post(_url, JSON.stringify(_json)).then(response => {
+        console.log(response)
         this.$cookies.set('token', response.bodyText)
         this.$router.push({path: '/waiter'})
       }).catch(err => {

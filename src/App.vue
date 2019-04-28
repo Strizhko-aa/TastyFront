@@ -50,6 +50,9 @@
                   </div>
                 </template>
               <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+              <b-dropdown-item-button @click.native="navigateTo('/kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
+              <b-dropdown-item-button @click.native="navigateTo('Администратор')" class="dropdown-style">Администратор</b-dropdown-item-button>
+              <b-dropdown-item-button @click.native="navigateTo('Официант')" class="dropdown-style">Официант</b-dropdown-item-button>
             </b-dropdown>
           <!-- </div> -->
         </b-col>
@@ -91,6 +94,9 @@ export default {
       }).catch(error => {
         console.log('logout' + ' ' + error)
       })
+    },
+    navigateTo (routeName) {
+      this.$router.push({path: routeName})
     }
   },
   computed: { // вычисляемое значение. Оно вычисляется при рендере
