@@ -70,43 +70,44 @@ router.afterEach((to, from) => {
 
 router.beforeEach((to, from, next) => {
   console.log(to.name)
-  switch (to.name) {
-    case 'login':
-      clearData()
-      next()
-      break
+  next()
+  // switch (to.name) {
+  //   case 'login':
+  //     clearData()
+  //     next()
+  //     break
 
-    case 'waiter': {
-      if (userStore.getters.permission('waiter') && checkToken()) {
-        next()
-      } else {
-        next({name: 'login'})
-      }
-      break
-    }
+  //   case 'waiter': {
+  //     if (userStore.getters.permission('waiter') && checkToken()) {
+  //       next()
+  //     } else {
+  //       next({name: 'login'})
+  //     }
+  //     break
+  //   }
 
-    case 'admin': {
-      if (userStore.getters.permission('admin') && checkToken()) {
-        next()
-      } else {
-        next({name: 'login'})
-      }
-      break
-    }
+  //   case 'admin': {
+  //     if (userStore.getters.permission('admin') && checkToken()) {
+  //       next()
+  //     } else {
+  //       next({name: 'login'})
+  //     }
+  //     break
+  //   }
 
-    case 'kitchen': {
-      if (userStore.getters.permission('kitchen') && checkToken()) {
-        next()
-      } else {
-        next({name: 'login'})
-      }
-      break
-    }
+  //   case 'kitchen': {
+  //     if (userStore.getters.permission('kitchen') && checkToken()) {
+  //       next()
+  //     } else {
+  //       next({name: 'login'})
+  //     }
+  //     break
+  //   }
 
-    default:
-      next()
-      break
-  }
+  //   default:
+  //     next()
+  //     break
+  // }
 })
 
 initApp()
