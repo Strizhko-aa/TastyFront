@@ -50,11 +50,8 @@ export default {
   methods: {
     loginIn: function () {
       let _url = 'http://localhost:8080/login'
-      // var _type = {
-      //   'username': this.username,
-      //   'login': this.login
-      // }
-      this.$http.get(_url).then(response => {
+      let _json = {'username': this.username, 'password': this.password}
+      this.$http.post(_url, JSON.stringify(_json)).then(response => {
         this.elements = response.body
       }).catch(err => {
         console.log(err.status)
