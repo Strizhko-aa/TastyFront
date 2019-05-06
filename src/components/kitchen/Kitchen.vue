@@ -33,6 +33,8 @@
 
 import ElementDish from './ElementDish'
 
+import store from '../store/store'
+
 export default {
   name: 'Kitchen',
   props: {
@@ -67,7 +69,7 @@ export default {
   created () {
     window.onresize = this.windowEvent
     window.onready = this.windowEvent
-    // let resource = this.$resource('http://localhost:8080/kitchen');
+    // let resource = this.$resource(store.getters.host + '/kitchen');
     // resource.get().then(result => {
     //   result.json().then(data => {
     //     console.log(data);
@@ -79,7 +81,7 @@ export default {
 
     // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
     // ниже и читать про него ничего не нужно
-    this.$http.get('http://localhost:8080/kitchen').then(response => {
+    this.$http.get(store.getters.host + '/kitchen').then(response => {
       this.elements = response.body
       this.updateComponent()
       console.log(response.body)

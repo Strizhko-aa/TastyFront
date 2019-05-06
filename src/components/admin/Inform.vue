@@ -17,7 +17,7 @@
               <label><strong>{{information.name}}</strong></label><br>
               <img align="left" class="leftimg"
                    style="height: 200px; width: 200px; margin-right: 15px;"
-                   :src="`http://localhost:8080` + information.img"/>
+                   :src="`store.getters.host` + information.img"/>
               <!--<label>Описание: {{information.description}}</label><br>-->
               <label><strong>Цена: </strong>{{information.price}} ₽</label><br>
               <!--<label v-html="information.ingredient">{{information.ingredient}}</label>-->
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     postToServer: function () {
-      let _url = 'http://localhost:8080/admin/inform'
+      let _url = store.getters.host + '/admin/inform'
       const req = {'needDish': this.selected}
       this.$http.post(_url, JSON.stringify(req)).then(response =>
         response.json()).then(json => {
@@ -156,7 +156,7 @@ export default {
     }
   },
   created: function () {
-    let _url = 'http://localhost:8080/admin/inform'
+    let _url = store.getters.host + '/admin/inform'
     this.$http.get(_url).then(response => {
       this.optionGroups = response.body
     })

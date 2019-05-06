@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     logout: function () {
-      let _url = 'http://localhost:8080/logout'
+      let _url = store.getters.host + '/logout'
       this.$http.post(_url, JSON.stringify('logout')).then(response =>
         response.json()).then(json => {
         this.result = json

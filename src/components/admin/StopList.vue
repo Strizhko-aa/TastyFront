@@ -76,14 +76,14 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8080/admin/showDish').then(response => {
+    this.$http.get(store.getters.host + '/admin/showDish').then(response => {
       this.dishes = response.body
       console.log(response.body)
     }).catch(err => {
       console.log(err.status)
       this.dishes = []
     })
-    this.$http.get('http://localhost:8080/admin/showStatusDish').then(response => {
+    this.$http.get(store.getters.host + '/admin/showStatusDish').then(response => {
       this.statusDish = response.body
       console.log(response.body)
     }).catch(err => {
@@ -114,7 +114,7 @@ export default {
       }
     },
     editDishInStopList (dish) {
-      this.$http.post('http://localhost:8080/admin/editDishInStopList', JSON.stringify(dish)).then(function (response) {
+      this.$http.post(store.getters.host + '/admin/editDishInStopList', JSON.stringify(dish)).then(function (response) {
         console.log(response)
         if (response.body.id) {
           if (response.body.statusDish === 'available') this.noty('Статус блюда ', 'success', 'Блюдо ' + dish.name + ' доступно для меню')

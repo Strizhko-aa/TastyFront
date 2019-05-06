@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import store from '../store/store'
 export default {
   data () {
     return {
@@ -49,7 +50,7 @@ export default {
   },
   methods: {
     loginIn: function () {
-      let _url = 'http://localhost:8080/login'
+      let _url = store.getters.host + '/login'
       let _json = {'username': this.username, 'password': this.password}
       this.$http.post(_url, JSON.stringify(_json)).then(response => {
         this.elements = response.body
@@ -62,7 +63,7 @@ export default {
     }
   },
   created () {
-    let _url = 'http://localhost:8080/login'
+    let _url = store.getters.host + '/login'
     this.$http.get(_url).then(response => {
       this.elements = response.body
     }).catch(err => {

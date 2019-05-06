@@ -88,6 +88,7 @@
 
 <script>
 import menuStore from './menuStore'
+import store from '../store/store'
 
 export default {
   data () {
@@ -130,7 +131,7 @@ export default {
       let index = this.findOrderedIndex(id)
       menuStore.dispatch('deleteFromPurshased', index)
       let json = {'dishId': id}
-      this.$http.post('http://localhost:8080/cancel', JSON.stringify(json)).then(function (response) {
+      this.$http.post(store.getters.host + '/cancel', JSON.stringify(json)).then(function (response) {
       }).catch(function (error) {
         console.log(error)
       })
@@ -143,12 +144,12 @@ export default {
         menuStore.dispatch('changeCount', {index: index, value: value})
         let json = {'dishId': orderedItem.dish.id}
         if (value === -1) {
-          this.$http.post('http://localhost:8080/delete', JSON.stringify(json)).then(function (response) {
+          this.$http.post(store.getters.host + '/delete', JSON.stringify(json)).then(function (response) {
           }).catch(function (error) {
             console.log(error)
           })
         } else if (value === 1) {
-          this.$http.post('http://localhost:8080/add', JSON.stringify(json)).then(function (response) {
+          this.$http.post(store.getters.host + '/add', JSON.stringify(json)).then(function (response) {
           }).catch(function (error) {
             console.log(error)
           })
@@ -253,7 +254,7 @@ export default {
     // просто в форе оно не работало пришлось рекурсивно делать
     sendOrder (typePay, token) {
       let json = {'tableNumber': this.$data.tableNumber, 'token': token}
-      this.$http.post('http://localhost:8080/confirm/' + typePay, JSON.stringify(json)).then((response) => {
+      this.$http.post(store.getters.host + '/confirm/' + typePay, JSON.stringify(json)).then((response) => {
         this.clearCardAndGoToRoot(response.bodyText)
         console.log('success')
         console.log(response)
@@ -276,7 +277,7 @@ export default {
     // async, promise только для того, чтобы дождаться пока отправится одно блюдо и только после этого отправить следующее
     sendDish: async function (data) {
       return new Promise((resolve) => {
-        this.$http.post('http://localhost:8080/confirm', data).then((response) => {
+        this.$http.post(store.getters.host + '/confirm', data).then((response) => {
           console.log(response.status)
           resolve('send success')
         }).catch(error => {

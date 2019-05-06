@@ -3,7 +3,7 @@
     <div v-on:click="flag=!flag">
       <div class="element-list">
         <div class="photo">
-          <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+          <img class="photo" :src="`store.getters.host` + data.dish.imgUrl">
         </div>
         <div class="name-dish">
           <div class="name category">
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import store from '../store/store'
+
 export default {
   name: 'ElementDish',
   props: {
@@ -127,7 +129,7 @@ export default {
         default:
           break
       }
-      this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(json)).then(function (response) {
+      this.$http.post(store.getters.host + '/kitchen/status-change', JSON.stringify(json)).then(function (response) {
         console.log(response)
       }).catch(function (error) {
         console.log(error)
