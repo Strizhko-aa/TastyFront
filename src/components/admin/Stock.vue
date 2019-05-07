@@ -12,7 +12,7 @@
         <div class="col-12">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <span class="panel-title">Ингедиенты</span>
+              <span class="panel-title">Ингредиенты</span>
               <div class="pull-right">
               <span class="clickable filter" data-container="body"><ion-icon name="ios-funnel"
                                                                              v-on:click="showSearch = !showSearch"></ion-icon></span>
@@ -25,6 +25,7 @@
                      data-filters="#ing-table"
                      placeholder="Поиск..." v-on:keyup="tableSearch()"/>
               <button class="btn-danger" v-on:click="sortedList('countNoNextDay')">Нужно докупить</button>
+              <button class="btn-danger" v-on:click="createPDF()">PDF</button>
             </div>
             <div class="panel-body col-12" v-show="showAddIngredient">
               <b-col cols="3">
@@ -124,6 +125,19 @@ export default {
     // this.loading = false;
   },
   methods: {
+    createPDF() {
+      this.$http.get('http://localhost:8080/admin/createPDF').then(function (response) {
+        console.log(response)
+        var a = document.createElement('a')
+        a.href = response.bodyText
+        a.target = '_blank'
+        a.click()
+        console.log(a)
+        this.noty('PDF ', 'success', ' успешно')
+      }).catch(err => {
+        console.log(err.status)
+      })
+    },
     getIngredientsFromServer: function () {
       this.$http.get('http://localhost:8080/admin/addDish/ingredient').then(response =>
         response.json()).then(json => {
