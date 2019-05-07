@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import store from '../store/store'
+
 export default {
   name: 'Popular',
   data: function () {
@@ -48,7 +50,7 @@ export default {
   },
   methods: {
     postToServer: function () {
-      let _url = 'http://localhost:8080/admin'
+      let _url = store.getters.host + '/admin'
       var _type = {'statistic_type': this.selected}
       this.qtype = this.selected
       this.$http.post(_url, JSON.stringify(_type)).then(response =>

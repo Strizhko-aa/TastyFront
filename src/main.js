@@ -26,34 +26,39 @@ Vue.mixin(WaiterMixin)
 
 Vue.config.productionTip = false
 
-function setAuthorized () {
-  if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
-    console.log(Vue.cookies.get('token'))
-    Vue.http.headers.common['Authorization'] = 'Token' + Vue.cookies.get('token')
-    userStore.state.authorized = true
-  } else {
-    Vue.http.headers.common['Authorization'] = ''
-    userStore.state.authorized = false
-  }
-}
+// Vue.http.interceptors.push((request, next) => {
+//   request.credentials = true
+//   next()
+// })
 
-function checkToken () {
-  if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
-    // также не забыть добавить проверку валидности токена на сервере(пока нет апи)
-    return true
-  } else {
-    return false
-  }
-}
+// function setAuthorized () {
+//   if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
+//     console.log(Vue.cookies.get('token'))
+//     // Vue.http.headers.common['Authorization'] = 'Token' + Vue.cookies.get('token')
+//     userStore.state.authorized = true
+//   } else {
+//     // Vue.http.headers.common['Authorization'] = ''
+//     userStore.state.authorized = false
+//   }
+// }
 
-function clearData () {
-  store.dispatch('clearStore')
-  userStore.dispatch('clearStore')
-  Vue.cookies.remove('token')
-}
+// function checkToken () {
+//   if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
+//     // также не забыть добавить проверку валидности токена на сервере(пока нет апи)
+//     return true
+//   } else {
+//     return false
+//   }
+// }
+
+// function clearData () {
+//   store.dispatch('clearStore')
+//   userStore.dispatch('clearStore')
+//   Vue.cookies.remove('token')
+// }
 
 function initApp () {
-  setAuthorized()
+  // setAuthorized()
   /* eslint-disable no-new */
   new Vue({
     el: '#app',

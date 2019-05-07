@@ -6,6 +6,7 @@ Vue.use(Vuex)
 // это vueX - хранилище чтобы перебрасывать значения между любыми компонентами прокта
 const store = new Vuex.Store({
   state: {
+    host: 'http://localhost:8079',
     whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
     selectedInWaiterMenu: 'tables'
   },
@@ -32,6 +33,9 @@ const store = new Vuex.Store({
     // store.getters.value('имя_поля')
     value: store => key => {
       return store[key]
+    },
+    host: store => {
+      return store.host
     }
   }
 })

@@ -52,6 +52,7 @@
 
 <script>
 // import moment from 'moment'
+import store from '../store/store'
 
 export default {
   name: 'WaiterOrdersOnTable',
@@ -110,7 +111,7 @@ export default {
     },
     reqestData () {
       this.loading = true
-      this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
+      this.$http.get(store.getters.host + '/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
         this.elements = response.body
         this.parsedOrders = this.parseResponseMix(this.elements)
         this.loading = false

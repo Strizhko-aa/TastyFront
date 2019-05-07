@@ -41,6 +41,7 @@
 
 <script>
 import LineChart from './chart/LineChart'
+import store from '../store/store'
 
 /* eslint-disable */
 export default {
@@ -110,7 +111,7 @@ export default {
   },
   methods: {
     postToServer: function () {
-      let _url = 'http://localhost:8080/admin/inform'
+      let _url = store.getters.host + '/admin/inform'
       const req = {'needDish': this.selected}
       this.$http.post(_url, JSON.stringify(req)).then(response =>
         response.json()).then(json => {
@@ -154,7 +155,7 @@ export default {
     }
   },
   created: function () {
-    let _url = 'http://localhost:8080/admin/inform'
+    let _url = store.getters.host + '/admin/inform'
     this.$http.get(_url).then(response => {
       this.optionGroups = response.body
     })

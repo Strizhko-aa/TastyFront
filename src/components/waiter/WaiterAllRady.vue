@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import store from '../store/store'
 export default {
   data () {
     return {
@@ -77,7 +78,7 @@ export default {
     },
     getTables () {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter').then(response => {
+        this.$http.get(store.getters.host + '/waiter').then(response => {
           resolve(response.body)
         }).catch(err => {
           console.log(err.status)
@@ -87,7 +88,7 @@ export default {
     },
     getTableOrders (tableNumber) {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter/orders/' + tableNumber).then(function (response) {
+        this.$http.get(store.getters.host + '/waiter/orders/' + tableNumber).then(function (response) {
           // this.elements.push(response.body)
           resolve(this.parseResponseMix(response.body))
         }).catch(function (err) {

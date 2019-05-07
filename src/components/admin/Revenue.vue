@@ -13,6 +13,7 @@
 
 <script>
 import BarChart from './chart/BarChart'
+import store from '../store/store'
 
 export default {
   name: 'Revenue',
@@ -61,7 +62,7 @@ export default {
   },
   methods: {
     getInfoFromServer: function () {
-      let _url = 'http://localhost:8080/admin/dishWithPrice'
+      let _url = store.getters.host + '/admin/dishWithPrice'
       var jsonLabelsDishPrice = []
       var jsonLabelsDishPriceByIngredients = []
       var jsonDataName = []

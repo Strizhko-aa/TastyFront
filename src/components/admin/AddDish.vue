@@ -66,6 +66,7 @@
 
 <script>
 import Vue from 'vue'
+import store from '../store/store'
 
 export default {
   name: 'AddDish',
@@ -88,14 +89,14 @@ export default {
   },
   props: [ 'imageSrc' ],
   created () {
-    this.$http.get('http://localhost:8080/admin/addDish/ingredient', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
+    this.$http.get(store.getters.host + '/admin/addDish/ingredient', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.ingredient = response.body
       console.log(response.body)
     }).catch(err => {
       console.log(err.status)
       this.ingredient = []
     })
-    this.$http.get('http://localhost:8080/admin/addDish/typeDish', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
+    this.$http.get(store.getters.host + '/admin/addDish/typeDish', {headers: {'Authorization': 'Token ' + this.$cookies.get('token')}}).then(response => {
       this.typeDish = response.body
       console.log(response.body)
     }).catch(err => {
@@ -130,7 +131,7 @@ export default {
       }
     },
     clickAdd () {
-      this.$http.post('http://localhost:8080/admin/addDishInMenu', JSON.stringify(this.model)).then(function (response) {
+      this.$http.post(store.getters.host + '/admin/addDishInMenu', JSON.stringify(this.model)).then(function (response) {
         console.log(response)
         if (response.body.id) {
           this.model = {

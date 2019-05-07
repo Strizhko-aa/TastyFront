@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import store from '../store/store'
+
 export default {
   name: 'ElementDish',
   props: {
@@ -127,7 +129,7 @@ export default {
         default:
           break
       }
-      this.$http.post('http://localhost:8080/kitchen/status-change', JSON.stringify(json)).then(function (response) {
+      this.$http.post(store.getters.host + '/kitchen/status-change', JSON.stringify(json)).then(function (response) {
         console.log(response)
       }).catch(function (error) {
         console.log(error)
