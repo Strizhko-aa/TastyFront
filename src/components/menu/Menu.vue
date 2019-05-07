@@ -42,7 +42,7 @@
             </b-col>
             <b-col cols="12" sm="3" md="6">
               <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
-              <div class="description"> Вкусно, нежно, аппетитно. Под супер соусом с невероятным вкусом. Подается на тарелке с хлебушком.</div>
+              <div class="description"> {{item.description}}</div>
               <div class="mass"> <span v-if="item.mass !== ''">{{ item.mass }} </span> <span class="price">{{ item.price }} ₽</span></div>
             </b-col>
             <b-col v-if="!inPurchased(item.id)" cols="12" sm="3" md="3" class="quantity">
@@ -317,7 +317,7 @@ export default {
   }
 
   .description {
-    /* text-align: justify; */
+    text-align: justify;
     width: 100%;
   }
 

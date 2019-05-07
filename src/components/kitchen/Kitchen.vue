@@ -14,11 +14,11 @@
           <h2>Блюда на приготовление не найдены</h2>
         </div>
         <div class="col-12 col-lg-6" v-if="flagR">
-          <p class="titleRow">Блюда в процессе притовления</p>
+          <p class="titleRow">Блюда в процессе приготовления</p>
           <ElementDish v-for="v in rightElements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
         </div>
         <div class="col-12 col-lg-6" v-else>
-          <h2>Блюда в процессе притовления не найдены</h2>
+          <h2>Блюда в процессе приготовления не найдены</h2>
         </div>
       </div>
       <!-- если их нет, то заглушка -->
@@ -65,28 +65,29 @@ export default {
     }
   },
   created () {
-    window.onresize = this.windowEvent
-    window.onready = this.windowEvent
-    // let resource = this.$resource('http://localhost:8080/kitchen');
-    // resource.get().then(result => {
-    //   result.json().then(data => {
-    //     console.log(data);
-    //     this.elements = data;
-    //   });
-    // }, error => {
-    //   console.log(error);
-    // });
-
-    // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
-    // ниже и читать про него ничего не нужно
-    this.$http.get('http://localhost:8080/kitchen').then(response => {
-      this.elements = response.body
-      this.updateComponent()
-      console.log(response.body)
-    }).catch(err => {
-      console.log(err.status)
-      this.elements = []
-    })
+    setInterval(() => {
+      window.onresize = this.windowEvent
+      window.onready = this.windowEvent
+      // let resource = this.$resource('http://localhost:8080/kitchen');
+      // resource.get().then(result => {
+      //   result.json().then(data => {
+      //     console.log(data);
+      //     this.elements = data;
+      //   });
+      // }, error => {
+      //   console.log(error);
+      // });
+      // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
+      // ниже и читать про него ничего не нужно
+      this.$http.get('http://localhost:8080/kitchen').then(response => {
+        this.elements = response.body
+        this.updateComponent()
+        console.log(response.body)
+      }).catch(err => {
+        console.log(err.status)
+        this.elements = []
+      })
+    }, 10000)
   }
 }
 </script>
