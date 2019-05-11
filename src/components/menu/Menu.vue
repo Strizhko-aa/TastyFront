@@ -84,6 +84,7 @@ export default {
   },
   created () {
     this.message = this.$route.query.message
+    console.log(this.message)
   },
   computed: {
     dishesCount () {

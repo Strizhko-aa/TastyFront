@@ -32,6 +32,7 @@ export default {
     console.log('mounted')
     this.$http.get(store.getters.host + '/waiter').then((response) => {
       this.elements = response.body
+      console.log(this.elements)
       this.parsedTables = this.parseTables(response.body)
     }).catch((err) => {
       console.log(err)
