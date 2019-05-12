@@ -126,8 +126,9 @@ export default {
   },
   methods: {
     createPDF() {
-      this.$http.get('http://localhost:8080/admin/createPDF').then(function (response) {
-        console.log(response)
+      console.log(this.ingredients);
+      this.$http.post('http://localhost:8080/admin/createPDF', JSON.stringify(this.forTomorrow)).then(function (response) {
+          console.log(response)
         var a = document.createElement('a')
         a.href = response.bodyText
         a.target = '_blank'
@@ -145,6 +146,7 @@ export default {
         for (var i = 0; i < json.length; i++) {
           this.ingredients[i] = json[i]['ingredient']
           this.ingredients[i].forTomorrow = json[i]['quantityIngredientsForTomorrow']
+          if (this.ingredients[i].quantity_in_stock - this.ingredients[i].forTomorrow < 100) this.forTomorrow.push(this.ingredients[i])
         }
       }).catch(err => {
         console.log(err.status)
