@@ -44,11 +44,11 @@ export default {
     },
     parseTables (data) {
       let _tables = []
-      console.log(data[0])
-      for (let i in data[0]) {
+      console.log(data[1])
+      for (let i in data[1]) {
         let table = {
-          id: data[0][i][0].id,
-          status: data[0][i][0].tableStatus.id
+          id: data[1][i][0].id,
+          status: data[1][i][0].tableStatus.id
         }
         // console.log(table)
         _tables.push(table)

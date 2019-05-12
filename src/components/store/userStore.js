@@ -7,8 +7,7 @@ const store = new Vuex.Store({
   state: {
     authorized: false,
     email: 'Loading...',
-    firstName: '',
-    secondName: '',
+    userName: '',
     phone: '',
     roleStaff: {
       id: null,
@@ -28,8 +27,7 @@ const store = new Vuex.Store({
     clearStore (store) {
       store.authorized = false
       store.email = 'Loading...'
-      store.firstName = ''
-      store.secondName = ''
+      store.userName = ''
       store.phone = ''
       store.roleStaff.id = null
       store.roleStaff.title = ''
@@ -38,16 +36,16 @@ const store = new Vuex.Store({
       store.permissions.kitchen = false
       store.permissions.menu = true
     },
-    setUserPermission (store, roleId) {
-      switch (roleId) {
-        case 1:
+    setUserPermission (store, roleName) {
+      switch (roleName) {
+        case 'WAITER':
           store.permissions.admin = false
           store.permissions.waiter = true
           store.permissions.kitchen = false
           store.permissions.menu = true
           break
 
-        case 2: {
+        case 'COOK': {
           store.permissions.admin = false
           store.permissions.waiter = false
           store.permissions.kitchen = true
@@ -55,7 +53,7 @@ const store = new Vuex.Store({
           break
         }
 
-        case 3: {
+        case 'ADMIN': {
           store.permissions.admin = true
           store.permissions.waiter = true
           store.permissions.kitchen = true
@@ -63,7 +61,7 @@ const store = new Vuex.Store({
           break
         }
 
-        case 4: {
+        case 'GUEST': {
           store.permissions.admin = false
           store.permissions.waiter = false
           store.permissions.kitchen = false
@@ -88,8 +86,8 @@ const store = new Vuex.Store({
     clearStore ({commit}) {
       commit('clearStore')
     },
-    setUserPermission ({commit}, roleId) {
-      commit('setUserPermission', roleId)
+    setUserPermission ({commit}, roleName) {
+      commit('setUserPermission', roleName)
     }
   },
   getters: {

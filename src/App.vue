@@ -97,7 +97,7 @@ export default {
       return userStore.getters.value('authorized')
     },
     userName () {
-      return userStore.getters.value('email')
+      return userStore.getters.value('userName')
     },
     permKitchen () {
       return userStore.getters.permission('kitchen')
@@ -111,13 +111,7 @@ export default {
   },
   methods: {
     logout () {
-      // let _url = store.getters.host + '/logout'
-      // this.$http.post(_url, JSON.stringify('logout')).then(response =>
-      //   response.json()).then(json => {
-      //   this.result = json
-      // }).catch(error => {
-      //   console.log('logout' + ' ' + error)
-      // })
+      this.logoutMix()
       console.log('logout')
       this.$router.push({name: 'login'})
     },

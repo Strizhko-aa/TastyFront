@@ -33,11 +33,12 @@
     </b-col>
     <b-col cols="4"></b-col>
     </b-row> -->
-    <form action="http://localhost:8079/login" method="post">
-      <input type="text" name="username">
-      <input type="password" name="password" id="">
-      <button type="submit">SEND</button>
+    <form >
+      <input v-model="username" type="text" name="username">
+      <input v-model="password" type="password" name="password" id="">
+      <button type="submit"> SEND </button>
     </form>
+    <button @click="logIn()">ZZZ</button>
   </b-container>
   </div>
 </template>
@@ -54,29 +55,14 @@ export default {
     }
   },
   methods: {
-    // loginIn: function () {
-    //   let _url = store.getters.host + '/login'
-    //   let _json = {'username': this.username, 'password': this.password}
-    //   this.$http.post(_url, JSON.stringify(_json)).then(response => {
-    //     this.elements = response.body
-    //   }).catch(err => {
-    //     console.log(err.status)
-    //     this.elements = []
-    //   })
-    //   console.log('login:')
-    //   console.log(this.elements)
-    // }
+    logIn () {
+      let _data = '?username=' + this.username + '&password=' + this.password
+      this.$http.post('http://localhost:8079/login' + _data).then(response => {
+        console.log(response)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   }
-  // created () {
-  // let _url = store.getters.host + '/login'
-  // this.$http.get(_url).then(response => {
-  // this.elements = response.body
-  // }).catch(err => {
-  // console.log(err.status)
-  // this.elements = []
-  // })
-  // console.log('created:')
-  // console.log(this.elements)
-  // }
 }
 </script>

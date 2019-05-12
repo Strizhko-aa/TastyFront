@@ -9,12 +9,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import Vuex from 'vuex'
 import store from '../src/components/store/store'
-// import userStore from '../src/components/store/userStore'
+import userStore from '../src/components/store/userStore'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
 
 import WaiterMixin from './components/mixin/WaiterMixin'
+import LoginMixin from './components/mixin/LoginMixin'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
@@ -23,16 +24,22 @@ Vue.use(Notifications)
 Vue.use(VueCookies)
 
 Vue.mixin(WaiterMixin)
+Vue.mixin(LoginMixin)
 
 Vue.config.productionTip = false
 
 // Vue.http.options.credentials = true
 // Vue.http.options.xhr = {withCredentials: true}
 
-// Vue.http.interceptors.push((request, next) => {
-//   request.credentials = true
-//   next()
-// })
+Vue.http.interceptors.push((request, next) => {
+  request.credentials = true
+  // console.log(request)
+  return function (response) {
+    console.log(response)
+  }
+})
+
+userStore.state.authorized = true
 
 // function setAuthorized () {
 //   if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
