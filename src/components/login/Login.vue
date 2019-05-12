@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import store from '../store/store'
+// import store from '../store/store'
 export default {
   data () {
     return {
@@ -54,18 +54,18 @@ export default {
     }
   },
   methods: {
-    loginIn: function () {
-      let _url = store.getters.host + '/login'
-      let _json = {'username': this.username, 'password': this.password}
-      this.$http.post(_url, JSON.stringify(_json)).then(response => {
-        this.elements = response.body
-      }).catch(err => {
-        console.log(err.status)
-        this.elements = []
-      })
-      console.log('login:')
-      console.log(this.elements)
-    }
+    // loginIn: function () {
+    //   let _url = store.getters.host + '/login'
+    //   let _json = {'username': this.username, 'password': this.password}
+    //   this.$http.post(_url, JSON.stringify(_json)).then(response => {
+    //     this.elements = response.body
+    //   }).catch(err => {
+    //     console.log(err.status)
+    //     this.elements = []
+    //   })
+    //   console.log('login:')
+    //   console.log(this.elements)
+    // }
   }
   // created () {
   // let _url = store.getters.host + '/login'

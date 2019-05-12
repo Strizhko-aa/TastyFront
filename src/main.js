@@ -9,7 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import Vuex from 'vuex'
 import store from '../src/components/store/store'
-import userStore from '../src/components/store/userStore'
+// import userStore from '../src/components/store/userStore'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 import VueCookies from 'vue-cookies'
@@ -25,6 +25,9 @@ Vue.use(VueCookies)
 Vue.mixin(WaiterMixin)
 
 Vue.config.productionTip = false
+
+// Vue.http.options.credentials = true
+// Vue.http.options.xhr = {withCredentials: true}
 
 // Vue.http.interceptors.push((request, next) => {
 //   request.credentials = true
