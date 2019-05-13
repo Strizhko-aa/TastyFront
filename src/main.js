@@ -50,7 +50,6 @@ function setUserInfo () {
   return new Promise(resolve => {
     let _url = store.getters.host + '/get_user_data'
     Vue.http.get(_url).then((response) => {
-      // console.log(response.body)
       setUserData(response.body)
       userStore.dispatch('setValue', {key: 'authorized', value: true})
       resolve(true)
