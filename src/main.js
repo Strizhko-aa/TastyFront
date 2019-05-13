@@ -26,7 +26,11 @@ Vue.mixin(WaiterMixin)
 Vue.config.productionTip = false
 connect()
 router.afterEach((to, from) => {
-  store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
+  if (to.name !== 'Стол') {
+    store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
+  } else {
+    store.dispatch('setValue', {key: 'whereIsUser', value: to.name + ' №' + to.params.tableNumber})
+  }
 })
 
 /* eslint-disable no-new */

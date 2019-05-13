@@ -22,8 +22,8 @@ export default {
       selected: 'tables',
       options: [
         {text: 'Столики', value: 'tables'},
-        {text: 'Нужно отнести(24)', value: 'ready'},
-        {text: 'Ждет оплаты(2)', value: 'needPay'}
+        {text: 'Нужно отнести(24)', value: 'ready'}
+        // {text: 'Ждет оплаты(2)', value: 'needPay'}
       ]
     }
   },

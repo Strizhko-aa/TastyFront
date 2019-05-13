@@ -4,9 +4,9 @@
       <b-row>
         <b-col class="table" cols=6 sm=6 md=4 lg=3 v-for="table in parsedTables" :key="table.id">
           <div class="table-color-back" @click="transitionOnOrder(table.id)"
-            v-bind:class="{'red-table': table.status === 3 || table.status === 6,
-                            'yellow-table': table.status === 5,
-                            'green-table': table.status === 4 || table.status === 8}">
+            v-bind:class="{'red-table': table.status === 2,
+                            'yellow-table': table.status === 3,
+                            'green-table': table.status === 4}">
             <span>{{table.id}}</span>
             <img src="../../assets/images/table.png" alt="">
           </div>

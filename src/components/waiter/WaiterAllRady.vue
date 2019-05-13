@@ -59,10 +59,12 @@ export default {
       this.loading = true
       let tables = await this.getTables()
       for (let i in tables[0]) {
-        // console.log('id ' + tables[i][0].id)
-        let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
-        // console.log(ordersFromTable)
-        this.parsedOrders.push(ordersFromTable)
+        if (tables[0][i][0].id !== undefined && tables[0][i][0].id !== null) {
+          // console.log('id ' + tables[i][0].id)
+          let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
+          console.log(ordersFromTable)
+          this.parsedOrders.push(ordersFromTable)
+        }
       }
       this.loading = false
     },
@@ -78,6 +80,7 @@ export default {
     getTables () {
       return new Promise(resolve => {
         this.$http.get('http://localhost:8080/waiter').then(response => {
+          console.log(response.body)
           resolve(response.body)
         }).catch(err => {
           console.log(err.status)
@@ -92,7 +95,7 @@ export default {
           resolve(this.parseResponseMix(response.body))
         }).catch(function (err) {
           console.log(err)
-          resolve(null)
+          // resolve(null)
         })
       })
     }
