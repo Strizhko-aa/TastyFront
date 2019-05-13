@@ -1,6 +1,7 @@
 <template>
   <div>
     <br>
+    <p hidden>{{refreshAdmin}}</p>
     <b-container fluid>
       <h1>Продажи</h1>
       <h3>За неделю</h3>
@@ -16,6 +17,8 @@
 <script>
 /* eslint-disable */
 import BarChart from './chart/BarChart'
+import store from '../store/store'
+
 
 export default {
   name: 'Rating',
@@ -88,7 +91,7 @@ export default {
             }
           ]
         }
-      }, 500)
+      }, 700)
     },
     getInformationFromServerThreeMonths: function () {
       let _url = 'http://localhost:8080/admin/rating?need_period=threeMonths'
@@ -117,7 +120,7 @@ export default {
             }
           ]
         }
-      }, 500)
+      }, 700)
     },
     getInformationFromServerOneMonth: function () {
       let _url = 'http://localhost:8080/admin/rating?need_period=oneMonth'
@@ -146,17 +149,25 @@ export default {
             }
           ]
         }
-      }, 500)
+      }, 700)
     },
-    startPageRender: function () {
+    startRenderPage: function () {
       this.getInformationFromServerOneMonth()
       this.getInformationFromServerOneWeek()
       this.getInformationFromServerThreeMonths()
     }
   },
   created: function () {
-    this.startPageRender()
-    this.ggg()
+    this.startRenderPage()
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshAdmin')
+    }
   }
 }
 </script>

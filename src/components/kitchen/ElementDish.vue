@@ -154,7 +154,6 @@ export default {
 <style scoped>
   .element {
     border: 1px solid #3F9384;
-    font-family: "Times New Roman";
     margin-bottom: 10px;
   }
 
@@ -164,7 +163,6 @@ export default {
     /*margin-bottom: 5px;
     border-top: 2px dotted #3F9384;*/
     display: flex;
-    font-family: "Times New Roman";
   }
 
   .arrow {
@@ -249,7 +247,6 @@ export default {
     font-weight: 500;
     float: right;
     vertical-align: middle;
-    font-family: "Times New Roman";
   }
 
   .button-take {
@@ -290,7 +287,6 @@ export default {
     line-height: 20px;
     text-align: center;
     margin-bottom: 15px;
-    font-family: "Times New Roman";
     color: black;
   }
 

@@ -1,5 +1,7 @@
 <template>
   <b-container fluid>
+    <p hidden>{{refreshAdmin}}</p>
+
     <notifications group="foo"/>
     <div class="title-block">
       <span> Запасы ингредиентов </span>
@@ -91,6 +93,8 @@
 <script>
 /* eslint-disable */
 import Vue from 'vue'
+import store from '../store/store'
+
 
 export default {
   name: 'Stock',
@@ -118,13 +122,25 @@ export default {
     }
   },
   created: function () {
-    this.loading = true
-    console.log('load')
-    this.getIngredientsFromServer()
-    setTimeout(() => this.loading = false, 200)
-    // this.loading = false;
+   this.startRenderPage()
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshAdmin')
+    }
   },
   methods: {
+    startRenderPage: function() {
+      this.loading = true
+      console.log('load')
+      this.getIngredientsFromServer()
+      setTimeout(() => this.loading = false, 200)
+      // this.loading = false;
+    },
     createPDF() {
       console.log(this.ingredients);
       this.$http.post('http://localhost:8080/admin/createPDF', JSON.stringify(this.forTomorrow)).then(function (response) {

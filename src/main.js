@@ -14,6 +14,7 @@ import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
 
 import WaiterMixin from './components/mixin/WaiterMixin'
+import {connect} from './utills/ws'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
@@ -23,7 +24,7 @@ Vue.use(Notifications)
 Vue.mixin(WaiterMixin)
 
 Vue.config.productionTip = false
-
+connect()
 router.afterEach((to, from) => {
   store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
 })

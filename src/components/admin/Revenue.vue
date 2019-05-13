@@ -2,9 +2,10 @@
   <div>
     <b-container fluid>
       <br>
+      <p hidden>{{refreshAdmin}}</p>
+
       <b-row>
         <b-col>
-          <h1>Цена блюд</h1>
         </b-col>
       </b-row>
       <b-row>
@@ -26,6 +27,7 @@
 
 <script>
 import BarChart from './chart/BarChart'
+import store from '../store/store'
 
 export default {
   name: 'Revenue',
@@ -45,7 +47,6 @@ export default {
       chartOptions: {
         scales: {
           yAxes: [{
-            stacked: true,
             ticks: {
               beginAtZero: true,
               fontSize: 16
@@ -58,7 +59,6 @@ export default {
           xAxes: [{
             barPercentage: 1,
             categoryPercentage: 0.6,
-            barThickness: 200,
             gridLines: {
               display: true
             },
@@ -80,7 +80,7 @@ export default {
     }
   },
   methods: {
-    getInfoFromServer: function () {
+    startRenderPage: function () {
       var jsonLabelsDishPrice = []
       var jsonLabelsDishPriceByIngredients = []
       var jsonDataName = []
@@ -115,7 +115,7 @@ export default {
               data: jsonLabelsDishPrice
             },
             {
-              label: 'Затраты на блюдо',
+              label: 'Себестоимость',
               backgroundColor: 'rgba(147,4,135,0.3)',
               borderColor: 'rgb(147,39,134)',
               borderWidth: 1,
@@ -123,19 +123,25 @@ export default {
             }
           ]
         }
-      }, 500)
-      console.log(jsonDataName)
-      console.log(jsonLabelsDishPrice)
-      console.log(jsonLabelsDishPriceByIngredients)
+      }, 700)
     }
   },
   watch: {
     selected: function (val) {
-      this.getInfoFromServer()
+      this.startRenderPage()
+    }
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshAdmin')
     }
   },
   created () {
-    this.getInfoFromServer()
+    this.startRenderPage()
   }
 }
 </script>

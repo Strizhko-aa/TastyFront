@@ -61,7 +61,7 @@
     </b-container>
     <footer>
       <div class="container">
-        <p>@2018 TastyHouse</p>
+        <p>@2018-2019 TastyHouse</p>
       </div>
     </footer>
   </div>
@@ -205,7 +205,6 @@ footer {
   left: 0;
 }
 footer p {
-  font-family: "Times New Roman";
   color: #ffffff;
   float: left;
   line-height: 40px;
