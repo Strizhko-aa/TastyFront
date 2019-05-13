@@ -53,6 +53,8 @@ import AddDish from './AddDish'
 import Stock from './Stock'
 import StopList from './StopList'
 import Revenue from './Revenue'
+import store from '../store/store'
+
 
 export default {
 
@@ -70,6 +72,12 @@ export default {
         {text: 'Финансы', value: 'revenue'}
       ]
     }
+  },
+  created: function () {
+    store.dispatch('setValue', {key: 'onAdminPage', value: true})
+  },
+  beforeDestroy: function () {
+    store.dispatch('setValue', {key: 'onAdminPage', value: false})
   }
 }
 </script>

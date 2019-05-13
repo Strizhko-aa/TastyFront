@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     refreshAdmin: false,
+    onAdminPage: false,
     refreshWaiter: false,
     refreshKitchen: false,
     whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
