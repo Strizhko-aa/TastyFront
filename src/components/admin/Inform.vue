@@ -17,7 +17,7 @@
               <label><strong>{{information.name}}</strong></label><br>
               <img align="left" class="leftimg"
                    style="height: 200px; width: 200px; margin-right: 15px;"
-                   :src="`http://localhost:8080` + information.img"/>
+                   :src="`http://localhost:8079` + information.img"/>
               <!--<label>Описание: {{information.description}}</label><br>-->
               <label><strong>Цена: </strong>{{information.price}} ₽</label><br>
               <!--<label v-html="information.ingredient">{{information.ingredient}}</label>-->

@@ -9,7 +9,7 @@
         </b-form-group>
       </b-col>
         <b-col cols="col-sm-5 col-md-2">
-          <img class="imgDish" align="right"  :src="`http://localhost:8080` + dish.img"/>
+          <img class="imgDish" align="right"  :src="`http://localhost:8079` + dish.img"/>
         </b-col>
         <b-col cols="col-sm-4 col-md-8">
           <div class="inform nameDish"><span><strong>{{dish.name}}</strong></span></div>

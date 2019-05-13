@@ -3,7 +3,7 @@
     <div v-on:click="flag=!flag">
       <div class="element-list">
         <div class="photo">
-          <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
+          <img class="photo" :src="`http://localhost:8079` + data.dish.imgUrl">
         </div>
         <div class="name-dish">
           <div class="name category">

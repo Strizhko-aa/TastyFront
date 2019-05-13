@@ -28,48 +28,56 @@ Vue.mixin(LoginMixin)
 
 Vue.config.productionTip = false
 
-// Vue.http.options.credentials = true
-// Vue.http.options.xhr = {withCredentials: true}
-
 Vue.http.interceptors.push((request, next) => {
   request.credentials = true
   // console.log(request)
-  return function (response) {
-    console.log(response)
-  }
+  // return function (response) {
+  //   console.log(response)
+  // }
+  next()
 })
 
-userStore.state.authorized = true
+async function setAuthorized () {
+  if (Vue.cookies.get('JSESSIONID') !== '' && Vue.cookies.get('JSESSIONID') !== null && Vue.cookies.get('JSESSIONID') !== undefined) {
+    console.log(Vue.cookies.get('JSESSIONID'))
+    await setUserInfo()
+  } else {
+    userStore.state.authorized = false
+  }
+}
 
-// function setAuthorized () {
-//   if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
-//     console.log(Vue.cookies.get('token'))
-//     // Vue.http.headers.common['Authorization'] = 'Token' + Vue.cookies.get('token')
-//     userStore.state.authorized = true
-//   } else {
-//     // Vue.http.headers.common['Authorization'] = ''
-//     userStore.state.authorized = false
-//   }
-// }
+function setUserInfo () {
+  return new Promise(resolve => {
+    let _url = store.getters.host + '/get_user_data'
+    Vue.http.get(_url).then((response) => {
+      // console.log(response.body)
+      setUserData(response.body)
+      userStore.dispatch('setValue', {key: 'authorized', value: true})
+      resolve(true)
+    }).catch(err => {
+      console.log(err)
+      userStore.dispatch('setValue', {key: 'authorized', value: false})
+      resolve(false)
+    })
+  })
+}
 
-// function checkToken () {
-//   if (Vue.cookies.get('token') !== '' && Vue.cookies.get('token') !== null && Vue.cookies.get('token') !== undefined) {
-//     // также не забыть добавить проверку валидности токена на сервере(пока нет апи)
-//     return true
-//   } else {
-//     return false
-//   }
-// }
+function setUserData (data) {
+  userStore.dispatch('setValue', {key: 'userName', value: data.username})
+  userStore.dispatch('setValue', {key: 'roleStaff', value: data.authorities[0].authority})
+  userStore.dispatch('setUserPermission', data.authorities[0].authority)
+  console.log(userStore.state)
+}
 
-// function clearData () {
-//   store.dispatch('clearStore')
-//   userStore.dispatch('clearStore')
-//   Vue.cookies.remove('token')
-// }
+function clearData () {
+  store.dispatch('clearStore')
+  userStore.dispatch('clearStore')
+  Vue.cookies.remove('JSESSIONID')
+}
 
 function initApp () {
-  // setAuthorized()
   /* eslint-disable no-new */
+  setAuthorized()
   new Vue({
     el: '#app',
     router,
@@ -86,43 +94,43 @@ router.afterEach((to, from) => {
 router.beforeEach((to, from, next) => {
   console.log(to.name)
   next()
-  // switch (to.name) {
-  //   case 'login':
-  //     clearData()
-  //     next()
-  //     break
+  switch (to.name) {
+    case 'login':
+      clearData()
+      next()
+      break
 
-  //   case 'waiter': {
-  //     if (userStore.getters.permission('waiter') && checkToken()) {
-  //       next()
-  //     } else {
-  //       next({name: 'login'})
-  //     }
-  //     break
-  //   }
+    case 'waiter': {
+      if (userStore.getters.permission('waiter')) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
 
-  //   case 'admin': {
-  //     if (userStore.getters.permission('admin') && checkToken()) {
-  //       next()
-  //     } else {
-  //       next({name: 'login'})
-  //     }
-  //     break
-  //   }
+    case 'admin': {
+      if (userStore.getters.permission('admin')) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
 
-  //   case 'kitchen': {
-  //     if (userStore.getters.permission('kitchen') && checkToken()) {
-  //       next()
-  //     } else {
-  //       next({name: 'login'})
-  //     }
-  //     break
-  //   }
+    case 'kitchen': {
+      if (userStore.getters.permission('kitchen')) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
+      break
+    }
 
-  //   default:
-  //     next()
-  //     break
-  // }
+    default:
+      next()
+      break
+  }
 })
 
 initApp()

@@ -9,10 +9,7 @@ const store = new Vuex.Store({
     email: 'Loading...',
     userName: '',
     phone: '',
-    roleStaff: {
-      id: null,
-      title: ''
-    },
+    roleStaff: '',
     permissions: {
       admin: false,
       waiter: false,
@@ -29,8 +26,7 @@ const store = new Vuex.Store({
       store.email = 'Loading...'
       store.userName = ''
       store.phone = ''
-      store.roleStaff.id = null
-      store.roleStaff.title = ''
+      store.roleStaff = ''
       store.permissions.admin = false
       store.permissions.waiter = false
       store.permissions.kitchen = false
