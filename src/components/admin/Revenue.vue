@@ -6,7 +6,6 @@
 
       <b-row>
         <b-col>
-          <h1>Цена блюд</h1>
         </b-col>
       </b-row>
       <b-row>
@@ -116,7 +115,7 @@ export default {
               data: jsonLabelsDishPrice
             },
             {
-              label: 'Затраты на блюдо',
+              label: 'Себестоимость',
               backgroundColor: 'rgba(147,4,135,0.3)',
               borderColor: 'rgb(147,39,134)',
               borderWidth: 1,

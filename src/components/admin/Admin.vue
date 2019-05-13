@@ -60,14 +60,14 @@ export default {
   components: {Rating, Inform, AddDish, Stock, StopList, Revenue},
   data: function () {
     return {
-      selected: 'popular',
+      selected: 'inform',
       options: [
         {text: 'Информация по блюду', value: 'inform'},
         {text: 'Рейтинг блюд', value: 'rating'},
         {text: 'Добавление блюда в меню', value: 'addDish'},
         {text: 'Запасы ингредиентов', value: 'stock'},
         {text: 'Стоп-лист', value: 'stopList'},
-        {text: 'Денежные средства', value: 'revenue'}
+        {text: 'Финансы', value: 'revenue'}
       ]
     }
   }
