@@ -19,15 +19,6 @@
     <!-- <div v-show="false">{{tableNumber}}</div> -->
     <div v-for="(table, i) in parsedOrders" :key="i">
     <b-container style="text-align: left" v-for="item in table" :key="item.id">
-      <!-- <b-row>
-        <b-col cols sm md lg = "12">
-          <p class="order-number">
-            Заказ №{{item.id}} | {{item.total}} &#8381;
-            <i v-if="item.typePayment.id === 1" class="fas fa-credit-card"></i>
-            <i v-if="item.typePayment.id === 2" class="fas fa-money-bill-wave"></i>
-          </p>
-        </b-col>
-      </b-row> -->
       <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
         <b-col cols=12 sm=6 md=6 lg=6>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}} </span>
