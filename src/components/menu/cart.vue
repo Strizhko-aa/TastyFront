@@ -88,6 +88,8 @@
 
 <script>
 import menuStore from './menuStore'
+// eslint-disable-next-line standard/object-curly-even-spacing
+import { sendMessage} from '../../utills/ws'
 
 export default {
   data () {
@@ -258,6 +260,7 @@ export default {
         console.log('success')
         console.log(response)
         console.log(response.bodyText)
+        sendMessage()
       }, (error) => {
         this.message = 'Ошибка сервера'
         console.log('error')

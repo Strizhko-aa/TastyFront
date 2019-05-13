@@ -2,6 +2,8 @@
   <div>
     <b-container fluid>
       <br>
+      <p hidden>{{refreshAdmin}}</p>
+
       <b-row>
         <b-col>
           <h1>Цена блюд</h1>
@@ -26,6 +28,7 @@
 
 <script>
 import BarChart from './chart/BarChart'
+import store from '../store/store'
 
 export default {
   name: 'Revenue',
@@ -45,7 +48,6 @@ export default {
       chartOptions: {
         scales: {
           yAxes: [{
-            stacked: true,
             ticks: {
               beginAtZero: true,
               fontSize: 16
@@ -58,7 +60,6 @@ export default {
           xAxes: [{
             barPercentage: 1,
             categoryPercentage: 0.6,
-            barThickness: 200,
             gridLines: {
               display: true
             },
@@ -80,7 +81,7 @@ export default {
     }
   },
   methods: {
-    getInfoFromServer: function () {
+    startRenderPage: function () {
       var jsonLabelsDishPrice = []
       var jsonLabelsDishPriceByIngredients = []
       var jsonDataName = []
@@ -123,7 +124,7 @@ export default {
             }
           ]
         }
-      }, 500)
+      }, 700)
       console.log(jsonDataName)
       console.log(jsonLabelsDishPrice)
       console.log(jsonLabelsDishPriceByIngredients)
@@ -131,11 +132,23 @@ export default {
   },
   watch: {
     selected: function (val) {
-      this.getInfoFromServer()
+      this.startRenderPage()
+    }
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        console.log('refresher is true Revenue')
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.startRenderPage()
+      } else {
+        console.log('refresher is false!')
+      }
+      return store.getters.value('refreshAdmin')
     }
   },
   created () {
-    this.getInfoFromServer()
+    this.startRenderPage()
   }
 }
 </script>

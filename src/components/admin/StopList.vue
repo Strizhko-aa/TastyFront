@@ -1,5 +1,7 @@
 <template>
   <b-container fluid>
+    <p hidden>{{refreshAdmin}}</p>
+
     <notifications group="foo" />
     <div class="title-block">
       <span> Стоп-лист </span>
@@ -58,6 +60,8 @@
 <script>
 /* eslint-disable */
 import Vue from 'vue'
+import store from '../store/store'
+
 export default {
   name: 'StopList',
   data: function () {
@@ -76,22 +80,37 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8080/admin/showDish').then(response => {
-      this.dishes = response.body
-      console.log(response.body)
-    }).catch(err => {
-      console.log(err.status)
-      this.dishes = []
-    })
-    this.$http.get('http://localhost:8080/admin/showStatusDish').then(response => {
-      this.statusDish = response.body
-      console.log(response.body)
-    }).catch(err => {
-      console.log(err.status)
-      this.statusDish = []
-    })
+    this.startRenderPage()
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        console.log('refresher is true StopList')
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.startRenderPage()
+      } else {
+        console.log('refresher is false!')
+      }
+      return store.getters.value('refreshAdmin')
+    }
   },
   methods: {
+    startRenderPage: function() {
+      this.$http.get('http://localhost:8080/admin/showDish').then(response => {
+        this.dishes = response.body
+        console.log(response.body)
+      }).catch(err => {
+        console.log(err.status)
+        this.dishes = []
+      })
+      this.$http.get('http://localhost:8080/admin/showStatusDish').then(response => {
+        this.statusDish = response.body
+        console.log(response.body)
+      }).catch(err => {
+        console.log(err.status)
+        this.statusDish = []
+      })
+    },
     log (string) {
       console.log(string)
     },
