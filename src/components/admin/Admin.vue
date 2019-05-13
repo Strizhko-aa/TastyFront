@@ -55,7 +55,6 @@ import StopList from './StopList'
 import Revenue from './Revenue'
 import store from '../store/store'
 
-
 export default {
 
   name: 'app',

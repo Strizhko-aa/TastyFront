@@ -31,7 +31,6 @@
 </template>
 
 <script>
-
 import ElementDish from './ElementDish'
 import store from '../store/store'
 
@@ -68,7 +67,7 @@ export default {
     startRenderPage: function () {
       window.onresize = this.windowEvent
       window.onready = this.windowEvent
-      this.$http.get('http://localhost:8080/kitchen').then(response => {
+      this.$http.get('http://localhost:8079/kitchen').then(response => {
         this.elements = response.body
         this.updateComponent()
         console.log(response.body)

@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import store from '../store/store'
 export default {
   data () {
     return {
@@ -49,13 +50,12 @@ export default {
     reqestAllReady: async function () {
       this.loading = true
       let tables = await this.getTables()
+      console.log(tables)
       for (let i in tables[0]) {
-        if (tables[0][i][0].id !== undefined && tables[0][i][0].id !== null) {
-          // console.log('id ' + tables[i][0].id)
-          let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
-          console.log(ordersFromTable)
-          this.parsedOrders.push(ordersFromTable)
-        }
+        // console.log('id ' + tables[i][0].id)
+        let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
+        // console.log(ordersFromTable)
+        this.parsedOrders.push(ordersFromTable)
       }
       this.loading = false
     },
@@ -70,8 +70,7 @@ export default {
     },
     getTables () {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter').then(response => {
-          console.log(response.body)
+        this.$http.get(store.getters.host + '/waiter').then(response => {
           resolve(response.body)
         }).catch(err => {
           console.log(err.status)
@@ -81,7 +80,7 @@ export default {
     },
     getTableOrders (tableNumber) {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter/orders/' + tableNumber).then(function (response) {
+        this.$http.get(store.getters.host + '/waiter/orders/' + tableNumber).then(function (response) {
           // this.elements.push(response.body)
           resolve(this.parseResponseMix(response.body))
         }).catch(function (err) {

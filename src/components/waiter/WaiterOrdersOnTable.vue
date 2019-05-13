@@ -58,7 +58,7 @@
 
 <script>
 // import moment from 'moment'
-// import store from '../store/store'
+import store from '../store/store'
 
 export default {
   name: 'WaiterOrdersOnTable',
@@ -117,7 +117,7 @@ export default {
     },
     reqestData () {
       this.loading = true
-      this.$http.get('http://localhost:8080/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
+      this.$http.get(store.getters.host + '/waiter/orders/' + this.$route.params.tableNumber).then(function (response) {
         this.elements = response.body
         this.parsedOrders = this.parseResponseMix(this.elements)
         this.loading = false
@@ -129,7 +129,7 @@ export default {
     deliveryDish (dishFromOrder) {
       if (dishFromOrder.dfoIds.length > 0) {
         // let _url = store.getters.host + '/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
-        let _url = 'http://localhost:8080/waiter/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
+        let _url = store.getters.host + '/waiter/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
         this.$http.get(_url).then(response => {
           console.log(response.status)
           this.reqestData()

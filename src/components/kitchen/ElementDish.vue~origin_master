@@ -3,14 +3,14 @@
     <div v-on:click="flag=!flag">
       <div class="element-list">
         <div class="photo">
-          <img class="photo" :src="`http://localhost:8079` + data.dish.imgUrl">
+          <img class="photo" :src="`http://localhost:8080` + data.dish.imgUrl">
         </div>
         <div class="name-dish">
           <div class="name category">
-            <span> {{data.dish.name}}</span>
+            <span> {{data.dish.typeDish.title}}</span>
           </div>
           <div class="name">
-            <span> {{data.dish.typeDish.title}} </span>
+            <span> {{data.dish.name}} </span>
           </div>
           <div class="mass">
             <span> {{data.dish.mass}}</span>
@@ -41,7 +41,7 @@
         <div class="ingredient-description">
           <div class="ingredient-list">
             <div v-for="i in data.dish.ingredients" v-bind:key="i.id">
-              <p class="ing-item"> {{i.ingredient.name}} - <span style="white-space: nowrap">{{i.quantity}} {{i.ingredient.unit}}</span></p>
+              <p class="ing-item"> {{i.ingredient.name}} - {{i.quantity}} {{i.ingredient.unit}}</p>
             </div>
           </div>
         </div>
@@ -57,8 +57,6 @@
 </template>
 
 <script>
-import store from '../store/store'
-
 export default {
   name: 'ElementDish',
   props: {
@@ -78,7 +76,7 @@ export default {
       classElementRecipe = 'button-take'
     }
     if (this.data.dishStatus.title === 'Готовится') {
-      recipeStatus = 'ОТДАТЬ'
+      recipeStatus = 'ГОТОВО'
       classElementRecipe = 'button-ready'
     }
     return {
@@ -116,12 +114,12 @@ export default {
       switch (this.recipeStatus) {
         case 'ВЗЯТЬ':
           this.data.dishStatus.title = 'Готовится'
-          this.recipeStatus = 'ОТДАТЬ'
+          this.recipeStatus = 'ГОТОВО'
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
           this.dateRealNow = new Date()
           break
-        case 'ОТДАТЬ':
+        case 'ГОТОВО':
           this.visible = false
           this.data.dishStatus.title = 'Готово'
           json = {'status': 'Готово', 'id': dishesFromOrderId, 'tableNumber': 2}
@@ -137,7 +135,7 @@ export default {
       this.updateComponent()
     },
     msToTime (duration) {
-      // var milliseconds = parseInt((duration % 1000) / 100)
+      var milliseconds = parseInt((duration % 1000) / 100)
       var seconds = parseInt((duration / 1000) % 60)
       var minutes = parseInt((duration / (1000 * 60)) % 60)
       var hours = parseInt((duration / (1000 * 60 * 60)))
@@ -156,7 +154,7 @@ export default {
 <style scoped>
   .element {
     border: 1px solid #3F9384;
-    margin-bottom: 10px;
+    font-family: "Times New Roman";
   }
 
   .element-list {
@@ -165,6 +163,7 @@ export default {
     /*margin-bottom: 5px;
     border-top: 2px dotted #3F9384;*/
     display: flex;
+    font-family: "Times New Roman";
   }
 
   .arrow {
@@ -226,7 +225,6 @@ export default {
     font-size: 22px;
     line-height: 22px;
     text-align: right;
-    white-space: nowrap;
   }
 
   .timeTop {
@@ -249,6 +247,7 @@ export default {
     font-weight: 500;
     float: right;
     vertical-align: middle;
+    font-family: "Times New Roman";
   }
 
   .button-take {
@@ -289,6 +288,7 @@ export default {
     line-height: 20px;
     text-align: center;
     margin-bottom: 15px;
+    font-family: "Times New Roman";
     color: black;
   }
 
@@ -309,7 +309,6 @@ export default {
   }
   .ing-item {
     margin-bottom: 0;
-    text-align: justify;
   }
 
   @media (max-width: 1200px) {

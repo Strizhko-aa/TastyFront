@@ -17,7 +17,7 @@
 </template>
 
 <script>
-// import store from '../store/store'
+import store from '../store/store'
 
 export default {
   name: 'WaiterTables',
@@ -30,7 +30,7 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    this.$http.get('http://localhost:8080/waiter').then((response) => {
+    this.$http.get(store.getters.host + '/waiter').then((response) => {
       this.elements = response.body
       this.parsedTables = this.parseTables(response.body)
     }).catch((err) => {
