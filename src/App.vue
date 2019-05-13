@@ -43,14 +43,27 @@
             {{ user ? user.name : 'Loading...' }}
           </div>
           <!-- <div> -->
-            <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
-                <template slot="button-content">
-                  <div class="menu-icon">
-                  <img src="./assets/images/menu-button.svg" alt="">
-                  </div>
-                </template>
-              <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
-            </b-dropdown>
+          <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
+            <template slot="button-content">
+              <div class="menu-icon">
+                <img src="./assets/images/menu-button.svg" alt="">
+              </div>
+            </template>
+<!--            <b-dropdown-header v-if="adminPage === true" id="nav">Навигация</b-dropdown-header>-->
+            <b-dropdown-item-button v-if="adminPage === true" @click="navigationWaiter()" class="dropdown-style">
+              Официант
+            </b-dropdown-item-button>
+            <b-dropdown-item-button v-if="adminPage === true" @click="navigationKitchen()" class="dropdown-style">
+              Кухня
+            </b-dropdown-item-button>
+            <b-dropdown-item-button v-if="adminPage === true" @click="navigationMenu()" class="dropdown-style">
+              Посетитель
+            </b-dropdown-item-button>
+
+<!--            <b-dropdown-header v-if="adminPage === true" id="user">Личный кабинет</b-dropdown-header>-->
+
+            <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+          </b-dropdown>
           <!-- </div> -->
         </b-col>
         <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
@@ -68,68 +81,83 @@
 </template>
 
 <script>
-// import Kitchen from './components/Kitchen.vue'
-import store from './components/store/store'
+  // import Kitchen from './components/Kitchen.vue'
+  import store from './components/store/store'
 
-export default {
-  name: 'app',
-  components: {
-    // Kitchen
-  },
-  data () {
-    return {
-      user: null,
-      result: ''
+  export default {
+    name: 'app',
+    components: {
+      // Kitchen
+    },
+    data() {
+      return {
+        user: null,
+        result: ''
+      }
+    },
+    methods: {
+      logout: function () {
+        let _url = 'http://localhost:8080/logout'
+        this.$http.post(_url, JSON.stringify('logout')).then(response =>
+          response.json()).then(json => {
+          this.result = json
+        }).catch(error => {
+          console.log('logout' + ' ' + error)
+        })
+      },
+      navigationWaiter: function () {
+        this.$router.push('/waiter')
+      },
+      navigationKitchen: function () {
+        this.$router.push('/kitchen')
+      },
+      navigationMenu: function () {
+        this.$router.push('/')
+      }
+    },
+    computed: { // вычисляемое значение. Оно вычисляется при рендере
+      // компонента(т.к. это основной компонент то при старте приложения), и при изменении
+      // одного из параметров от которого он зависит. В данном случает тут берется значение из хранилища store.
+      // Значит, если поменяется хначение в хранилище, то поменяется и значение переменной в компоненте
+      whereIsUser() {
+        return store.getters.value('whereIsUser')
+      },
+      adminPage() {
+        return store.getters.value('onAdminPage')
+      }
+    },
+    created() {
+      // Simulate fetching user data.
+      setTimeout(() => {
+        this.user = {name: 'Guest'}
+      }, 2000)
     }
-  },
-  methods: {
-    logout: function () {
-      let _url = 'http://localhost:8080/logout'
-      this.$http.post(_url, JSON.stringify('logout')).then(response =>
-        response.json()).then(json => {
-        this.result = json
-      }).catch(error => {
-        console.log('logout' + ' ' + error)
-      })
-    }
-  },
-  computed: { // вычисляемое значение. Оно вычисляется при рендере
-  // компонента(т.к. это основной компонент то при старте приложения), и при изменении
-  // одного из параметров от которого он зависит. В данном случает тут берется значение из хранилища store.
-  // Значит, если поменяется хначение в хранилище, то поменяется и значение переменной в компоненте
-    whereIsUser () {
-      return store.getters.value('whereIsUser')
-    }
-  },
-  created () {
-    // Simulate fetching user data.
-    setTimeout(() => {
-      this.user = { name: 'Guest' }
-    }, 2000)
   }
-}
 
 </script>
 
 <style>
-#app {
-  position: relative;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  justify-content: space-between;
-  min-height: 100vh;
-  padding-bottom: 60px;
-}
-.modal-header {
-   height: auto !important;
-   padding: 0 !important;
- }
- .btn-drop-menu {
-   float: right;
- }
+  #app {
+    position: relative;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  .modal-header {
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  .btn-drop-menu {
+    float: right;
+  }
+
   header {
     width: 100%;
     height: 100px;
@@ -137,14 +165,17 @@ export default {
     display: flex;
     float: left;
   }
+
   header .container .row {
     flex-wrap: nowrap;
   }
-.logo {
-  width: 90px;
-  height: 90px;
-}
-  .title{
+
+  .logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .title {
     width: 100%;
     text-align: center;
     font-size: 50px;
@@ -152,17 +183,19 @@ export default {
     color: #ffffff;
     font-family: Mistral;
   }
+
   .menu {
     width: auto;
     height: 100px;
     line-height: 100px;
     float: right;
     font-size: 20px;
-    color:#ffffff;
+    color: #ffffff;
     vertical-align: middle;
     display: flex;
     flex-wrap: nowrap;
   }
+
   .dropdown-style {
     height: auto;
     line-height: initial;
@@ -172,7 +205,8 @@ export default {
     display: flex;
     flex-wrap: nowrap;
   }
-  .user{
+
+  .user {
     float: right;
     height: 100px;
     line-height: 100px;
@@ -180,34 +214,37 @@ export default {
     text-decoration: underline;
     margin-right: 10px;
   }
+
   .menu-icon {
     width: 25px;
     height: 25px;
     vertical-align: middle;
   }
 
-   .menu-icon img {
-     width: 25px;
-     height: 25px;
-   }
-.section {
-  margin: 25px auto;
-  min-height: calc( 100vh - 220px);
-}
+  .menu-icon img {
+    width: 25px;
+    height: 25px;
+  }
 
-footer {
-  background-color: #3F9384;
-  width: 100%;
-  display: inline-block;
-  float: left;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-footer p {
-  color: #ffffff;
-  float: left;
-  line-height: 40px;
-}
+  .section {
+    margin: 25px auto;
+    min-height: calc(100vh - 220px);
+  }
+
+  footer {
+    background-color: #3F9384;
+    width: 100%;
+    display: inline-block;
+    float: left;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  footer p {
+    color: #ffffff;
+    float: left;
+    line-height: 40px;
+  }
 
 </style>
