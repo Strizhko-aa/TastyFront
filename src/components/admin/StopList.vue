@@ -85,11 +85,8 @@ export default {
   computed: {
     refreshAdmin () {
       if (store.getters.value('refreshAdmin') === true) {
-        console.log('refresher is true StopList')
         store.dispatch('setValue', {key: 'refreshAdmin', value: false})
         this.startRenderPage()
-      } else {
-        console.log('refresher is false!')
       }
       return store.getters.value('refreshAdmin')
     }

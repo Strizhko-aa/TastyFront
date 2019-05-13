@@ -125,9 +125,6 @@ export default {
           ]
         }
       }, 700)
-      console.log(jsonDataName)
-      console.log(jsonLabelsDishPrice)
-      console.log(jsonLabelsDishPriceByIngredients)
     }
   },
   watch: {
@@ -138,11 +135,8 @@ export default {
   computed: {
     refreshAdmin () {
       if (store.getters.value('refreshAdmin') === true) {
-        console.log('refresher is true Revenue')
         store.dispatch('setValue', {key: 'refreshAdmin', value: false})
         this.startRenderPage()
-      } else {
-        console.log('refresher is false!')
       }
       return store.getters.value('refreshAdmin')
     }

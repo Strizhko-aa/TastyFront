@@ -3,7 +3,6 @@
     <br>
     <p hidden>{{refreshAdmin}}</p>
     <b-container fluid>
-      <p hidden>{{refreshAdmin}}</p>
       <h1>Продажи</h1>
       <h3>За неделю</h3>
       <bar-chart :chart-data="graphOneWeek" :options="chartOptions"></bar-chart>
@@ -163,13 +162,9 @@ export default {
   },
   computed: {
     refreshAdmin () {
-      console.log('in refresher RATING')
       if (store.getters.value('refreshAdmin') === true) {
-        console.log('refresher is true Rating')
         store.dispatch('setValue', {key: 'refreshAdmin', value: false})
         this.startRenderPage()
-      } else {
-        console.log('refresher is false!')
       }
       return store.getters.value('refreshAdmin')
     }
