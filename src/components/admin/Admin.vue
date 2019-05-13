@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import Popular from './Popular'
 import Inform from './Inform'
 import Rating from './Rating'
 import AddDish from './AddDish'
@@ -58,12 +57,11 @@ import Revenue from './Revenue'
 export default {
 
   name: 'app',
-  components: {Rating, Popular, Inform, AddDish, Stock, StopList, Revenue},
+  components: {Rating, Inform, AddDish, Stock, StopList, Revenue},
   data: function () {
     return {
       selected: 'popular',
       options: [
-        {text: 'Популярное блюдо', value: 'popular'},
         {text: 'Информация по блюду', value: 'inform'},
         {text: 'Рейтинг блюд', value: 'rating'},
         {text: 'Добавление блюда в меню', value: 'addDish'},
