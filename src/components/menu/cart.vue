@@ -26,7 +26,7 @@
         </b-col>
       </b-row>
       <b-row class="totalSum">
-      <b-col>Итого: {{ totalPrice }}</b-col>
+      <b-col>Итого: {{ totalPrice }} ₽</b-col>
     </b-row>
       <b-row class="buttonConfOrder">
         <b-button v-if="ordered.length > 0" variant="success"  @click="beforeConfirmOrder()">Подтвердить заказ</b-button>
@@ -59,7 +59,7 @@
         </table>
       </div>
       <b-row>
-        <b-col class="totalSum">Итоговая стоимость: {{ totalPrice }}</b-col>
+        <b-col class="totalSum">Итоговая стоимость: {{ totalPrice }} ₽</b-col>
       </b-row>
       <b-row>
         <b-col><b-button variant="success" @click="stripeOpen()">Оплата картой онлайн</b-button></b-col>

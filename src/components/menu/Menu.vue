@@ -41,7 +41,7 @@
               <img class="photo" v-bind:src="(item.imgUrl.substring(0, 4) === 'http') ? item.imgUrl : require('../../assets/images/' + item.imgUrl.substring(5, item.imgUrl.length))" alt="">
             </b-col>
             <b-col cols="12" sm="3" md="6">
-              <div class="name">{{ item.name }} <div class="rating"> ★★★☆☆ </div></div>
+              <div class="name">{{ item.name }}</div>
               <div class="description"> {{item.description}}</div>
               <div class="mass"> <span v-if="item.mass !== ''">{{ item.mass }} </span> <span class="price">{{ item.price }} ₽</span></div>
             </b-col>
@@ -319,6 +319,7 @@ export default {
   .description {
     text-align: justify;
     width: 100%;
+    margin-top: 10px;
   }
 
   .mass {
