@@ -2,6 +2,7 @@
   <div class="hello">
     <div class="container">
       <!-- проверка что элементы есть -->
+      <p hidden>{{refreshKitchen}}</p>
       <div class="row" v-if="elements.length > 0 && mobile" >
         <ElementDish class="col-12" v-for="v in elements" v-bind:key="v.id" v-bind:data="v" v-bind:updateComponent="updateComponent"/>
       </div>
@@ -32,6 +33,7 @@
 <script>
 
 import ElementDish from './ElementDish'
+import store from '../store/store'
 
 export default {
   name: 'Kitchen',
@@ -62,23 +64,10 @@ export default {
       this.rightElements = this.filter('Готовится')
       this.flagL = this.leftElements.length > 0
       this.flagR = this.rightElements.length > 0
-    }
-  },
-  created () {
-    setInterval(() => {
+    },
+    startRenderPage: function () {
       window.onresize = this.windowEvent
       window.onready = this.windowEvent
-      // let resource = this.$resource('http://localhost:8080/kitchen');
-      // resource.get().then(result => {
-      //   result.json().then(data => {
-      //     console.log(data);
-      //     this.elements = data;
-      //   });
-      // }, error => {
-      //   console.log(error);
-      // });
-      // чуть изменил запрос просто добавил модуль, vue-resource. По сути весь он находится
-      // ниже и читать про него ничего не нужно
       this.$http.get('http://localhost:8080/kitchen').then(response => {
         this.elements = response.body
         this.updateComponent()
@@ -87,7 +76,19 @@ export default {
         console.log(err.status)
         this.elements = []
       })
-    }, 10000)
+    }
+  },
+  created () {
+    this.startRenderPage()
+  },
+  computed: {
+    refreshKitchen () {
+      if (store.getters.value('refreshKitchen') === true) {
+        store.dispatch('setValue', {key: 'refreshKitchen', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshKitchen')
+    }
   }
 }
 </script>

@@ -2,6 +2,7 @@
   <div>
     <br>
       <b-container fluid>
+        <p hidden>{{refreshAdmin}}</p>
         <b-row>
           <b-col cols="5">
             <b-form-select v-model="selected" :options="options" class="mb-3" :select-size="15">
@@ -41,6 +42,7 @@
 
 <script>
 import LineChart from './chart/LineChart'
+import store from '../store/store'
 
 /* eslint-disable */
 export default {
@@ -99,7 +101,6 @@ export default {
             ticks: {
               beginAtZero: true,
               stacked: true,
-              stepSize: 5,
               fontSize: 14
 
             }
@@ -111,7 +112,7 @@ export default {
     }
   },
   methods: {
-    postToServer: function () {
+    postToServerPopularComponent: function () {
       let _url = 'http://localhost:8080/admin/inform'
       const req = {'needDish': this.selected}
       this.$http.post(_url, JSON.stringify(req)).then(response =>
@@ -153,18 +154,30 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    startRenderPage: function () {
+      let _url = 'http://localhost:8080/admin/inform'
+      this.$http.get(_url).then(response => {
+        this.optionGroups = response.body
+      })
+      this.postToServerPopularComponent()
     }
   },
   created: function () {
-    let _url = 'http://localhost:8080/admin/inform'
-    this.$http.get(_url).then(response => {
-      this.optionGroups = response.body
-    })
-    this.postToServer()
+    this.startRenderPage()
   },
   watch: {
     selected: function (val) {
-      this.postToServer()
+      this.postToServerPopularComponent()
+    }
+  },
+  computed: {
+    refreshAdmin () {
+      if (store.getters.value('refreshAdmin') === true) {
+        store.dispatch('setValue', {key: 'refreshAdmin', value: false})
+        this.postToServerPopularComponent()
+      }
+      return store.getters.value('refreshAdmin')
     }
   }
 }
