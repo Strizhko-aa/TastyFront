@@ -47,12 +47,14 @@ Vue.http.interceptors.push((request, next) => {
 })
 
 async function setAuthorized () {
-  if (Vue.cookies.get('JSESSIONID') !== '' && Vue.cookies.get('JSESSIONID') !== null && Vue.cookies.get('JSESSIONID') !== undefined) {
-    console.log(Vue.cookies.get('JSESSIONID'))
-    await setUserInfo()
-  } else {
-    userStore.state.authorized = false
-  }
+  // console.log(Vue.cookies.get())
+  // if (Vue.cookies.get('JSESSIONID') !== '' && Vue.cookies.get('JSESSIONID') !== null && Vue.cookies.get('JSESSIONID') !== undefined) {
+  //   console.log(Vue.cookies.get('JSESSIONID'))
+  //   console.log('in if')
+  await setUserInfo()
+  // } else {
+  //   userStore.state.authorized = false
+  // }
 }
 
 function setUserInfo () {
@@ -60,6 +62,7 @@ function setUserInfo () {
     let _url = store.getters.host + '/get_user_data'
     Vue.http.get(_url).then((response) => {
       setUserData(response.body)
+      console.log(response.body)
       userStore.dispatch('setValue', {key: 'authorized', value: true})
       resolve(true)
     }).catch(err => {
@@ -83,9 +86,9 @@ function clearData () {
   Vue.cookies.remove('JSESSIONID')
 }
 
-function initApp () {
+async function initApp () {
   /* eslint-disable no-new */
-  setAuthorized()
+  await setAuthorized()
   new Vue({
     el: '#app',
     router,
