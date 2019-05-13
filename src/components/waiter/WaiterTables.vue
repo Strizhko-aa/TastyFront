@@ -45,15 +45,19 @@ export default {
     parseTables (data) {
       let _tables = []
       console.log(data[0])
-      for (let i in data[0]) {
-        let table = {
-          id: data[0][i][0].id,
-          status: data[0][i][0].tableStatus.id
+      if (data[0] !== undefined && data[0] !== null) {
+        for (let i in data[0]) {
+          if (data[0][i][0].id && data[0][i][0].tableStatus.id) {
+            let table = {
+              id: data[0][i][0].id,
+              status: data[0][i][0].tableStatus.id
+            }
+            // console.log(table)
+            _tables.push(table)
+          }
         }
-        // console.log(table)
-        _tables.push(table)
+        return _tables
       }
-      return _tables
     }
   }
 }
@@ -68,8 +72,8 @@ export default {
   position: absolute;
   width: 155px;
   text-align: center;
-  top: 38%;
-  font-weight: bold;
+  top: 43%;
+  font-weight: bolder;
   font-size: 22pt;
   color: black;
 }

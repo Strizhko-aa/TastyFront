@@ -27,9 +27,12 @@ export default {
             newDfo.dish = dfo[i][0].dish
             newDfo.status = dfo[i][0].dishStatus
             newDfo.count = 1
+            newDfo.dfoIds = [] // массив dfo id нужен для того, чтобы изменять статус на отнесено
+            newDfo.dfoIds.push(dfo[i][0].id)
             parsedDishes.push(newDfo)
           } else {
             parsedDishes[includeIndex].count++
+            parsedDishes[includeIndex].dfoIds.push(dfo[i][0].id)
           }
         }
         return parsedDishes

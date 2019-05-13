@@ -26,7 +26,7 @@
         <b-col cols=12 sm=6 md=6 lg=6>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
         </b-col>
-        <b-col cols=12 sm=4 md=4 lg=4> </b-col>
+        <!-- <b-col cols=12 sm=4 md=4 lg=4> </b-col> -->
         <b-col cols=12 sm=2 md=2 lg=2></b-col>
       </b-row>
       <i v-if="getCount(2, item) > 0" class="fas fa-fire status"> Готовится</i>
@@ -34,7 +34,7 @@
         <b-col cols=12 sm=6 md=6 lg=6>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
         </b-col>
-        <b-col style="color:red" cols=12 sm=4 md=4 lg=4>  </b-col>
+        <!-- <b-col style="color:red" cols=12 sm=4 md=4 lg=4>  </b-col> -->
         <b-col cols=12 sm=2 md=2 lg=2><img class="status-icon" src="../../assets/images/warning.svg" alt=""></b-col>
       </b-row>
       <i v-if="getCount(3, item) > 0" class="fas fa-check status"> Готово</i>
@@ -42,8 +42,8 @@
         <b-col cols=12 sm=6 md=6 lg=6>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
         </b-col>
-        <b-col cols=12 sm=4 md=4 lg=4>  </b-col>
-        <b-col cols=12 sm=2 md=2 lg=2><img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""></b-col>
+        <!-- <b-col cols=12 sm=4 md=4 lg=4>  </b-col> -->
+        <b-col cols=12 sm=2 md=2 lg=2 @click="deliveryDish(dish)"><img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""></b-col>
       </b-row>
     </b-container>
   </b-container>
@@ -52,6 +52,7 @@
 
 <script>
 // import moment from 'moment'
+// import store from '../store/store'
 
 export default {
   name: 'WaiterOrdersOnTable',
@@ -118,6 +119,17 @@ export default {
         this.loading = false
         console.log(err)
       })
+    },
+    deliveryDish (dishFromOrder) {
+      if (dishFromOrder.dfoIds.length > 0) {
+        // let _url = store.getters.host + '/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
+        let _url = 'http://localhost:8080/waiter/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
+        this.$http.get(_url).then(response => {
+          console.log(response.status)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     }
   }
 }
