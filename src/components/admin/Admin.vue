@@ -17,10 +17,7 @@
         <b-row>
           <b-col class="text-center bordered" style="vertical-align: ">
             <!-- если statistic ===  'popular' показываем одну пикчу, если нет смотрим следующее условие и т.д.-->
-            <div v-if="selected === 'popular'">
-              <Popular/>
-            </div>
-            <div v-else-if="selected === 'inform'">
+            <div v-if="selected === 'inform'">
               <Inform/>
             </div>
             <div v-if="selected === 'rating'">
