@@ -30,10 +30,11 @@ Vue.mixin(LoginMixin)
 Vue.config.productionTip = false
 connect()
 router.afterEach((to, from) => {
-  if (to.name !== 'Стол') {
-    store.dispatch('setValue', {key: 'whereIsUser', value: to.name})
+  console.log(to)
+  if (to.name !== 'table') {
+    store.dispatch('setValue', {key: 'whereIsUser', value: to.meta.title})
   } else {
-    store.dispatch('setValue', {key: 'whereIsUser', value: to.name + ' №' + to.params.tableNumber})
+    store.dispatch('setValue', {key: 'whereIsUser', value: to.meta.title + ' №' + to.params.tableNumber})
   }
 })
 
@@ -77,7 +78,7 @@ function setUserData (data) {
   userStore.dispatch('setValue', {key: 'userName', value: data.username})
   userStore.dispatch('setValue', {key: 'roleStaff', value: data.authorities[0].authority})
   userStore.dispatch('setUserPermission', data.authorities[0].authority)
-  console.log(userStore.state)
+  // console.log(userStore.state)
 }
 
 function clearData () {
@@ -97,10 +98,10 @@ async function initApp () {
   })
 }
 
-router.afterEach((to, from) => {
-  console.log(to.meta.title)
-  store.dispatch('setValue', {key: 'whereIsUser', value: to.meta.title})
-})
+// router.afterEach((to, from) => {
+//   console.log(to.meta.title)
+//   store.dispatch('setValue', {key: 'whereIsUser', value: to.meta.title})
+// })
 
 router.beforeEach((to, from, next) => {
   console.log(to.name)
@@ -139,7 +140,11 @@ router.beforeEach((to, from, next) => {
     }
 
     default:
-      next()
+      if (userStore.getters.value('autorized')) {
+        next()
+      } else {
+        next({name: 'login'})
+      }
       break
   }
 })
