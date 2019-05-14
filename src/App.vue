@@ -32,30 +32,33 @@
   <div id="app">
     <b-container fluid>
       <b-row style="background-color: #3F9384">
-        <b-col cols="2" md="2" sm="2">
+        <b-col cols="2" md="2" lg="2" sm="2">
           <img class="rounded logo" align="right" src="./assets/images/logo.png" alt="logo"/>
         </b-col>
-        <b-col cols="8" md="8" sm="8">
+        <b-col cols="7" md="7" lg="7" sm="7">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
-        <b-col cols="2" md="2" sm="2" class="menu md" v-show="authorized">
+        <b-col cols="2" md="2" lg="2" sm="2" class="menu md" v-show="authorized">
           <div style="margin-top: 1px" class="user">
             {{ userName }}
           </div>
-          <!-- <div> -->
-            <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
-                <template slot="button-content">
-                  <div class="menu-icon">
-                  <img src="./assets/images/menu-button.svg" alt="">
-                  </div>
-                </template>
-              <b-dropdown-item-button @click="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
-              <b-dropdown-item-button v-show="permKitchen" @click="navigateTo('kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
-              <b-dropdown-item-button v-show="permAdmin" @click="navigateTo('admin')" class="dropdown-style">Администратор</b-dropdown-item-button>
-              <b-dropdown-item-button v-show="permWaiter" @click="navigateTo('waiter')" class="dropdown-style">Официант</b-dropdown-item-button>
-            </b-dropdown>
-          <!-- </div> -->
         </b-col>
+        <b-dropdown v-show="authorized" id="ddown-right" right variant="link" class="m-md-1 btn-drop-menu" no-caret>
+            <template slot="button-content">
+              <div class="menu-icon">
+              <img src="./assets/images/menu-button.svg" alt="">
+              </div>
+            </template>
+          <b-dropdown-item-button v-show="permKitchen" @click="navigateTo('kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
+          <b-dropdown-item-button v-show="permAdmin" @click="navigateTo('admin')" class="dropdown-style">Администратор</b-dropdown-item-button>
+          <b-dropdown-item-button v-show="permWaiter" @click="navigateTo('waiter')" class="dropdown-style">Официант</b-dropdown-item-button>
+          <b-dropdown-item-button @click="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+        </b-dropdown>
+
+        <!-- <b-col v-show="!authorized" cols="2" md="2" lg="2" sm="2">
+          <b-button @click="enter()" class="enterButton"> Войти  </b-button>
+        </b-col> -->
+        
         <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
       </b-row>
     </b-container>
@@ -117,6 +120,9 @@ export default {
     },
     navigateTo (routeName) {
       this.$router.push({path: routeName})
+    },
+    enter () {
+      this.$router.push({name: 'login'})
     }
   }
 }
@@ -180,6 +186,7 @@ export default {
     vertical-align: middle;
     display: flex;
     flex-wrap: nowrap;
+    text-align: right;
   }
 
   .dropdown-style {
@@ -193,12 +200,14 @@ export default {
   }
 
   .user {
-    float: right;
+    /* float: right; */
     height: 100px;
     line-height: 100px;
-    float: left;
+    /* float: left; */
     text-decoration: underline;
     margin-right: 10px;
+    width: 100%;
+    text-align: right;
   }
 
   .menu-icon {

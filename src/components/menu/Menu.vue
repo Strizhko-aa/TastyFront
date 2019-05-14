@@ -46,7 +46,7 @@
               <div class="mass"> <span v-if="item.mass !== ''">{{ item.mass }} </span> <span class="price">{{ item.price }} ₽</span></div>
             </b-col>
             <b-col v-if="!inPurchased(item.id)" cols="12" sm="3" md="3" class="quantity">
-              <b-button class="button button-buy" @click="addToCard(item)">Купить</b-button>
+              <b-button class="button button-buy" @click="addToCard(item)">Заказать</b-button>
             </b-col>
             <b-col v-else cols="12" sm="3" md="3" class="quantity">
               <div class="quantity-input">

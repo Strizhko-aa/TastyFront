@@ -18,7 +18,7 @@
     </div>
     <b-button @click="logIn()" name="enter" style="width: 100%; margin-top: 20px;" size="lg" variant="success">Войти</b-button>
     <div class="mt-3">
-    <b-checkbox class="float-left">Запомнить</b-checkbox>
+    <!-- <b-checkbox class="float-left">Запомнить</b-checkbox>
     <a href="/getpassword" class="float-right">Забыли пароль?</a>
     </div>
     <div class="mt-5">
@@ -28,7 +28,7 @@
     <div>
     <img alt="VK" src="">
     <img alt="Google" src="">
-    <img alt="Facebook" src="">
+    <img alt="Facebook" src="">  -->
     </div>
     </b-col>
     <b-col cols="4"></b-col>
