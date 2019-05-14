@@ -10,12 +10,16 @@ const store = new Vuex.Store({
     onAdminPage: false,
     refreshWaiter: false,
     refreshKitchen: false,
+    host: 'http://localhost:8079',
     whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
     selectedInWaiterMenu: 'tables'
   },
   mutations: {
     setValue (store, keyValue) {
       store[keyValue.key] = keyValue.value
+    },
+    clearStore (store) {
+      store.selectedInWaiterMenu = 'tables'
     }
   },
   actions: {
@@ -23,6 +27,9 @@ const store = new Vuex.Store({
     // чтобы использовать храилище его надо импортировать
     setValue ({commit}, keyValue) {
       commit('setValue', keyValue)
+    },
+    clearStore ({commit}) {
+      commit('clearStore')
     }
   },
   getters: {
@@ -30,6 +37,9 @@ const store = new Vuex.Store({
     // store.getters.value('имя_поля')
     value: store => key => {
       return store[key]
+    },
+    host: store => {
+      return store.host
     }
   }
 })

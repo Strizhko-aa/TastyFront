@@ -19,7 +19,6 @@
 import BarChart from './chart/BarChart'
 import store from '../store/store'
 
-
 export default {
   name: 'Rating',
   components: {BarChart},
@@ -65,7 +64,7 @@ export default {
   },
   methods: {
     getInformationFromServerOneWeek: function () {
-      let _url = 'http://localhost:8080/admin/rating?need_period=oneWeek'
+      let _url = store.getters.host + '/admin/rating?need_period=oneWeek'
       var jsonLabels = []
       var jsonData = []
       this.$http.get(_url).then(response =>
@@ -94,7 +93,7 @@ export default {
       }, 700)
     },
     getInformationFromServerThreeMonths: function () {
-      let _url = 'http://localhost:8080/admin/rating?need_period=threeMonths'
+      let _url = store.getters.host + '/admin/rating?need_period=threeMonths'
       var jsonLabels = []
       var jsonData = []
       this.$http.get(_url).then(response =>
@@ -123,7 +122,7 @@ export default {
       }, 700)
     },
     getInformationFromServerOneMonth: function () {
-      let _url = 'http://localhost:8080/admin/rating?need_period=oneMonth'
+      let _url = store.getters.host + '/admin/rating?need_period=oneMonth'
       var jsonLabels = []
       var jsonData = []
       this.$http.get(_url).then(response =>

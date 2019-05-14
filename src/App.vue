@@ -38,32 +38,22 @@
         <b-col cols="8" md="8" sm="8">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
-        <b-col cols="2" md="2" sm="2" class="menu md">
+        <b-col cols="2" md="2" sm="2" class="menu md" v-show="authorized">
           <div style="margin-top: 1px" class="user">
-            {{ user ? user.name : 'Loading...' }}
+            {{ userName }}
           </div>
           <!-- <div> -->
-          <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
-            <template slot="button-content">
-              <div class="menu-icon">
-                <img src="./assets/images/menu-button.svg" alt="">
-              </div>
-            </template>
-<!--            <b-dropdown-header v-if="adminPage === true" id="nav">Навигация</b-dropdown-header>-->
-            <b-dropdown-item-button v-if="adminPage === true" @click="navigationWaiter()" class="dropdown-style">
-              Официант
-            </b-dropdown-item-button>
-            <b-dropdown-item-button v-if="adminPage === true" @click="navigationKitchen()" class="dropdown-style">
-              Кухня
-            </b-dropdown-item-button>
-            <b-dropdown-item-button v-if="adminPage === true" @click="navigationMenu()" class="dropdown-style">
-              Посетитель
-            </b-dropdown-item-button>
-
-<!--            <b-dropdown-header v-if="adminPage === true" id="user">Личный кабинет</b-dropdown-header>-->
-
-            <b-dropdown-item-button @click.native="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
-          </b-dropdown>
+            <b-dropdown id="ddown-right" right variant="link" class="m-md-2 btn-drop-menu" no-caret>
+                <template slot="button-content">
+                  <div class="menu-icon">
+                  <img src="./assets/images/menu-button.svg" alt="">
+                  </div>
+                </template>
+              <b-dropdown-item-button @click="logout()" class="dropdown-style">Выйти</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permKitchen" @click="navigateTo('kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permAdmin" @click="navigateTo('admin')" class="dropdown-style">Администратор</b-dropdown-item-button>
+              <b-dropdown-item-button v-show="permWaiter" @click="navigateTo('waiter')" class="dropdown-style">Официант</b-dropdown-item-button>
+            </b-dropdown>
           <!-- </div> -->
         </b-col>
         <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
@@ -81,59 +71,55 @@
 </template>
 
 <script>
-  // import Kitchen from './components/Kitchen.vue'
-  import store from './components/store/store'
+// import Kitchen from './components/Kitchen.vue'
+import store from './components/store/store'
+import userStore from './components/store/userStore'
 
-  export default {
-    name: 'app',
-    components: {
-      // Kitchen
+export default {
+  name: 'app',
+  components: {
+    // Kitchen
+  },
+  data () {
+    return {
+      user: null,
+      result: ''
+    }
+  },
+  computed: { // вычисляемое значение. Оно вычисляется при рендере
+  // компонента(т.к. это основной компонент то при старте приложения), и при изменении
+  // одного из параметров от которого он зависит. В данном случает тут берется значение из хранилища store.
+  // Значит, если поменяется хначение в хранилище, то поменяется и значение переменной в компоненте
+    whereIsUser () {
+      return store.getters.value('whereIsUser')
     },
-    data() {
-      return {
-        user: null,
-        result: ''
-      }
+    authorized () {
+      return userStore.getters.value('authorized')
     },
-    methods: {
-      logout: function () {
-        let _url = 'http://localhost:8080/logout'
-        this.$http.post(_url, JSON.stringify('logout')).then(response =>
-          response.json()).then(json => {
-          this.result = json
-        }).catch(error => {
-          console.log('logout' + ' ' + error)
-        })
-      },
-      navigationWaiter: function () {
-        this.$router.push('/waiter')
-      },
-      navigationKitchen: function () {
-        this.$router.push('/kitchen')
-      },
-      navigationMenu: function () {
-        this.$router.push('/')
-      }
+    userName () {
+      return userStore.getters.value('userName')
     },
-    computed: { // вычисляемое значение. Оно вычисляется при рендере
-      // компонента(т.к. это основной компонент то при старте приложения), и при изменении
-      // одного из параметров от которого он зависит. В данном случает тут берется значение из хранилища store.
-      // Значит, если поменяется хначение в хранилище, то поменяется и значение переменной в компоненте
-      whereIsUser() {
-        return store.getters.value('whereIsUser')
-      },
-      adminPage() {
-        return store.getters.value('onAdminPage')
-      }
+    permKitchen () {
+      return userStore.getters.permission('kitchen')
     },
-    created() {
-      // Simulate fetching user data.
-      setTimeout(() => {
-        this.user = {name: 'Guest'}
-      }, 2000)
+    permWaiter () {
+      return userStore.getters.permission('waiter')
+    },
+    permAdmin () {
+      return userStore.getters.permission('admin')
+    }
+  },
+  methods: {
+    logout () {
+      this.logoutMix()
+      console.log('logout')
+      this.$router.push({name: 'login'})
+    },
+    navigateTo (routeName) {
+      this.$router.push({path: routeName})
     }
   }
-
+}
 </script>
 
 <style>

@@ -19,15 +19,6 @@
     <!-- <div v-show="false">{{tableNumber}}</div> -->
     <div v-for="(table, i) in parsedOrders" :key="i">
     <b-container style="text-align: left" v-for="item in table" :key="item.id">
-      <!-- <b-row>
-        <b-col cols sm md lg = "12">
-          <p class="order-number">
-            Заказ №{{item.id}} | {{item.total}} &#8381;
-            <i v-if="item.typePayment.id === 1" class="fas fa-credit-card"></i>
-            <i v-if="item.typePayment.id === 2" class="fas fa-money-bill-wave"></i>
-          </p>
-        </b-col>
-      </b-row> -->
       <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
         <b-col cols=12 sm=6 md=6 lg=6>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}} </span>
@@ -43,6 +34,7 @@
 </template>
 
 <script>
+import store from '../store/store'
 export default {
   data () {
     return {
@@ -58,6 +50,7 @@ export default {
     reqestAllReady: async function () {
       this.loading = true
       let tables = await this.getTables()
+      console.log(tables)
       for (let i in tables[0]) {
         // console.log('id ' + tables[i][0].id)
         let ordersFromTable = await this.getTableOrders(tables[0][i][0].id)
@@ -77,7 +70,7 @@ export default {
     },
     getTables () {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter').then(response => {
+        this.$http.get(store.getters.host + '/waiter').then(response => {
           resolve(response.body)
         }).catch(err => {
           console.log(err.status)
@@ -87,12 +80,12 @@ export default {
     },
     getTableOrders (tableNumber) {
       return new Promise(resolve => {
-        this.$http.get('http://localhost:8080/waiter/orders/' + tableNumber).then(function (response) {
+        this.$http.get(store.getters.host + '/waiter/orders/' + tableNumber).then(function (response) {
           // this.elements.push(response.body)
           resolve(this.parseResponseMix(response.body))
         }).catch(function (err) {
           console.log(err)
-          resolve(null)
+          // resolve(null)
         })
       })
     }

@@ -143,7 +143,7 @@ export default {
     },
     createPDF() {
       console.log(this.ingredients);
-      this.$http.post('http://localhost:8080/admin/createPDF', JSON.stringify(this.forTomorrow)).then(function (response) {
+      this.$http.post(store.getters.host + '/admin/createPDF', JSON.stringify(this.forTomorrow)).then(function (response) {
           console.log(response)
         var a = document.createElement('a')
         a.href = response.bodyText
@@ -156,7 +156,7 @@ export default {
       })
     },
     getIngredientsFromServer: function () {
-      this.$http.get('http://localhost:8080/admin/addDish/ingredient').then(response =>
+      this.$http.get(store.getters.host + '/admin/addDish/ingredient').then(response =>
         response.json()).then(json => {
         this.ingredients = []
         for (var i = 0; i < json.length; i++) {
@@ -188,7 +188,7 @@ export default {
       }
     },
     clickAddIngredient () {
-      this.$http.post('http://localhost:8080/admin/addIngredient', JSON.stringify(this.model)).then(function (response) {
+      this.$http.post(store.getters.host + '/admin/addIngredient', JSON.stringify(this.model)).then(function (response) {
         console.log(response)
         if (response.body.id) {
           this.model = {
@@ -201,7 +201,6 @@ export default {
         } else {
           this.noty('Добавление ', 'error', 'Ошибка добавления')
         }
-      }, error => {
         this.noty('Добавление ', 'error', 'Ошибка добавления')
       }).catch(function (error) {
         console.log(error)
@@ -212,7 +211,7 @@ export default {
       if (ingredient.mass != null) {
         this.editModel.id = ingredient.id
         this.editModel.mass = symbol + ingredient.mass
-        this.$http.post('http://localhost:8080/admin/editMassIngredient', JSON.stringify(this.editModel)).then(function (response) {
+        this.$http.post(store.getters.host + '/admin/editMassIngredient', JSON.stringify(this.editModel)).then(function (response) {
           console.log(response)
           if (response.body.id) {
             this.noty('Изменение кол-ва ингредента ', 'success', 'Вес ингредиента ' + response.body.name + ' успешно изменен')
@@ -222,7 +221,6 @@ export default {
           } else {
             this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
           }
-        }, error => {
           this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
         }).catch(function (error) {
           console.log(error)
@@ -230,7 +228,7 @@ export default {
       } else this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
     },
     deleteIng (id) {
-      this.$http.post('http://localhost:8080/admin/deleteIngredient', JSON.stringify(id)).then(function (response) {
+      this.$http.post(store.getters.host + '/admin/deleteIngredient', JSON.stringify(id)).then(function (response) {
         console.log(response)
         if (response.body === true) {
           const indexElement = this.ingredients.findIndex(x => x.id === id)

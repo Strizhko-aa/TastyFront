@@ -25,7 +25,7 @@ function callbackOnMessage (message) {
 }
 
 export function connect () {
-  const socket = new SockJS('http://localhost:8080/refresh')
+  const socket = new SockJS(store.getters.host + '/refresh')
   stompClient = Stomp.over(socket)
   stompClient.connect({}, frame => {
     console.log('!!!!!!Connected: ' + frame)

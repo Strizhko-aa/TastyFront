@@ -85,7 +85,7 @@ export default {
       var jsonLabelsDishPriceByIngredients = []
       var jsonDataName = []
       console.log(encodeURI(this.selected))
-      let _url = 'http://localhost:8080/admin/revenue/get_dishes/' + encodeURI(this.selected)
+      let _url = store.getters.host + '/admin/revenue/get_dishes/' + encodeURI(this.selected)
       this.$http.get(_url).then(response =>
         response.json()).then(json => {
         console.log(json)
