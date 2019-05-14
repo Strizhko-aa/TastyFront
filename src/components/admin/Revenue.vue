@@ -108,7 +108,7 @@ export default {
           bodySpacing: 10,
           datasets: [
             {
-              label: 'Прибыль',
+              label: 'Выручка',
               backgroundColor: 'rgba(63, 147, 132, 0.3)',
               borderColor: 'rgba(63, 147, 132, 1)',
               borderWidth: 1,
