@@ -58,7 +58,7 @@
         <!-- <b-col v-show="!authorized" cols="2" md="2" lg="2" sm="2">
           <b-button @click="enter()" class="enterButton"> Войти  </b-button>
         </b-col> -->
-        
+
         <!-- <b-col cols="0" md="0" sm="0"></b-col> -->
       </b-row>
     </b-container>

@@ -55,9 +55,9 @@ export default {
     }
   },
   methods: {
-    logIn () {
+    logIn() {
       let _data = '?username=' + this.username + '&password=' + this.password
-      this.$http.post('http://localhost:8079/login' + _data).then(response => {
+      this.$http.post('http://localhost:8079/login' + _data).then(async function (response) {
         // console.log(response)
         if (response.status === 200) {
           // this.$http.get('http://localhost:8079/get_user_data').then((response) => {
@@ -65,7 +65,7 @@ export default {
           // }).catch(err => {
           //   console.log(err)
           // })
-          this.initUserMix()
+          await this.initUserMix()
           console.log('Роль пользователя: ' + userStore.state.roleStaff)
           switch (userStore.state.roleStaff) {
             case 'COOK':
