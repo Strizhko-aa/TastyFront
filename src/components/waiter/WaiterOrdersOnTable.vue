@@ -1,6 +1,5 @@
 <template>
 <div>
-
   <b-container fluid>
     <b-row>
       <b-col style="text-align: left" cols=12 sm=12 md=12 lg=12>
@@ -10,6 +9,7 @@
   </b-container>
   <b-container v-if="loading">LOADING ////\\\\</b-container>
   <b-container v-else fluid>
+    <p hidden>{{refreshWaiter}}</p>
     <div v-show="false">{{tableNumber}}</div>
     <b-container style="text-align: left" v-for="item in parsedOrders" :key="item.id">
       <b-row>
@@ -82,9 +82,15 @@ export default {
         this.reqestData()
       }
       return this.$route.params.tableNumber
+    },
+    refreshWaiter () {
+      if (store.getters.value('refreshWaiter') === true) {
+        store.dispatch('setValue', {key: 'refreshWaiter', value: false})
+        this.reqestData()
+      }
+      return store.getters.value('refreshWaiter')
     }
   },
-
   created () {
     this.reqestData()
   },

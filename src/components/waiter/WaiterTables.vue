@@ -1,6 +1,7 @@
 <template>
   <div class="main-waiter-tables">
     <b-container fluid>
+      <p hidden>{{refreshWaiter}}</p>
       <b-row>
         <b-col class="table" cols=6 sm=6 md=4 lg=3 v-for="table in parsedTables" :key="table.id">
           <div class="table-color-back" @click="transitionOnOrder(table.id)"
@@ -29,15 +30,18 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted')
-    this.$http.get(store.getters.host + '/waiter').then((response) => {
-      this.elements = response.body
-      this.parsedTables = this.parseTables(response.body)
-    }).catch((err) => {
-      console.log(err)
-    })
+    this.startRenderPage()
   },
   methods: {
+    startRenderPage: function () {
+      console.log('mounted')
+      this.$http.get(store.getters.host + '/waiter').then((response) => {
+        this.elements = response.body
+        this.parsedTables = this.parseTables(response.body)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     transitionOnOrder: function (tableNumber) {
       this.$route.params.tableNumber = tableNumber
       this.$router.push({path: '/waiter/orders/' + tableNumber})
@@ -58,6 +62,15 @@ export default {
         }
         return _tables
       }
+    }
+  },
+  computed: {
+    refreshWaiter () {
+      if (store.getters.value('refreshWaiter') === true) {
+        store.dispatch('setValue', {key: 'refreshWaiter', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshWaiter')
     }
   }
 }
