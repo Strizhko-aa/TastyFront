@@ -6,20 +6,18 @@ var stompClient = null
 
 function callbackOnMessage (message) {
   console.log(message)
-  switch (message.body) {
-    case 'refresh all': {
-      console.log('I am in REFRESH ALL case')
-      store.dispatch('setValue', {key: 'refreshAdmin', value: true})
-      store.dispatch('setValue', {key: 'refreshWaiter', value: true})
-      store.dispatch('setValue', {key: 'refreshKitchen', value: true})
-      console.log(store.getters.value('refreshAdmin'))
+  if (message.body === 'refresh all') {
+    store.dispatch('setValue', {key: 'refreshAdmin', value: true})
+    store.dispatch('setValue', {key: 'refreshWaiter', value: true})
+    store.dispatch('setValue', {key: 'refreshKitchen', value: true})
+  }
+  console.log(message.body)
+}
 
-      break
-    }
-    case 'refresh waiter': {
-      store.dispatch('setValue', {key: 'refreshWaiter', value: true})
-      break
-    }
+function callbackOnMessageFromKitchen (message) {
+  console.log(message)
+  if (message.body === 'refresh') {
+    store.dispatch('setValue', {key: 'refreshWaiter', value: true})
   }
   console.log(message.body)
 }
@@ -33,6 +31,9 @@ export function connect () {
     stompClient.subscribe('topic/messages', message => {
       callbackOnMessage(message)
     })
+    stompClient.subscribe('topic/messages/waiter', message => {
+      callbackOnMessageFromKitchen(message)
+    })
   })
 }
 
@@ -43,9 +44,11 @@ export function disconnect () {
   console.log('Disconnected')
 }
 
+export function sendMessageFromKitchen () {
+  stompClient.send('/app/refresh', {}, JSON.stringify({message: 'change dish status on kitchen'}))
+}
+
 export function sendMessage () {
   // eslint-disable-next-line no-undef
   stompClient.send('/app/refresh', {}, JSON.stringify({message: 'bought new dish'}))
-  console.log('Сообщение : ' + JSON.stringify({message: 'added new dish'}) + ' отправлено!')
-  console.log(JSON.stringify({message: 'added new dish'}))
 }

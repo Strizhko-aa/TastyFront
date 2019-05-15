@@ -58,6 +58,7 @@
 
 <script>
 import store from '../store/store'
+import {sendMessageFromKitchen} from "../../utills/ws";
 
 export default {
   name: 'ElementDish',
@@ -135,6 +136,7 @@ export default {
         console.log(error)
       })
       this.updateComponent()
+      sendMessageFromKitchen()
     },
     msToTime (duration) {
       // var milliseconds = parseInt((duration % 1000) / 100)
