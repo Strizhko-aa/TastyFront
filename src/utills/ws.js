@@ -3,23 +3,28 @@ import {Stomp} from '@stomp/stompjs'
 import store from '../components/store/store'
 
 var stompClient = null
+var delay = 1 // sec
 
 function callbackOnMessage (message) {
-  console.log(message)
-  if (message.body === 'refresh all') {
-    store.dispatch('setValue', {key: 'refreshAdmin', value: true})
-    store.dispatch('setValue', {key: 'refreshWaiter', value: true})
-    store.dispatch('setValue', {key: 'refreshKitchen', value: true})
-  }
-  console.log(message.body)
+  setTimeout(() => {
+    console.log(message)
+    if (message.body === 'refresh all') {
+      store.dispatch('setValue', {key: 'refreshAdmin', value: true})
+      store.dispatch('setValue', {key: 'refreshWaiter', value: true})
+      store.dispatch('setValue', {key: 'refreshKitchen', value: true})
+    }
+    console.log(message.body)
+  }, delay * 1000)
 }
 
 function callbackOnMessageFromKitchen (message) {
-  console.log(message)
-  if (message.body === 'refresh') {
-    store.dispatch('setValue', {key: 'refreshWaiter', value: true})
-  }
-  console.log(message.body)
+  setTimeout(() => {
+    console.log(message)
+    if (message.body === 'refresh') {
+      store.dispatch('setValue', {key: 'refreshWaiter', value: true})
+    }
+    console.log(message.body)
+  }, delay * 1000)
 }
 
 export function connect () {

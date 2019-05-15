@@ -32,10 +32,10 @@
   <div id="app">
     <b-container fluid>
       <b-row style="background-color: #3F9384">
-        <b-col cols="2" md="2" lg="2" sm="2">
+        <b-col cols="3" md="3" lg="3" sm="3">
           <img class="rounded logo" align="right" src="./assets/images/logo.png" alt="logo"/>
         </b-col>
-        <b-col cols="7" md="7" lg="7" sm="7">
+        <b-col cols="6" md="6" lg="6" sm="6">
           <h1 style="margin-top: 11px" class="text-center title">{{whereIsUser}}</h1>
         </b-col>
         <b-col cols="2" md="2" lg="2" sm="2" class="menu md" v-show="authorized">
@@ -165,6 +165,7 @@ export default {
   .logo {
     width: 90px;
     height: 90px;
+    margin-right: 80px;
   }
 
   .title {

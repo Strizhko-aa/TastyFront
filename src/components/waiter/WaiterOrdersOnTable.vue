@@ -25,31 +25,37 @@
       <i v-if="getCount(1, item) > 0" class="fas fa-clock status"> В ожидании</i>
       <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 1" :key="'wait' + index">
         <b-col offset=1 offset-sm=1 offset-md=1 offset-lg=1></b-col>
-        <b-col cols=12 sm=6 md=6 lg=6>
+        <b-col cols=11 sm=11 md=11 lg=11>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
         </b-col>
         <!-- <b-col cols=12 sm=4 md=4 lg=4> </b-col> -->
-        <b-col cols=12 sm=2 md=2 lg=2></b-col>
+        <b-col cols=11 sm=11 md=11 lg=11></b-col>
       </b-row>
       <i v-if="getCount(2, item) > 0" class="fas fa-fire status"> Готовится</i>
       <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 2" :key="'inProgerss' + index">
         <b-col offset=1 offset-sm=1 offset-md=1 offset-lg=1></b-col>
-        <b-col cols=12 sm=6 md=6 lg=6>
+        <b-col cols=11 sm=11 md=11 lg=11>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
-        </b-col>
-        <!-- <b-col style="color:red" cols=12 sm=4 md=4 lg=4>  </b-col> -->
-        <b-col cols=12 sm=2 md=2 lg=2>
-          <!-- <img class="status-icon" src="../../assets/images/warning.svg" alt=""> -->
         </b-col>
       </b-row>
       <i v-if="getCount(3, item) > 0" class="fas fa-check status"> Готово</i>
       <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
         <b-col offset=1 offset-sm=1 offset-md=1 offset-lg=1></b-col>
-        <b-col cols=8 sm=6 md=6 lg=6>
+        <b-col cols=11 sm=11 md=11 lg=11>
+          <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
+          <img class="status-icon" @click="deliveryDish(dish)" src="../../assets/images/arrow-right.svg" alt="">
+        </b-col>
+        <!-- <b-col cols=12 sm=4 md=4 lg=4>  </b-col> -->
+        <!-- <b-col cols=1 sm=1 md=1 lg=1 ></b-col> -->
+      </b-row>
+      <i v-if="getCount(4, item) > 0" class="fas fa-check-double status"> Отнесено</i>
+      <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 4" :key="'delivered' + index">
+        <b-col offset=1 offset-sm=1 offset-md=1 offset-lg=1></b-col>
+        <b-col cols=11 sm=11 md=11 lg=11>
           <span class="dish-name">{{dish.dish.name}} x {{dish.count}}</span>
         </b-col>
         <!-- <b-col cols=12 sm=4 md=4 lg=4>  </b-col> -->
-        <b-col cols=1 sm=1 md=1 lg=1 @click="deliveryDish(dish)"><img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""></b-col>
+        <!-- <b-col cols=1 sm=1 md=1 lg=1 @click="deliveryDish(dish)"><img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""></b-col> -->
       </b-row>
     </b-container>
   </b-container>
@@ -93,19 +99,6 @@ export default {
   },
   created () {
     this.reqestData()
-  },
-
-  filters: {
-    // formatToDate (date) {
-    //   if (date) {
-    //     return moment(String(date)).format('DD.MM.YYYY')
-    //   }
-    // },
-    // formatToTime (date) {
-    //   if (date) {
-    //     return moment(String(date)).format('hh:mm')
-    //   }
-    // }
   },
 
   methods: {
@@ -162,15 +155,19 @@ p {
 .dish-name {
   font-size: 14pt;
   font-family: Times, serif;
+  width: 320px;
 }
 .order-number {
   margin-top: 20px;
 }
 .dishes-in-order {
   padding-left: 30px;
+  padding-top: 4px;
 }
 .status-icon {
-  height: 20px;
-  float: left;
+  height: 22px;
+  float: right;
+  cursor: pointer;
+  margin: 5px 10% 5px 0;
 }
 </style>

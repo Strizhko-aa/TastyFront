@@ -55,16 +55,12 @@ export default {
     }
   },
   methods: {
-    logIn() {
+    logIn () {
       let _data = '?username=' + this.username + '&password=' + this.password
       this.$http.post('http://localhost:8079/login' + _data).then(async function (response) {
         // console.log(response)
-        if (response.status === 200) {
-          // this.$http.get('http://localhost:8079/get_user_data').then((response) => {
-          //   console.log(response.body)
-          // }).catch(err => {
-          //   console.log(err)
-          // })
+        // console.log(response.bodyText.substring(0, 9))
+        if (response.status === 200 && response.bodyText.substring(0, 9) !== '<!DOCTYPE') {
           await this.initUserMix()
           console.log('Роль пользователя: ' + userStore.state.roleStaff)
           switch (userStore.state.roleStaff) {
@@ -84,27 +80,10 @@ export default {
           }
           console.log('Данные пользователя: ' + response)
           // alert('Не верные логин или пароль')
+        } else {
+          alert('Не верные логин или пароль')
         }
-      }).catch(async function (err) {
-        if (err.status === 403) {
-          await this.initUserMix()
-          console.log(userStore.state.roleStaff)
-          switch (userStore.state.roleStaff) {
-            case 'COOK':
-              this.$router.push({name: 'kitchen'})
-              break
-            case 'ADMIN':
-              this.$router.push({name: 'admin'})
-              break
-            case 'WAITER':
-              this.$router.push({name: 'waiter'})
-              break
-
-            default:
-              this.$router.push('/')
-              break
-          }
-        }
+      }).catch(function (err) {
         console.log(err)
       })
     }

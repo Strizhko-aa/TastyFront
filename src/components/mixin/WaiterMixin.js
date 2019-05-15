@@ -21,7 +21,7 @@ export default {
       return orders
     },
     parseDishesFromOrder (dfo) {
-      console.log(dfo)
+      // console.log(dfo)
       if (dfo !== undefined) {
         let parsedDishes = []
         for (let i in dfo) {
@@ -50,11 +50,15 @@ export default {
 
     include (dishId, statusId, arr) {
       // console.log(arr)
+      // console.log(dishId)
+      // console.log(statusId)
       for (let i in arr) {
         if (dishId === arr[i].dish.id && statusId === arr[i].status.id) {
+          console.log(i)
           return i
         }
       }
+      console.log(-1)
       return -1
     }
   }

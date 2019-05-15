@@ -58,7 +58,7 @@
 
 <script>
 import store from '../store/store'
-import {sendMessageFromKitchen} from "../../utills/ws";
+import {sendMessageFromKitchen} from '../../utills/ws'
 
 export default {
   name: 'ElementDish',

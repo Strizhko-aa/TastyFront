@@ -4,31 +4,34 @@
   <b-container fluid>
     <b-row>
       <b-col style="text-align: left" cols=12 sm=12 md=12 lg=12>
-        <b-button @click="goBack()">Назад</b-button>
+        <!-- <b-button @click="goBack()">Назад</b-button> -->
       </b-col>
     </b-row>
   </b-container>
   <b-container v-if="loading">LOADING ////\\\\</b-container>
   <b-container v-else fluid>
-    <b-container>
+    <b-container v-if="getCount(3, parsedOrders) > 0">
       <b-row style="margin-bottom: 20px;">
-        <b-col cols=6 sm=6 md=6 lg=6> <p>Блюдо</p></b-col>
-        <b-col cols=6 sm=6 md=6 lg=6><p>Столик №</p></b-col>
+        <b-col cols=5 sm=5 md=5 lg=5> <p>Блюдо</p></b-col>
+        <b-col cols=3 sm=3 md=3 lg=3><p>Столик №</p></b-col>
       </b-row>
     </b-container>
     <!-- <div v-show="false">{{tableNumber}}</div> -->
-    <div v-for="(table, i) in parsedOrders" :key="i">
-    <b-container style="text-align: left" v-for="item in table" :key="item.id">
-      <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
-        <b-col cols=12 sm=6 md=6 lg=6>
-          <span class="dish-name">{{dish.dish.name}} x {{dish.count}} </span>
-        </b-col>
-        <b-col cols=6 sm=2 md=2 lg=2> <img class="status-icon" src="../../assets/images/arrow-right.svg" alt=""> </b-col>
-        <b-col style="text-align: center" cols=6 sm=2 md=2 lg=2>{{item.tableNumber}}</b-col>
-        <b-col offset=0 offset-sm=2 offset-md=2 offset-lg=2></b-col>
-      </b-row>
-    </b-container>
+    <div v-if="getCount(3, parsedOrders) > 0">
+      <div v-for="(table, i) in parsedOrders" :key="i">
+      <b-container style="text-align: left" v-for="item in table" :key="item.id">
+        <b-row class="dishes-in-order" v-for="(dish, index) in item.parsedDishes" v-show="dish.status.id === 3" :key="'ready' + index">
+          <b-col cols=5 sm=5 md=5 lg=5>
+            <span class="dish-name">{{dish.dish.name}} x {{dish.count}} </span>
+          </b-col>
+          <b-col cols=3 sm=3 md=3 lg=3 style="text-align: center">{{item.tableNumber}}</b-col>
+          <b-col cols=3 sm=3 md=3 lg=3> <img @click="deliveryDish(dish)" class="status-icon" src="../../assets/images/arrow-right.svg" alt=""> </b-col>
+          <!-- <b-col cols=3 sm=3 md=3 lg=3></b-col> -->
+        </b-row>
+      </b-container>
+      </div>
     </div>
+    <div v-else><h1>пусто</h1></div>
   </b-container>
 </div>
 </template>
@@ -49,7 +52,9 @@ export default {
   methods: {
     reqestAllReady: async function () {
       this.loading = true
-      let tables = await this.getTables()
+      this.parsedOrders = []
+      let tables = []
+      tables = await this.getTables()
       console.log(tables)
       for (let i in tables[0]) {
         // console.log('id ' + tables[i][0].id)
@@ -88,6 +93,19 @@ export default {
           // resolve(null)
         })
       })
+    },
+    deliveryDish (dishFromOrder) {
+      console.log(dishFromOrder)
+      if (dishFromOrder.dfoIds.length > 0) {
+        // let _url = store.getters.host + '/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
+        let _url = store.getters.host + '/waiter/orders/delivery-dish/' + dishFromOrder.dfoIds.shift()
+        this.$http.get(_url).then(response => {
+          console.log(response.status)
+          this.reqestAllReady()
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     }
   }
 }
@@ -118,5 +136,6 @@ p {
 .status-icon {
   height: 20px;
   float: left;
+  cursor: pointer;
 }
 </style>
