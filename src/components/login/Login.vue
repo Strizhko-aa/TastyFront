@@ -60,7 +60,30 @@ export default {
       this.$http.post('http://localhost:8079/login' + _data).then(response => {
         // console.log(response)
         if (response.status === 200) {
-          alert('Не верные логин или пароль')
+          // this.$http.get('http://localhost:8079/get_user_data').then((response) => {
+          //   console.log(response.body)
+          // }).catch(err => {
+          //   console.log(err)
+          // })
+          this.initUserMix()
+          console.log('Роль пользователя: ' + userStore.state.roleStaff)
+          switch (userStore.state.roleStaff) {
+            case 'COOK':
+              this.$router.push({name: 'kitchen'})
+              break
+            case 'ADMIN':
+              this.$router.push({name: 'admin'})
+              break
+            case 'WAITER':
+              this.$router.push({name: 'waiter'})
+              break
+
+            default:
+              this.$router.push('/')
+              break
+          }
+          console.log('Данные пользователя: ' + response)
+          // alert('Не верные логин или пароль')
         }
       }).catch(async function (err) {
         if (err.status === 403) {

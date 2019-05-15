@@ -140,7 +140,7 @@ router.beforeEach((to, from, next) => {
     }
 
     default:
-      if (userStore.getters.value('autorized')) {
+      if (userStore.getters.value('authorized')) {
         next()
       } else {
         next({name: 'login'})
