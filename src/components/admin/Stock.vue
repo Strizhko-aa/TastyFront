@@ -36,14 +36,17 @@
               <b-col cols="3">
                 <input type="text" class="form-control inputAdd" v-model="model.type" placeholder="Категория"/>
               </b-col>
-              <b-col cols="3">
+              <b-col cols="2">
                 <select class="select input form-control" v-model="model.unit">
                   <option value="гр">гр</option>
                   <option value="мл">мл</option>
                   <option value="шт">шт</option>
                 </select>
               </b-col>
-              <b-col cols="3">
+              <b-col cols="2">
+                <input type="text" class="form-control inputAdd" v-model="model.price" placeholder="Цена за ед"/>
+              </b-col>
+              <b-col cols="2">
                 <button type="button" class="btn btn-labeled btn-success inputAdd" v-on:click="clickAddIngredient()">
                   <span class="btn-label"><ion-icon name="checkmark-circle"></ion-icon></span>Добавить
                 </button>
@@ -108,7 +111,8 @@ export default {
       model: {
         name: '',
         type: '',
-        unit: 'гр'
+        unit: 'гр',
+        price: ''
       },
       editModel: {
         id: null,
@@ -194,14 +198,14 @@ export default {
           this.model = {
             name: '',
             type: '',
-            unit: ''
+            unit: '',
+            price:''
           }
           this.ingredients.push(response.body)
           this.noty('Добавление ', 'success', 'Ингредиент ' + response.body.name + ' успешно добавлен')
         } else {
           this.noty('Добавление ', 'error', 'Ошибка добавления')
         }
-        this.noty('Добавление ', 'error', 'Ошибка добавления')
       }).catch(function (error) {
         console.log(error)
         this.noty('Добавление ', 'error', 'Ошибка добавления')
@@ -221,7 +225,6 @@ export default {
           } else {
             this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
           }
-          this.noty('Изменение ', 'error', 'Ошибка изменения количества ингредиента')
         }).catch(function (error) {
           console.log(error)
         })

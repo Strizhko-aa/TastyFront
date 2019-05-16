@@ -37,7 +37,7 @@
           <b-col class="col-sm-6 col-md-6 col-6">
             <select class="select input" v-model="dishIngredient.value">
               <option value="0">Ингредиент</option>
-              <option v-bind:value="i.id" name="ingredient" v-for="i in ingredient" v-bind:key="i.ingredient.id">{{i.ingredient.name}}, {{i.ingredient.unit}}</option>
+              <option v-bind:value="i.ingredient.id" name="ingredient" v-for="i in ingredient" v-bind:key="i.ingredient.id">{{i.ingredient.name}}, {{i.ingredient.unit}}</option>
             </select>
           </b-col>
           <b-col cols="col-sm-5 col-md-5 col-4">
