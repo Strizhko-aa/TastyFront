@@ -141,11 +141,6 @@ export default {
     padding-bottom: 60px;
   }
 
-  .modal-header {
-    height: auto !important;
-    padding: 0 !important;
-  }
-
   .btn-drop-menu {
     float: right;
   }
@@ -156,10 +151,6 @@ export default {
     background-color: #3F9384;
     display: flex;
     float: left;
-  }
-
-  header .container .row {
-    flex-wrap: nowrap;
   }
 
   .logo {
