@@ -63,6 +63,7 @@ export default {
               display: true
             },
             ticks: {
+              beginAtZero: true,
               fontSize: 16
             },
             scaleLabel: {
