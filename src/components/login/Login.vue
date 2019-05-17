@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     logIn () {
-      console.log('aaa')
       let _data = '?username=' + this.username + '&password=' + this.password
       this.$http.post('http://localhost:8079/login' + _data).then(async function (response) {
         // console.log(response)
