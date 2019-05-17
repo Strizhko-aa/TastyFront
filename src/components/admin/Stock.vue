@@ -199,7 +199,7 @@ export default {
         for (var i = 0; i < json.length; i++) {
           this.ingredients[i] = json[i]['ingredient']
           this.ingredients[i].forTomorrow = json[i]['quantityIngredientsForTomorrow']
-          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
           console.log(this.delForIngred)
           if (this.ingredients[i].quantity_in_stock - this.ingredients[i].forTomorrow < this.delForIngred) this.forTomorrow.push(this.ingredients[i])
         }

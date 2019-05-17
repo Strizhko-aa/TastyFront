@@ -24,7 +24,7 @@ export default {
       return new Promise(resolve => {
         let _url = store.getters.host + '/get_user_data'
         this.$http.get(_url).then((response) => {
-          // console.log(response.body)
+          console.log(response.body)
           this.setUserData(response.body)
           userStore.dispatch('setValue', {key: 'authorized', value: true})
           resolve(true)
@@ -40,6 +40,7 @@ export default {
       userStore.dispatch('setValue', {key: 'roleStaff', value: data.authorities[0].authority})
       userStore.dispatch('setUserPermission', data.authorities[0].authority)
       console.log(userStore.state)
+      // console.log(userStore.state.roleStaff)
     }
   }
 }

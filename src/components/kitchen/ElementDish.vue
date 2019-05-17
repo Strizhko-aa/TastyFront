@@ -119,14 +119,14 @@ export default {
           this.data.dishStatus.title = 'Готовится'
           this.recipeStatus = 'ОТДАТЬ'
           this.classElementRecipe = 'button-ready'
-          json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
+          json = {'status': 'Готовится', 'id': dishesFromOrderId}
           this.dateRealNow = new Date()
           sendMessageFromKitchenToStock()
           break
         case 'ОТДАТЬ':
           this.visible = false
           this.data.dishStatus.title = 'Готово'
-          json = {'status': 'Готово', 'id': dishesFromOrderId, 'tableNumber': 2}
+          json = {'status': 'Готово', 'id': dishesFromOrderId}
           break
         default:
           break
