@@ -17,10 +17,20 @@ function callbackOnMessage (message) {
   }, delay * 1000)
 }
 
-function callbackOnMessageFromKitchen (message) {
+function callbackOnMessageFromKitchenToUpdateStock (message) {
   setTimeout(() => {
     console.log(message)
-    if (message.body === 'refresh') {
+    if (message.body === 'refresh stock') {
+      store.dispatch('setValue', {key: 'refreshStock', value: true})
+    }
+    console.log(message.body)
+  }, delay * 1000)
+}
+
+function callbackOnMessageFromKitchenToUpdateWaiter (message) {
+  setTimeout(() => {
+    console.log(message)
+    if (message.body === 'refresh waiter') {
       store.dispatch('setValue', {key: 'refreshWaiter', value: true})
     }
     console.log(message.body)
@@ -36,8 +46,11 @@ export function connect () {
     stompClient.subscribe('topic/messages', message => {
       callbackOnMessage(message)
     })
-    stompClient.subscribe('topic/messages/waiter', message => {
-      callbackOnMessageFromKitchen(message)
+    stompClient.subscribe('topic/messages/toWaiter', message => {
+      callbackOnMessageFromKitchenToUpdateWaiter(message)
+    })
+    stompClient.subscribe('topic/messages/toStock', message => {
+      callbackOnMessageFromKitchenToUpdateStock(message)
     })
   })
 }
@@ -49,8 +62,12 @@ export function disconnect () {
   console.log('Disconnected')
 }
 
-export function sendMessageFromKitchen () {
+export function sendMessageFromKitchenToWaiter () {
   stompClient.send('/app/refresh', {}, JSON.stringify({message: 'change dish status on kitchen'}))
+}
+
+export function sendMessageFromKitchenToStock () {
+  stompClient.send('/app/refresh', {}, JSON.stringify({message: 'remove ingredients from stock'}))
 }
 
 export function sendMessage () {

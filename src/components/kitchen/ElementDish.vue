@@ -58,7 +58,7 @@
 
 <script>
 import store from '../store/store'
-import {sendMessageFromKitchen} from '../../utills/ws'
+import {sendMessageFromKitchenToStock, sendMessageFromKitchenToWaiter} from '../../utills/ws'
 
 export default {
   name: 'ElementDish',
@@ -121,6 +121,7 @@ export default {
           this.classElementRecipe = 'button-ready'
           json = {'status': 'Готовится', 'id': dishesFromOrderId, 'tableNumber': 2}
           this.dateRealNow = new Date()
+          sendMessageFromKitchenToStock()
           break
         case 'ОТДАТЬ':
           this.visible = false
@@ -136,7 +137,7 @@ export default {
         console.log(error)
       })
       this.updateComponent()
-      sendMessageFromKitchen()
+      sendMessageFromKitchenToWaiter()
     },
     msToTime (duration) {
       // var milliseconds = parseInt((duration % 1000) / 100)

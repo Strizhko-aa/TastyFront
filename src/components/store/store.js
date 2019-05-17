@@ -6,10 +6,13 @@ Vue.use(Vuex)
 // это vueX - хранилище чтобы перебрасывать значения между любыми компонентами прокта
 const store = new Vuex.Store({
   state: {
+    // start refreshers
     refreshAdmin: false,
     onAdminPage: false,
     refreshWaiter: false,
     refreshKitchen: false,
+    refreshStock: false,
+    // end refreshers
     host: 'http://localhost:8079',
     whereIsUser: '', //  выводми сверху где юзер. Меняется в main.js при переходе
     selectedInWaiterMenu: 'tables'
