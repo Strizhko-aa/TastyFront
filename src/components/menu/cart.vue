@@ -80,7 +80,7 @@
 
         <b-button class="stripeButton" variant="success" @click="submitForm()" >Оплатить</b-button>
       </div>
-      <b-button variant="danger" class="confirm-close-btn">X</b-button>
+      <b-button variant="danger" class="confirm-close-btn" @click="closeConfirm">X</b-button>
     </div>
     <div class="confirm-overflow" v-if="confirmOrderFlag" @click="closeConfirm()"></div>
   </b-container>
