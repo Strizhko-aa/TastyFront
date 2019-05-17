@@ -13,7 +13,7 @@
     </div>
     <div class="mt-3">
     <b-form-input v-model="password"
-    type="password"
+    type="password" v-on:keyup.enter="logIn()"
     placeholder="Введите пароль"></b-form-input>
     </div>
     <b-button @click="logIn()" name="enter" style="width: 100%; margin-top: 20px;" size="lg" variant="success">Войти</b-button>
@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     logIn () {
+      console.log('aaa')
       let _data = '?username=' + this.username + '&password=' + this.password
       this.$http.post('http://localhost:8079/login' + _data).then(async function (response) {
         // console.log(response)
