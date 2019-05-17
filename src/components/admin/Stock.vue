@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <p hidden>{{refreshAdmin}}</p>
+    <p hidden>{{refreshAdmin}}{{refreshStocks}}</p>
 
     <notifications group="foo"/>
     <div class="title-block">
@@ -22,12 +22,20 @@
                   name="ios-add-circle" v-on:click="showAddIngredient=!showAddIngredient"></ion-icon></span>
               </div>
             </div>
-            <div class="panel-body" v-show="showSearch">
-              <input type="text" class="form-control" id="ing-table-filter" data-action="filter"
-                     data-filters="#ing-table"
-                     placeholder="Поиск..." v-on:keyup="tableSearch()"/>
-              <button class="btn-danger" v-on:click="sortedList('countNoNextDay')">Нужно докупить</button>
-              <button class="btn-danger" v-on:click="createPDF()">PDF</button>
+            <div class="panel-body col-12" v-show="showSearch">
+              <b-col cols="3">
+                <input type="text" class="form-control inputAdd" v-model="deltaForTomorrowIngredients"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Необходимый запас..."/>
+              </b-col>
+              <b-col cols="5">
+                <input type="text" class="form-control" id="ing-table-filter" data-action="filter"
+                       data-filters="#ing-table"
+                       placeholder="Поиск..." v-on:keyup="tableSearch()"/>
+              </b-col>
+              <b-col style="text-align: right" cols="4">
+                <button class="btn-danger" v-on:click="sortedList('countNoNextDay')">Нужно докупить</button>
+                <button class="btn-danger" v-on:click="createPDF()">PDF</button>
+              </b-col>
             </div>
             <div class="panel-body col-12" v-show="showAddIngredient">
               <b-col cols="3">
@@ -67,7 +75,10 @@
               </thead>
               <tbody>
               <tr v-for="i in ingredients" v-bind:key="i.id">
-                <td bgcolor="#f0908a" v-if="(i.quantity_in_stock - i.forTomorrow)<100">{{i.id}}</td>
+                <td bgcolor="#f0908a"
+                    v-if="(i.quantity_in_stock - i.forTomorrow)< (deltaForTomorrowIngredients === '' ? 100 : deltaForTomorrowIngredients) ">
+                  {{i.id}}
+                </td>
                 <td v-else>{{i.id}}</td>
 
                 <td>{{i.name}}</td>
@@ -94,15 +105,16 @@
 </template>
 
 <script>
-/* eslint-disable */
 import Vue from 'vue'
 import store from '../store/store'
-
 
 export default {
   name: 'Stock',
   data: function () {
     return {
+      deltaForTomorrowIngredients: '100',
+      forRecountForPDF: null,
+      makeRed: false,
       showSearch: false,
       showAddIngredient: false,
       loading: true,
@@ -126,29 +138,49 @@ export default {
     }
   },
   created: function () {
-   this.startRenderPage()
+    this.startRenderPage()
   },
   computed: {
+    delForIngred () {
+      return this.deltaForTomorrowIngredients
+    },
     refreshAdmin () {
       if (store.getters.value('refreshAdmin') === true) {
         store.dispatch('setValue', {key: 'refreshAdmin', value: false})
         this.startRenderPage()
       }
       return store.getters.value('refreshAdmin')
+    },
+    refreshStocks () {
+      if (store.getters.value('refreshStock') === true) {
+        store.dispatch('setValue', {key: 'refreshStock', value: false})
+        this.startRenderPage()
+      }
+      return store.getters.value('refreshStock')
     }
   },
   methods: {
-    startRenderPage: function() {
+    startRenderPage: function () {
       this.loading = true
       console.log('load')
       this.getIngredientsFromServer()
-      setTimeout(() => this.loading = false, 200)
-      // this.loading = false;
+      // setTimeout( () => this.loading = false, 200)
+      this.loading = false
     },
-    createPDF() {
-      console.log(this.ingredients);
+    recountForPDF () {
+      this.forTomorrow = []
+      this.tmp = []
+      for (var i = 0; i < this.forRecountForPDF.length; i++) {
+        this.tmp[i] = this.forRecountForPDF[i]['ingredient']
+        this.tmp[i].forTomorrow = this.forRecountForPDF[i]['quantityIngredientsForTomorrow']
+        if (this.tmp[i].quantity_in_stock - this.tmp[i].forTomorrow < this.deltaForTomorrowIngredients) this.forTomorrow.push(this.tmp[i])
+      }
+    },
+    createPDF () {
+      console.log(this.ingredients)
+      this.recountForPDF()
       this.$http.post(store.getters.host + '/admin/createPDF', JSON.stringify(this.forTomorrow)).then(function (response) {
-          console.log(response)
+        console.log(response)
         var a = document.createElement('a')
         a.href = response.bodyText
         a.target = '_blank'
@@ -163,10 +195,13 @@ export default {
       this.$http.get(store.getters.host + '/admin/addDish/ingredient').then(response =>
         response.json()).then(json => {
         this.ingredients = []
+        this.forRecountForPDF = json
         for (var i = 0; i < json.length; i++) {
           this.ingredients[i] = json[i]['ingredient']
           this.ingredients[i].forTomorrow = json[i]['quantityIngredientsForTomorrow']
-          if (this.ingredients[i].quantity_in_stock - this.ingredients[i].forTomorrow < 100) this.forTomorrow.push(this.ingredients[i])
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          console.log(this.delForIngred)
+          if (this.ingredients[i].quantity_in_stock - this.ingredients[i].forTomorrow < this.delForIngred) this.forTomorrow.push(this.ingredients[i])
         }
       }).catch(err => {
         console.log(err.status)
@@ -199,7 +234,7 @@ export default {
             name: '',
             type: '',
             unit: '',
-            price:''
+            price: ''
           }
           this.ingredients.push(response.body)
           this.noty('Добавление ', 'success', 'Ингредиент ' + response.body.name + ' успешно добавлен')
