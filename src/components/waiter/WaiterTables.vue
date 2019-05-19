@@ -10,8 +10,8 @@
                             'green-table': table.status === 4}">
             <span>{{table.id}}</span>
             <img src="../../assets/images/table.png" alt="">
-            <b-button>Обнулить статус</b-button>
           </div>
+          <b-button @click="clearTableStatus(table.id)">Обнулить статус</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -34,6 +34,13 @@ export default {
     this.startRenderPage()
   },
   methods: {
+    clearTableStatus: function (tableNumber) {
+      this.$http.post(store.getters.host + '/waiter/clear/' + tableNumber).then((response) => {
+      }).catch((err) => {
+        console.log(err)
+      })
+      this.startRenderPage()
+    },
     startRenderPage: function () {
       console.log('mounted')
       this.$http.get(store.getters.host + '/waiter').then((response) => {
@@ -94,6 +101,12 @@ export default {
 .table img {
   width: 155px;
   height: 155px;
+}
+.table b-button {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  align-self: center;
 }
 .red-table {
   background-color: red;
