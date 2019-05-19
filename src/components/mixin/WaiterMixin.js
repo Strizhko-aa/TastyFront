@@ -54,11 +54,11 @@ export default {
       // console.log(statusId)
       for (let i in arr) {
         if (dishId === arr[i].dish.id && statusId === arr[i].status.id) {
-          console.log(i)
+          // console.log(i)
           return i
         }
       }
-      console.log(-1)
+      // console.log(-1)
       return -1
     }
   }

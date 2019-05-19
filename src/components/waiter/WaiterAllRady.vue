@@ -55,7 +55,7 @@ export default {
       this.parsedOrders = []
       let tables = []
       tables = await this.getTables()
-      console.log(tables)
+      // console.log(tables)
       for (let i in tables) {
         // console.log('id ' + tables[i][0].id)
         let ordersFromTable = await this.getTableOrders(tables[i].id)
@@ -64,15 +64,19 @@ export default {
       }
       this.loading = false
     },
-    getCount (statusId, order) {
-      console.log(this.parsedOrders)
-      console.log(this.elements)
+    getCount (statusId, orders) {
       let count = 0
-      for (let i in order.parsedDishes) {
-        if (order.parsedDishes[i].status.id === statusId) {
-          count++
+      for (let i = 0; i < orders.length; i++) {
+        // console.log(orders[i][0].parsedDishes)
+        if (orders[i][0] !== undefined) {
+          for (let j = 0; j < orders[i][0].parsedDishes.length; j++) {
+            if (orders[i][0].parsedDishes[j].status.id === statusId) {
+              count++
+            }
+          }
         }
       }
+      console.log(count)
       return count
     },
     getTables () {
