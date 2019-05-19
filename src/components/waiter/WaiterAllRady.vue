@@ -31,7 +31,7 @@
       </b-container>
       </div>
     </div>
-    <div v-else><h1>пусто</h1></div>
+    <div v-else><h1>Нет готовых блюд</h1></div>
   </b-container>
 </div>
 </template>
