@@ -12,9 +12,9 @@ export default {
           order.id = data[0].ordersList[i].id
           order.dateOrders = data[0].ordersList[i].dateOrders
           order.typePayment = data[0].ordersList[i].typePayment
-          order.total = data[3][i]
+          order.total = data[1][i]
           order.tableNumber = data[0].id
-          order.parsedDishes = this.parseDishesFromOrder(data[1][i])
+          order.parsedDishes = this.parseDishesFromOrder(data[0].ordersList[i].dishesFromOrder)
           orders.push(order)
         }
       }
@@ -25,20 +25,20 @@ export default {
       if (dfo !== undefined) {
         let parsedDishes = []
         for (let i in dfo) {
-          if (dfo[i][0].dishStatus !== null) {
+          if (dfo[i].dishStatus !== null) {
             // console.log(dfo[i][0])
-            let includeIndex = this.include(dfo[i][0].dish.id, dfo[i][0].dishStatus.id, parsedDishes)
+            let includeIndex = this.include(dfo[i].dish.id, dfo[i].dishStatus.id, parsedDishes)
             if (includeIndex === -1) {
               let newDfo = {}
-              newDfo.dish = dfo[i][0].dish
-              newDfo.status = dfo[i][0].dishStatus
+              newDfo.dish = dfo[i].dish
+              newDfo.status = dfo[i].dishStatus
               newDfo.count = 1
               newDfo.dfoIds = [] // массив dfo id нужен для того, чтобы изменять статус на отнесено
-              newDfo.dfoIds.push(dfo[i][0].id)
+              newDfo.dfoIds.push(dfo[i].id)
               parsedDishes.push(newDfo)
             } else {
               parsedDishes[includeIndex].count++
-              parsedDishes[includeIndex].dfoIds.push(dfo[i][0].id)
+              parsedDishes[includeIndex].dfoIds.push(dfo[i].id)
             }
           }
         }

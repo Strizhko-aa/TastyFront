@@ -275,8 +275,8 @@ export default {
           }
           this.noty('Удаление ', 'success', 'Ингредиент удален')
         } else this.noty('Удаление ', 'error', 'Нельзя удалить ингредиент, так как он используется в блюде(блюдах)')
-      }, error => {
-        this.noty('Удаление ', 'error', 'Ошибка удаления')
+      // }, error => {
+      //   this.noty('Удаление ', 'error', 'Ошибка удаления')
       }).catch(function (error) {
         console.log(error)
         this.noty('Удаление ', 'error', 'Ошибка удаления')

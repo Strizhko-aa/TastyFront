@@ -10,6 +10,7 @@
                             'green-table': table.status === 4}">
             <span>{{table.id}}</span>
             <img src="../../assets/images/table.png" alt="">
+            <b-button>Обнулить статус</b-button>
           </div>
         </b-col>
       </b-row>
@@ -48,13 +49,13 @@ export default {
     },
     parseTables (data) {
       let _tables = []
-      console.log(data[0])
-      if (data[0] !== undefined && data[0] !== null) {
-        for (let i in data[0]) {
-          if (data[0][i][0].id && data[0][i][0].tableStatus.id) {
+      console.log(data)
+      if (data !== undefined && data !== null) {
+        for (let i in data) {
+          if (data[i].id && data[i].tableStatus.id) {
             let table = {
-              id: data[0][i][0].id,
-              status: data[0][i][0].tableStatus.id
+              id: data[i].id,
+              status: data[i].tableStatus.id
             }
             // console.log(table)
             _tables.push(table)
@@ -85,7 +86,7 @@ export default {
   position: absolute;
   width: 155px;
   text-align: center;
-  top: 43%;
+  top: 40%;
   font-weight: bolder;
   font-size: 22pt;
   color: black;

@@ -6,15 +6,15 @@
       </b-row>
       <b-row class="height-150 category-line">
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Горячее')">
-          <img class="menu-icon" src="../../assets/images/myaso.jpg" alt="горячее">
+          <img class="menu-icon" src="../../assets/images/gribnoe-rizotto-v-slivochnom-souse.jpg" alt="горячее">
           <div class="category-name">Горячее</div>
         </b-col>
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Салаты')">
-          <img class="menu-icon" src="../../assets/images/cezar.jpg" alt="салаты">
+          <img class="menu-icon" src="../../assets/images/pechenochnii-salad.jpg" alt="салаты">
           <div class="category-name">Салаты</div>
         </b-col>
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Супы')">
-          <img class="menu-icon" src="../../assets/images/supy.jpg" alt="супы">
+          <img class="menu-icon" src="../../assets/images/soup-lapsha-s-yaicom.jpg" alt="супы">
           <div class="category-name">Супы</div>
         </b-col>
       </b-row>
@@ -22,11 +22,11 @@
       </b-row>
       <b-row class="height-150 category-line">
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Десерты')">
-          <img class="menu-icon" src="../../assets/images/novogodnij-desert-radost-obezyanki.jpg" alt="десерты">
+          <img class="menu-icon" src="../../assets/images/shokoladnie-blinchiki.jpg" alt="десерты">
           <div class="category-name">Десерты</div>
         </b-col>
         <b-col cols="12" sm="6" md="4" class="menu-item" @click="changeMenuFlag('Закуски')">
-          <img class="menu-icon" src="../../assets/images/buterbrody-s-krasnoj-ikroj-i-syrom.jpg" alt="закуски">
+          <img class="menu-icon" src="../../assets/images/buterbrody-s-ribkoi.jpg" alt="закуски">
           <div class="category-name">Закуски</div>
         </b-col>
       </b-row>
