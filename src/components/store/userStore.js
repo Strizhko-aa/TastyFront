@@ -38,14 +38,14 @@ const store = new Vuex.Store({
           store.permissions.admin = false
           store.permissions.waiter = true
           store.permissions.kitchen = false
-          store.permissions.menu = true
+          store.permissions.menu = false
           break
 
         case 'COOK': {
           store.permissions.admin = false
           store.permissions.waiter = false
           store.permissions.kitchen = true
-          store.permissions.menu = true
+          store.permissions.menu = false
           break
         }
 

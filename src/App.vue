@@ -49,6 +49,7 @@
               <img src="./assets/images/menu-button.svg" alt="">
               </div>
             </template>
+          <b-dropdown-item-button v-show="permMenu" @click="navigateTo('menu')" class="dropdown-style">Меню</b-dropdown-item-button>
           <b-dropdown-item-button v-show="permKitchen" @click="navigateTo('kitchen')" class="dropdown-style">Кухня</b-dropdown-item-button>
           <b-dropdown-item-button v-show="permAdmin" @click="navigateTo('admin')" class="dropdown-style">Администратор</b-dropdown-item-button>
           <b-dropdown-item-button v-show="permWaiter" @click="navigateTo('waiter')" class="dropdown-style">Официант</b-dropdown-item-button>
@@ -110,6 +111,9 @@ export default {
     },
     permAdmin () {
       return userStore.getters.permission('admin')
+    },
+    permMenu () {
+      return userStore.getters.permission('menu')
     }
   },
   methods: {
@@ -119,7 +123,7 @@ export default {
       this.$router.push({name: 'login'})
     },
     navigateTo (routeName) {
-      this.$router.push({path: routeName})
+      this.$router.push({name: routeName})
     },
     enter () {
       this.$router.push({name: 'login'})

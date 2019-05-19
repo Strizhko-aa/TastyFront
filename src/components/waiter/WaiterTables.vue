@@ -45,6 +45,8 @@
                             'green-table': table.status === 4}">
             <span>{{table.id}}</span>
             <img src="../../assets/images/table.png" alt="">
+          </div>
+          <div class="button-cler-status">
             <b-button @click="clearTableStatus(table.id)">Обнулить статус</b-button>
           </div>
         </b-col>
@@ -71,10 +73,10 @@ export default {
   methods: {
     clearTableStatus: function (tableNumber) {
       this.$http.post(store.getters.host + '/waiter/clear/' + tableNumber).then((response) => {
+        this.startRenderPage()
       }).catch((err) => {
         console.log(err)
       })
-      this.startRenderPage()
     },
     startRenderPage: function () {
       console.log('mounted')
@@ -160,6 +162,11 @@ export default {
     font-weight: bolder;
     font-size: 22pt;
     color: black;
+  }
+
+  .button-cler-status {
+    width: 155px;
+    /* text-align: center; */
   }
 
   .table img {
