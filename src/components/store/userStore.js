@@ -65,6 +65,14 @@ const store = new Vuex.Store({
           break
         }
 
+        case 'anonymousUser': {
+          store.permissions.admin = false
+          store.permissions.waiter = false
+          store.permissions.kitchen = false
+          store.permissions.menu = true
+          break
+        }
+
         default: {
           store.permissions.admin = false
           store.permissions.waiter = false

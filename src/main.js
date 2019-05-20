@@ -62,8 +62,12 @@ function setUserInfo () {
   return new Promise(resolve => {
     let _url = store.getters.host + '/get_user_data'
     Vue.http.get(_url).then((response) => {
-      setUserData(response.body)
-      console.log(response.body)
+      if (response.bodyText === 'anonymousUser') {
+        setUserData('anonymousUser')
+      } else {
+        setUserData(response.data)
+      }
+      // console.log(response.body)
       userStore.dispatch('setValue', {key: 'authorized', value: true})
       resolve(true)
     }).catch(err => {
@@ -75,10 +79,17 @@ function setUserInfo () {
 }
 
 function setUserData (data) {
-  userStore.dispatch('setValue', {key: 'userName', value: data.username})
-  userStore.dispatch('setValue', {key: 'roleStaff', value: data.authorities[0].authority})
-  userStore.dispatch('setUserPermission', data.authorities[0].authority)
-  // console.log(userStore.state)
+  console.log(data)
+  if (data === 'anonymousUser') {
+    userStore.dispatch('setValue', {key: 'userName', value: 'Лучший гость'})
+    userStore.dispatch('setValue', {key: 'roleStaff', value: 'anonymousUser'})
+    userStore.dispatch('setUserPermission', 'anonymousUser')
+  } else {
+    userStore.dispatch('setValue', {key: 'userName', value: data.username})
+    userStore.dispatch('setValue', {key: 'roleStaff', value: data.authorities[0].authority})
+    userStore.dispatch('setUserPermission', data.authorities[0].authority)
+  }
+  console.log(userStore.state)
 }
 
 function clearData () {
