@@ -3,6 +3,7 @@
 
   <b-container fluid>
     <b-row>
+      <p hidden>{{refreshWaiter}}</p>
       <b-col style="text-align: left" cols=12 sm=12 md=12 lg=12>
         <!-- <b-button @click="goBack()">Назад</b-button> -->
       </b-col>
@@ -112,6 +113,15 @@ export default {
           console.log(err)
         })
       }
+    }
+  },
+  computed: {
+    refreshWaiter () {
+      if (store.getters.value('refreshWaiter') === true) {
+        store.dispatch('setValue', {key: 'refreshWaiter', value: false})
+        this.reqestAllReady()
+      }
+      return store.getters.value('refreshWaiter')
     }
   }
 }
