@@ -12,6 +12,7 @@ export default {
           order.id = data[0].ordersList[i].id
           order.dateOrders = data[0].ordersList[i].dateOrders
           order.typePayment = data[0].ordersList[i].typePayment
+          order.status = data[0].ordersList[i].orderStatus
           order.total = data[1][i]
           order.tableNumber = data[0].id
           order.parsedDishes = this.parseDishesFromOrder(data[0].ordersList[i].dishesFromOrder)

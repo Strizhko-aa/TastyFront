@@ -17,8 +17,8 @@
         <b-col cols sm md lg = "6">
           <p class="order-number">
             Заказ №{{item.id}} | {{item.total}} &#8381;
-            <i v-if="item.typePayment.id === 1" class="fas fa-credit-card"></i>
-            <i v-if="item.typePayment.id === 2" class="fas fa-money-bill-wave"></i>
+            <i v-if="item.typePayment.id === 1" class="fas fa-credit-card" :class="{'green-icon': item.status.id === 1, 'red-icon': item.status.id === 2}"></i>
+            <i v-if="item.typePayment.id === 2" class="fas fa-money-bill-wave" :class="{'green-icon': item.status.id === 1, 'red-icon': item.status.id === 2}"></i>
           </p>
         </b-col>
       </b-row>
@@ -169,5 +169,11 @@ p {
   float: right;
   cursor: pointer;
   margin: 5px 10% 5px 0;
+}
+.green-icon {
+  color: green;
+}
+.red-icon {
+  color: red;
 }
 </style>
